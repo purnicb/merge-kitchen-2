@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>🌱 텃밭 키친 · Garden Kitchen</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#080e04;--s1:#0f1a08;--s2:#162008;--s3:#1e2c0c;
+  --bdr:#2a3e10;--pri:#7ec832;--sec:#f07020;
+  --gold:#ffd700;--grn:#22dd66;--blu:#44aaff;
+  --txt:#e8f0d0;--txt2:#6a8a40;--r:13px
+}
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
+  background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;user-select:none}
+
+/* ══ HEADER ══ */
+.hdr{background:linear-gradient(160deg,#0a1405,#142008);padding:10px 13px 8px;
+  border-bottom:2px solid #4a7818;position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 20px rgba(60,120,10,.3)}
+.hdr1{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.gtit{font-size:1.2em;font-weight:900;color:var(--pri);letter-spacing:-.3px}
+.gtit em{font-size:.67em;font-weight:400;font-style:normal;color:var(--txt2);margin-left:4px}
+.lbtn{background:var(--s3);border:1px solid var(--pri);color:var(--pri);
+  padding:3px 9px;border-radius:9px;cursor:pointer;font-size:.77em;font-weight:700;touch-action:manipulation}
+.hdr2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hcoin{display:flex;align-items:center;gap:3px;font-size:.84em;font-weight:700;color:var(--gold)}
+.xpg{flex:1;min-width:90px;display:flex;align-items:center;gap:5px}
+.xpbg{flex:1;height:8px;background:var(--bg);border-radius:4px;overflow:hidden;border:1px solid var(--bdr)}
+.xpf{height:100%;background:linear-gradient(90deg,#20aa44,#50ff80);border-radius:4px;transition:width .5s}
+.xpt{font-size:.64em;color:var(--txt2);white-space:nowrap}
+.lvc{background:linear-gradient(135deg,#3a7818,#7ec832);color:#fff;
+  font-size:.7em;font-weight:900;padding:2px 7px;border-radius:7px;white-space:nowrap}
+.enc{display:flex;align-items:center;gap:3px;font-size:.78em;font-weight:700;color:#88ddff}
+.etm{font-size:.6em;color:#3a99cc}
+
+/* ══ TABS ══ */
+.tabs{display:flex;background:var(--s1);border-bottom:1px solid var(--bdr);
+  position:sticky;top:65px;z-index:99}
+.tab{flex:1;padding:8px 3px;text-align:center;cursor:pointer;
+  font-size:.68em;color:var(--txt2);border-bottom:3px solid transparent;transition:all .2s;touch-action:manipulation}
+.tico{font-size:1.3em;display:block}
+.tab.on{color:var(--pri);border-bottom-color:var(--pri);background:var(--bg)}
+.tab:hover:not(.on){color:var(--txt);background:var(--s2)}
+.tab-board{display:none}
+
+/* ══ CONTENT ══ */
+.wrap{padding:10px;max-width:580px;margin:0 auto;padding-bottom:28px}
+.pane{display:none}.pane.on{display:block}
+
+/* ══ MISSION BANNER ══ */
+.mban{background:linear-gradient(135deg,var(--s2),#243010);
+  border:1.5px solid #3a5818;border-radius:var(--r);
+  padding:10px 12px;margin-bottom:9px;display:flex;gap:9px;align-items:flex-start}
+.mchar{font-size:2.2em;line-height:1;flex-shrink:0;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.mbody{flex:1;min-width:0}
+.mep{font-size:.64em;color:var(--txt2);margin-bottom:1px;font-weight:700}
+.mq{font-size:.81em;font-style:italic;color:var(--txt);line-height:1.4;margin-bottom:6px}
+.mos{display:flex;flex-direction:column;gap:4px}
+.mo{display:flex;align-items:center;gap:5px;font-size:.75em;
+  background:rgba(0,0,0,.3);border-radius:6px;padding:4px 8px}
+.mobg{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.mof{height:100%;background:linear-gradient(90deg,var(--sec),var(--gold));
+  border-radius:3px;transition:width .4s}
+.mo.dk .mof{background:linear-gradient(90deg,#009933,var(--grn))}
+.mot{font-size:.72em;color:var(--txt2);white-space:nowrap;min-width:30px;text-align:right}
+.mo.dk .mot{color:var(--grn)}
+
+/* ══ BOARD ══ */
+.btop{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.btip{font-size:.67em;color:var(--txt2)}
+.sbtn{background:linear-gradient(135deg,#2a6010,#5aaa20);border:none;color:#fff;
+  padding:8px 14px;border-radius:15px;cursor:pointer;font-size:.86em;font-weight:900;
+  box-shadow:0 3px 10px rgba(50,140,10,.4);transition:transform .12s,opacity .15s;
+  white-space:nowrap;display:flex;align-items:center;gap:5px;touch-action:manipulation}
+.sbtn:hover{transform:scale(1.04)}.sbtn:active{transform:scale(.93)}
+.sbtn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+
+/* GRID — wooden board look */
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:8px;
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 38px,rgba(0,0,0,.07) 38px,rgba(0,0,0,.07) 40px),
+    repeating-linear-gradient(180deg,transparent,transparent 20px,rgba(0,0,0,.04) 20px,rgba(0,0,0,.04) 22px),
+    linear-gradient(160deg,#3a2008,#251208);
+  border-radius:18px;border:5px solid #5a3010;
+  box-shadow:0 8px 24px rgba(0,0,0,.6),inset 0 2px 4px rgba(255,150,50,.08)}
+
+/* 3D CELL */
+.cell{aspect-ratio:1;border-radius:14px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;cursor:pointer;
+  position:relative;overflow:visible;touch-action:manipulation;
+  transition:transform .13s,box-shadow .13s;
+  background:var(--s2);
+  box-shadow:0 4px 0 #0a0a06,0 6px 10px rgba(0,0,0,.4),
+    inset 0 1px 2px rgba(255,255,255,.1)}
+.cell:hover{transform:translateY(-3px);
+  box-shadow:0 7px 0 #0a0a06,0 10px 16px rgba(0,0,0,.45),
+    inset 0 1px 2px rgba(255,255,255,.1)}
+
+/* Tier-specific 3D faces */
+.cell[data-t="1"]{background:linear-gradient(145deg,#7a8842,#4a5828);--dp:#2a3414}
+.cell[data-t="2"]{background:linear-gradient(145deg,#52aa42,#2e7022);--dp:#104410}
+.cell[data-t="3"]{background:linear-gradient(145deg,#e47c2a,#a04c12);--dp:#5c2c08}
+.cell[data-t="4"]{background:linear-gradient(145deg,#dc3c2c,#9c1c18);--dp:#540e0c}
+.cell[data-t="5"]{background:linear-gradient(145deg,#dcd02a,#9c941a);--dp:#5c560a}
+.cell[data-t="6"]{background:linear-gradient(145deg,#6cbe3a,#3c7e1e);--dp:#1c4c0a}
+.cell[data-t="7"]{background:linear-gradient(145deg,#b47030,#784018);--dp:#442608}
+.cell[data-t="8"]{background:linear-gradient(145deg,#d4a030,#946018);--dp:#543a08}
+.cell[data-t="9"]{background:linear-gradient(145deg,#a060e0,#6030b0);--dp:#2c1468;
+  box-shadow:0 5px 0 #2c1468,0 8px 16px rgba(0,0,0,.5),
+    0 0 18px rgba(160,96,224,.45),inset 0 1px 3px rgba(255,255,255,.3)}
+.cell[data-t="10"]{background:linear-gradient(145deg,#c87820,#884010);--dp:#502808;
+  filter:drop-shadow(0 0 10px rgba(200,120,32,.75))}
+.cell[data-t="11"]{background:linear-gradient(145deg,#e8b020,#a86818);--dp:#604010;
+  filter:drop-shadow(0 0 11px rgba(232,176,32,.8))}
+.cell[data-t="12"]{background:linear-gradient(145deg,#ffd700,#b8860b);--dp:#6a5010;
+  box-shadow:0 5px 0 #6a5010,0 8px 20px rgba(0,0,0,.55),
+    0 0 24px rgba(255,215,0,.55),inset 0 1px 3px rgba(255,255,255,.35);
+  filter:drop-shadow(0 0 14px rgba(255,215,0,.9));animation:t12g 2.2s infinite}
+@keyframes t12g{0%,100%{filter:drop-shadow(0 0 14px rgba(255,215,0,.85))}50%{filter:drop-shadow(0 0 26px rgba(255,240,120,1))}}
+
+.cell[data-t]{
+  box-shadow:0 5px 0 var(--dp),0 7px 12px rgba(0,0,0,.45),
+    inset 0 1px 3px rgba(255,255,255,.3),inset 0 -2px 3px rgba(0,0,0,.2)}
+.cell[data-t]:hover{transform:translateY(-4px);
+  box-shadow:0 9px 0 var(--dp),0 13px 18px rgba(0,0,0,.5),
+    inset 0 1px 3px rgba(255,255,255,.3),inset 0 -2px 3px rgba(0,0,0,.2)}
+.cell.sel{transform:translateY(2px)!important;
+  box-shadow:0 3px 0 var(--dp,#0a0a06),0 4px 8px rgba(0,0,0,.4),
+    0 0 0 3px var(--gold),0 0 22px rgba(255,215,0,.55),
+    inset 0 1px 3px rgba(255,255,255,.3)!important}
+
+/* Glow for high tiers */
+.cell[data-t="7"]{filter:drop-shadow(0 0 4px rgba(180,112,48,.6))}
+.cell[data-t="8"]{filter:drop-shadow(0 0 7px rgba(212,160,48,.7))}
+.cell[data-t="9"]{filter:drop-shadow(0 0 12px rgba(160,96,224,.8));animation:t9glow 2s infinite}
+@keyframes t9glow{0%,100%{filter:drop-shadow(0 0 12px rgba(160,96,224,.8))}50%{filter:drop-shadow(0 0 22px rgba(200,140,255,1))}}
+
+/* Shine overlay */
+.cell[data-t]::before{content:'';position:absolute;top:0;left:0;right:0;height:44%;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),transparent);
+  border-radius:12px 12px 0 0;pointer-events:none;z-index:1}
+
+/* Item bubble (orb) */
+.ibub{width:64%;aspect-ratio:1;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.42),rgba(0,0,0,.18) 72%);
+  box-shadow:0 3px 8px rgba(0,0,0,.45),inset 0 1px 3px rgba(255,255,255,.35);
+  margin-bottom:2px;position:relative;z-index:2}
+.ico{font-size:1.62em;filter:drop-shadow(0 2px 4px rgba(0,0,0,.55))}
+.iname{font-size:.44em;color:rgba(255,255,255,.78);z-index:2;text-align:center;
+  font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.tdots{display:flex;gap:2px;margin-top:2px;z-index:2}
+.td{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.22)}
+.td.lit{background:rgba(255,255,255,.88);box-shadow:0 0 3px rgba(255,255,255,.6)}
+
+/* Animations */
+@keyframes pop{0%{transform:scale(.1) rotate(-15deg);opacity:0}65%{transform:scale(1.3) rotate(4deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes mrg{0%{transform:scale(.1);opacity:0}50%{transform:scale(1.45)}100%{transform:scale(1);opacity:1}}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.cell.ap .ibub{animation:pop .38s cubic-bezier(.2,1.4,.5,1)}
+.cell.am .ibub{animation:mrg .44s cubic-bezier(.2,1.4,.5,1)}
+.cell.as{animation:shk .3s ease}
+
+/* Particles */
+.pt{position:fixed;border-radius:50%;pointer-events:none;z-index:999;
+  animation:ptf .6s ease-out forwards}
+@keyframes ptf{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0}}
+
+/* Legend */
+.leg{margin-top:8px;background:var(--s1);border-radius:10px;
+  padding:7px 10px;border:1px solid var(--bdr)}
+.legtit{font-size:.65em;color:var(--txt2);margin-bottom:5px;font-weight:700}
+.legrow{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.legit{display:flex;align-items:center;gap:2px;font-size:.66em;
+  background:var(--s2);padding:2px 6px;border-radius:6px}
+.legarr{color:var(--pri);font-weight:900;font-size:.9em;padding:0 1px}
+
+/* ══ STORY ══ */
+.epl{display:flex;flex-direction:column;gap:9px}
+.epc{background:var(--s1);border-radius:14px;padding:12px;border:2px solid var(--bdr);transition:border-color .2s}
+.epc.curr{border-color:var(--pri)}
+.epc.done{border-color:#2a6614;background:#041208}
+.epc.lock{opacity:.38;pointer-events:none}
+.eph{display:flex;gap:9px;align-items:center;margin-bottom:8px}
+.epch{font-size:2.2em;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.eptb{flex:1}
+.epn{font-size:.62em;color:var(--txt2);font-weight:700}
+.ept{font-size:.88em;font-weight:700}
+.epbdg{font-size:.7em;font-weight:700}
+.bc{color:var(--pri)}.bd{color:var(--grn)}.bl{color:var(--txt2)}
+.epq{font-size:.78em;font-style:italic;color:var(--txt);
+  background:rgba(0,0,0,.32);border-left:3px solid var(--pri);
+  padding:6px 10px;border-radius:0 8px 8px 0;margin-bottom:8px;line-height:1.5}
+.epc.done .epq{border-left-color:var(--grn)}
+.epos{display:flex;flex-direction:column;gap:5px}
+.epo{display:flex;align-items:center;gap:7px;font-size:.77em;
+  background:rgba(0,0,0,.24);border-radius:7px;padding:5px 9px}
+.epoi{font-size:1.05em}.epod{flex:1}
+.epobb{width:70px;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.epob{height:100%;background:linear-gradient(90deg,var(--sec),var(--gold));border-radius:3px;transition:width .4s}
+.epo.dk .epob{background:linear-gradient(90deg,#009933,var(--grn))}
+.epoc{font-size:.71em;color:var(--txt2);white-space:nowrap;min-width:30px;text-align:right}
+.epo.dk .epoc{color:var(--grn)}
+.eprw{margin-top:7px;font-size:.71em;color:var(--txt2)}
+.epcl{margin-top:9px;width:100%;background:linear-gradient(135deg,#1a5a10,#3a9920);
+  border:none;color:#fff;padding:8px;border-radius:9px;cursor:pointer;font-size:.85em;font-weight:900}
+.epcld{margin-top:8px;text-align:center;font-size:.76em;color:var(--grn);font-weight:700}
+
+/* ending */
+.ending{background:linear-gradient(135deg,#0a1a04,#142808);
+  border:3px solid var(--gold);border-radius:18px;padding:22px;
+  text-align:center;margin-bottom:12px;animation:eglw 2s infinite}
+@keyframes eglw{0%,100%{box-shadow:0 0 20px rgba(255,215,0,.3)}50%{box-shadow:0 0 40px rgba(255,215,0,.6)}}
+.endb{font-size:3em}.endtt{font-size:1.4em;font-weight:900;color:var(--gold);margin:8px 0 4px}
+.endsb{color:var(--txt2);font-size:.84em;line-height:1.6}
+
+/* ══ RESTAURANT CANVAS ══ */
+#rc{width:100%;max-width:556px;border-radius:14px;border:2px solid var(--bdr);display:block;margin:0 auto;
+  box-shadow:0 8px 28px rgba(0,0,0,.6)}
+.rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
+.rs{background:var(--s1);border-radius:8px;padding:8px 10px;border:1px solid var(--bdr)}
+.rsl{font-size:.66em;color:var(--txt2)}.rsv{font-size:.85em;font-weight:700;color:var(--gold)}
+
+/* ══ UPGRADES ══ */
+.upl{display:flex;flex-direction:column;gap:10px}
+.upc{background:var(--s1);border-radius:14px;padding:12px;border:1px solid var(--bdr)}
+.uph{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.upi{font-size:1.6em}.upif{flex:1}
+.upn{font-weight:700;font-size:.9em}.upc2{font-size:.66em;color:var(--txt2)}
+.upds{display:flex;gap:5px;margin-bottom:7px}
+.upd{flex:1;height:7px;border-radius:4px;background:var(--bg);border:1px solid var(--bdr);transition:all .3s}
+.upd.lit{background:linear-gradient(90deg,var(--sec),var(--gold));border-color:var(--pri)}
+.upde{font-size:.72em;color:var(--txt2);margin-bottom:9px}
+.upbtn{width:100%;border:none;color:#fff;padding:10px;border-radius:10px;
+  cursor:pointer;font-size:.83em;font-weight:900;transition:all .2s;
+  background:linear-gradient(135deg,#2a6010,#5aaa20)}
+.upbtn:hover:not(:disabled){transform:scale(1.02)}
+.upbtn:disabled{background:#151e0a;color:#3a4a20;cursor:not-allowed}
+.upbtn.mx{background:linear-gradient(135deg,#1a4a60,#2a80aa)}
+.uplk{font-size:.71em;color:var(--txt2);text-align:center;padding:3px 0}
+.up-banner{
+  background:linear-gradient(135deg,rgba(40,80,20,.35),rgba(10,30,8,.5));
+  border:1px solid var(--bdr);border-radius:14px;padding:12px 14px;margin-bottom:4px;
+  border-left:4px solid var(--pri)
+}
+.up-banner-t{font-size:.82em;font-weight:900;color:var(--gold);margin-bottom:6px;letter-spacing:.02em}
+.up-banner-p{font-size:.72em;color:var(--txt2);line-height:1.55;margin:0}
+.up-flavor{
+  font-size:.68em;color:rgba(200,220,160,.88);font-style:italic;line-height:1.45;
+  margin:-2px 0 8px;padding:6px 8px;background:rgba(0,0,0,.2);border-radius:8px;border-left:3px solid rgba(126,200,50,.35)
+}
+
+/* ══ GARDEN HUB — 카드 전체를 잔디 톤으로 확장 ══ */
+.hub{
+  background:linear-gradient(180deg,#3b6f30 0%,#2a5a26 16%,#21451c 100%);
+  border-radius:18px;border:2px solid var(--bdr);
+  overflow:hidden;position:relative;min-height:360px;box-shadow:0 10px 32px rgba(0,0,0,.55)}
+.hub-scene-lbl{text-align:center;font-size:.68em;font-weight:900;color:#b8e870;letter-spacing:.06em;padding:8px 10px 6px;
+  background:linear-gradient(180deg,#1a2810,#0f180a);text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.g-walk-pixel{
+  position:relative;z-index:2;
+  height:clamp(320px,75vw,440px);
+  border-radius:0 0 14px 14px;
+  overflow:hidden;
+  background:linear-gradient(185deg,rgba(42,78,44,.95),rgba(58,102,56,.88));
+  box-shadow:inset 0 0 48px rgba(20,40,22,.2);
+}
+.hub-walk-field{
+  position:relative;
+  height:100%;
+  min-height:clamp(320px,75vw,440px);
+  cursor:pointer;touch-action:manipulation;
+  border-radius:0;
+  background:
+    radial-gradient(ellipse 95% 72% at 48% 38%,rgba(255,255,255,.16),transparent 52%),
+    radial-gradient(ellipse 75% 50% at 72% 18%,rgba(186,230,160,.2),transparent 42%),
+    linear-gradient(178deg,#a5db97 0%,#7bc06e 42%,#62a857 78%,#52944a 100%);
+  box-shadow:inset 0 0 56px rgba(34,74,36,.14);
+}
+.hub-walk-field::before{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.4;
+  background-image:
+    linear-gradient(to right,rgba(35,75,30,.1) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(35,75,30,.1) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+.hub-walk-field::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ctext x='2' y='12' font-size='10'%3E🌿%3C/text%3E%3C/svg%3E");
+  background-size:22px 22px;
+}
+.hub-corner-tree{
+  position:absolute;z-index:3;pointer-events:none;line-height:1;
+  font-size:clamp(1.85rem,8.5vw,3rem);
+  opacity:.93;
+  filter:drop-shadow(0 2px 0 rgba(0,40,10,.28));
+  user-select:none;
+}
+.hub-corner-tree.tr{top:6px;right:4px}
+.hub-corner-tree.tl{top:6px;left:4px}
+.hub-corner-tree.br{bottom:6px;right:4px}
+.hub-corner-tree.bl{bottom:6px;left:4px}
+/* 채소별 정원 — 가운데 줄 맞춤·작은 카드 */
+.hub-crop-zones{
+  position:absolute;z-index:4;
+  left:50%;transform:translateX(-50%);
+  width:min(94%,352px);
+  top:38px;bottom:10px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  display:flex;flex-wrap:wrap;
+  justify-content:center;
+  align-content:flex-start;
+  align-items:stretch;
+  gap:10px 12px;
+  padding:8px 6px 62px;
+  box-sizing:border-box;
+  pointer-events:auto;
+}
+.hub-crop-zone{
+  flex:0 0 calc(25% - 10px);
+  min-width:76px;
+  max-width:100px;
+  background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.06));
+  border:1px solid rgba(110,160,70,.5);
+  border-radius:12px;
+  padding:6px 6px 7px;
+  box-shadow:0 3px 10px rgba(0,48,12,.15),inset 0 1px 0 rgba(255,255,255,.2);
+  backdrop-filter:blur(6px);
+}
+@media(max-width:900px){
+  /* 모바일/태블릿 폭에서도 정원/오브젝트들이 너무 크게 보이지 않게 */
+  .wrap{max-width:720px}
+  /* 머지쿠킹(보드) 5x6: 한 줄 잘리는 현상 방지 */
+  .grid{
+    width:100%;
+    gap:4px;
+    padding:7px;
+    border-radius:16px;
+    border-width:4px;
+  }
+  .cell{border-radius:12px}
+  .ibub{width:60%}
+  .hub-corner-tree{font-size:clamp(1.4rem,6.2vw,2.4rem)}
+  .hub-crop-zones{
+    width:min(94%,330px);
+    top:34px;bottom:8px;
+    gap:9px 10px;
+    padding:7px 6px 56px;
+  }
+  .hub-crop-zone{
+    min-width:68px;
+    max-width:96px;
+    padding:5px 5px 6px;
+  }
+  .hub-char-wrap{width:40px;height:66px}
+  .hub-charSprite{transform:scale(.62);margin-left:0;margin-bottom:-6px;width:48px;height:96px}
+  .hub-bub{min-width:min(150px,55vw);max-width:min(220px,78vw);font-size:.60em}
+  /* 우측하단(트리 겹침) 줄이기: 더 작게 + 위로 */
+  .hub-tavern-wrap{right:14px;bottom:14px;max-width:86px;transform:translate(10px,0) scale(.72)}
+  .hub-tavern-img{max-height:min(12vh,72px)}
+  .hub-freezer-wrap{right:24px;bottom:16px}
+  .hub-freezer.hub-fridge{width:22px;min-height:22px}
+  .hub-freezer-img{width:20px;height:20px}
+  .hub-freezer.hub-fridge::after{width:22px;height:8px}
+}
+@media(max-width:1050px){
+  /* 990px대 화면에서도 5x6 보드가 잘리지 않게: 더 타이트하게 */
+  .grid{
+    width:100%;
+    max-width:calc(100vw - 20px);
+    gap:3px;
+    padding:6px;
+    border-radius:16px;
+    border-width:3px;
+  }
+  .cell{border-radius:12px}
+  .ibub{width:58%}
+}
+@media(max-width:480px){
+  .wrap{padding:8px;max-width:420px}
+  /* 5x6 보드: 화면 폭에 딱 맞게(우측 마지막 열 잘림 방지) */
+  .grid{
+    width:100%;
+    gap:3px;
+    padding:6px;
+    border-radius:15px;
+    border-width:4px;
+  }
+  .cell{border-radius:11px}
+  .ibub{width:56%}
+  .hub-corner-tree{font-size:clamp(1.4rem,7vw,2.4rem)}
+  .hub-char-wrap{width:38px;height:62px}
+  /* mobile에서 스프라이트가 밀려 화면 밖으로 나가는 문제 방지 */
+  .hub-charSprite{transform:scale(.58);margin:0;width:48px;height:96px;transform-origin:center bottom}
+  .hub-bub{min-width:min(140px,52vw);max-width:min(200px,75vw);font-size:.58em}
+  .hub-crop-zones{width:min(96%,320px);top:30px;bottom:8px;gap:8px;padding:6px 6px 56px}
+  .hub-crop-zone{flex:0 0 calc(33.33% - 8px);min-width:70px;max-width:110px}
+  /* translate 제거: PC 창이 좁아져도 화면 밖으로 밀리지 않게 */
+  .hub-tavern-wrap{right:8px;bottom:12px;max-width:80px;transform:scale(.72)}
+  .hub-tavern-img{max-height:min(14vh,76px);mix-blend-mode:normal}
+  /* right calc이 과도해져서 화면 밖으로 나갈 수 있어 값 고정 */
+  .hub-freezer-wrap{right:18px;bottom:14px}
+  .hub-freezer.hub-fridge{width:22px;min-height:22px}
+  .hub-freezer-img{width:20px;height:20px;mix-blend-mode:normal}
+  .hub-freezer.hub-fridge::after{width:22px;height:8px}
+}
+@media(max-width:360px){
+  .hub-crop-zone{flex:0 0 calc(33.33% - 9px);min-width:64px;max-width:92px}
+  /* 초소형 화면에서 5x6 보드 더 타이트하게 */
+  .grid{
+    gap:2.6px;
+    padding:5px;
+    border-width:3px;
+    border-radius:14px;
+  }
+  .cell{border-radius:10px}
+  .ibub{width:52%}
+  .hub-char-wrap{width:34px;height:56px}
+  /* 배경 스프라이트 셀 크기(48x96) 유지: 잘림 방지 */
+  .hub-charSprite{transform:scale(.52);margin:0;width:48px;height:96px}
+  .hub-bub{min-width:min(130px,50vw);max-width:min(190px,74vw);font-size:.54em}
+  .hub-tavern-wrap{right:6px;bottom:12px;max-width:70px;transform:scale(.62)}
+  .hub-tavern-img{max-height:min(10vh,56px)}
+  .hub-freezer-wrap{right:14px;bottom:12px}
+  .hub-freezer.hub-fridge{width:18px;min-height:18px}
+  .hub-freezer-img{width:16px;height:16px}
+  .hub-freezer.hub-fridge::after{width:20px;height:6px}
+}
+.hub-zone-head{
+  font-size:.52em;font-weight:900;color:#f0ffe8;letter-spacing:.04em;margin-bottom:5px;
+  text-shadow:0 1px 3px rgba(0,0,0,.35);
+  text-align:center;
+  line-height:1.2;
+  border-bottom:1px solid rgba(120,170,90,.28);
+  padding-bottom:4px;
+}
+.hub-zone-bed{
+  border-radius:9px;
+  min-height:26px;
+  background:linear-gradient(175deg,#654028 0%,#3d2415 55%,#2a180c 100%);
+  border:1px solid rgba(90,55,30,.35);
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.38),inset 0 -1px 0 rgba(255,235,200,.06);
+  padding:4px 4px;
+}
+.hub-zone-pile{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 3px;
+  min-height:20px;line-height:1;
+}
+.hub-zone-plant{font-size:clamp(.58rem,2.6vw,.75rem);filter:drop-shadow(0 1px 1px rgba(0,0,0,.42))}
+.hub-zone-more{font-size:.48em;font-weight:900;color:#ffe866;padding:0 2px}
+/* 캐릭터: 스프라이트 축소 + 말풍선 가로형 */
+.hub-char-wrap{
+  position:absolute;top:55%;left:50%;
+  transition:left .4s cubic-bezier(.25,.8,.25,1),top .4s cubic-bezier(.25,.8,.25,1);
+  transform:translate(-50%,-50%);z-index:6;
+  width:44px;height:72px;
+}
+.hub-charSprite{
+  width:48px;height:96px;
+  transform:scale(0.68);transform-origin:center bottom;
+  margin-left:-14px;margin-bottom:-10px;
+  background:url(assets/farmer.png) no-repeat;
+  background-position:0 0;
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  filter:drop-shadow(0 3px 0 rgba(0,0,0,.28));
+  pointer-events:none;
+}
+.hub-char-em{display:none;width:40px;height:64px;align-items:center;justify-content:center;font-size:2em;line-height:1;
+  transform:scale(0.85);transform-origin:center bottom;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.45));pointer-events:none}
+.hub-bub{
+  position:absolute;left:50%;bottom:23px;right:auto;top:auto;
+  transform:translateX(-58%);
+  z-index:7;
+  min-width:min(160px,52vw);max-width:min(240px,78vw);
+  width:max-content;
+  background:linear-gradient(180deg,#fefff8,#e8f0d4);
+  color:#1a2808;border:2px solid #6a9440;border-radius:16px;
+  padding:6px 11px;font-size:.64em;font-weight:600;line-height:1.28;
+  text-align:center;word-break:keep-all;
+  box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.72);
+}
+.hub-bub::after{
+  content:'';position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:#6a9440;
+}
+.hub-freezer-wrap{
+  position:absolute;left:auto;right:calc(max(40px,8vw) + 62px);bottom:13px;z-index:9;
+  width:auto;touch-action:manipulation;
+}
+.hub-freezer.hub-fridge{
+  width:30px;min-height:30px;padding:0;border-radius:9px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  cursor:pointer;position:relative;overflow:visible;
+}
+.hub-freezer.hub-fridge::before{
+  display:none;
+}
+.hub-freezer-img{
+  position:absolute;left:50%;top:50%;
+  width:28px;height:28px;
+  transform:translate(-50%,-50%);
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  mix-blend-mode:multiply;
+  filter:saturate(.92) contrast(.96) brightness(1.02);
+  pointer-events:none;
+  z-index:2;
+}
+.hub-freezer.hub-fridge::after{
+  content:'';
+  position:absolute;left:50%;top:82%;
+  width:30px;height:10px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at 50% 0%,rgba(70,170,95,.28),rgba(30,110,60,.14) 55%,transparent 76%);
+  filter:blur(.2px);
+  z-index:1;
+  pointer-events:none;
+}
+.hub-fridge-door,
+.hub-fridge-door::before,
+.hub-fridge-door::after{display:none}
+.hub-freezer.dim{opacity:.55;filter:saturate(.7) brightness(.9)}
+.hub-freezer-lab{display:none}
+.hub-fz-mini{display:none}
+/* 정원 속 레스토랑 — 회색 제거 PNG + 잔디 톤 받침 */
+.hub-tavern-wrap{
+  position:absolute;z-index:5;
+  right:max(40px,8vw);bottom:10px;
+  width:max-content;max-width:min(36vw,108px);
+  pointer-events:none;
+  filter:drop-shadow(0 3px 8px rgba(18,48,20,.32));
+  transform:translate(30px,3px);
+}
+.hub-tavern-frame{
+  position:relative;display:inline-block;width:max-content;max-width:100%;
+  pointer-events:none;line-height:0;
+  border-radius:3px;
+  overflow:visible;
+  background:transparent;
+}
+.hub-tavern-frame::before{
+  content:'';position:absolute;z-index:-1;
+  left:8%;right:8%;bottom:-3px;height:10px;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 50% 0%,rgba(90,174,73,.42),rgba(62,130,68,.16) 58%,transparent 75%);
+  pointer-events:none;
+}
+.hub-tavern-frame::after{display:none}
+.hub-tavern-img{
+  display:block;position:relative;z-index:0;
+  width:auto;height:auto;max-width:100%;
+  max-height:min(17vh,104px);
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  filter:saturate(.98) contrast(.98) brightness(1.03);
+  mix-blend-mode:multiply;
+  pointer-events:none;
+}
+.hub-tavern-door{
+  position:absolute;
+  left:4.15%;top:61.2%;
+  width:38.6%;height:27.1%;
+  margin:0;padding:0;border:none;border-radius:4px;
+  background:transparent;
+  cursor:pointer;pointer-events:auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.hub-tavern-door:hover,.hub-tavern-door:active{background:transparent}
+.hub-tavern-door:focus-visible{outline:2px solid #7cba4a;outline-offset:1px}
+.hub-enter{
+  margin:8px auto 12px;
+  display:block;
+  min-width:0;max-width:190px;
+  background:linear-gradient(135deg,#1a5a10,#3a9920);border:none;color:#fff;
+  padding:8px 14px;border-radius:11px;
+  font-size:.8em;font-weight:900;cursor:pointer;box-shadow:0 4px 14px rgba(40,120,20,.45);touch-action:manipulation}
+.hub-enter:active{transform:scale(.98)}
+.hub-hint{
+  font-size:.6em;color:var(--txt2);text-align:center;
+  padding:6px 10px 0;line-height:1.45;
+}
+
+/* merge subtabs */
+.subtabs{display:flex;gap:6px;margin-bottom:8px}
+.stab{flex:1;text-align:center;padding:7px 4px;border-radius:10px;font-size:.68em;font-weight:800;
+  background:var(--s2);border:1px solid var(--bdr);color:var(--txt2);cursor:pointer;touch-action:manipulation}
+.stab.on{color:var(--bg);background:linear-gradient(135deg,var(--pri),#4a8820);border-color:#5aaa30}
+.stab .lk{font-size:.85em;opacity:.85}
+#grid-meat-wrap{display:none}
+#grid-meat-wrap.on{display:block}
+#grid-veg-wrap{display:none}
+#grid-veg-wrap.on{display:block}
+
+/* cold storage modal */
+.fs-mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;justify-content:center;align-items:center;padding:12px}
+.fs-mbg.show{display:flex}
+.fs-md{background:linear-gradient(160deg,#0c1828,#102030);border:3px solid #5a9ccc;border-radius:18px;
+  max-width:380px;width:100%;max-height:92vh;overflow:auto;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.fs-mt{font-size:1.05em;font-weight:900;color:#8cf;margin-bottom:6px}
+.fs-ms{font-size:.72em;color:var(--txt2);line-height:1.45;margin-bottom:10px}
+.fs-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:10px}
+.fs-cell{aspect-ratio:1;border-radius:8px;background:rgba(0,0,0,.35);border:1px solid #3a5a78;
+  display:flex;align-items:center;justify-content:center;font-size:1.15em}
+.fs-mtrow{font-size:.66em;color:var(--txt2);margin-bottom:12px;white-space:pre-wrap}
+.fs-actions{display:flex;gap:8px;flex-wrap:wrap}
+.fs-btn{flex:1;min-width:120px;border:none;padding:9px 12px;border-radius:10px;font-weight:800;cursor:pointer;font-size:.78em}
+.fs-btn-cl{background:#3a4a50;color:#e0e8f0}
+.fs-btn-go{background:linear-gradient(135deg,#1a5080,#3080c0);color:#fff}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(65px);
+  padding:9px 18px;border-radius:17px;font-size:.84em;
+  z-index:1000;pointer-events:none;white-space:nowrap;
+  box-shadow:0 4px 18px rgba(0,0,0,.65);transition:transform .26s ease;
+  background:#1a2a0a;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:linear-gradient(135deg,#083814,#1a6622)}
+.toast.err{background:linear-gradient(135deg,#3a0000,#770000)}
+.toast.gd{background:linear-gradient(135deg,#3a2800,#886600)}
+
+/* ══ MODAL ══ */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:500;justify-content:center;align-items:center}
+.mbg.show{display:flex}
+.md{background:linear-gradient(135deg,#0c1a06,#162808);border:3px solid var(--gold);
+  border-radius:22px;padding:26px;text-align:center;animation:mpop .38s ease;
+  max-width:300px;width:90%}
+@keyframes mpop{0%{transform:scale(.35);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1)}}
+.mi{font-size:3em;margin-bottom:10px}.mt{font-size:1.55em;font-weight:900;color:var(--gold);margin-bottom:5px}
+.ms{color:var(--txt2);margin-bottom:18px;font-size:.85em;line-height:1.5;white-space:pre-line}
+.mb{background:linear-gradient(135deg,#2a6010,#5aaa20);border:none;color:#fff;
+  padding:10px 24px;border-radius:11px;cursor:pointer;font-size:.9em;font-weight:900}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr1">
+    <div class="gtit">🌱 텃밭 키친<em>Garden Kitchen</em></div>
+    <button class="lbtn" onclick="toggleLang()">한/EN</button>
+  </div>
+  <div class="hdr2">
+    <div class="hcoin">🪙<span id="hcoin">0</span></div>
+    <div class="xpg">
+      <div class="xpbg"><div class="xpf" id="xpf" style="width:0%"></div></div>
+      <span class="xpt" id="xpt">0/300</span>
+    </div>
+    <div class="lvc" id="lvc">Lv.1</div>
+    <div class="enc">⚡<span id="enval">20</span>/20<span class="etm" id="etm"></span></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" onclick="goTab('garden')"><span class="tico">🏡</span><span id="t0">정원</span></div>
+  <div class="tab tab-board" onclick="goTab('board')"><span class="tico">🧩</span><span id="t1">머지</span></div>
+  <div class="tab" onclick="goTab('story')"><span class="tico">📖</span><span id="t2">스토리</span></div>
+  <div class="tab" onclick="goTab('rest')"><span class="tico">🍽️</span><span id="t3">음식점</span></div>
+  <div class="tab" onclick="goTab('up')"><span class="tico">⬆️</span><span id="t4">업그레이드</span></div>
+</div>
+
+<div class="wrap">
+  <div class="pane on" id="pane-garden">
+    <div class="hub" id="hub">
+      <div class="hub-scene-lbl" id="hub-scene-lbl">🌱 내 텃밭</div>
+      <div class="g-walk g-walk-pixel">
+        <div class="hub-walk-field" id="g-walk-hit" onclick="hubWalkClick(event)">
+          <span class="hub-corner-tree tl" aria-hidden="true">🌳</span>
+          <span class="hub-corner-tree tr" aria-hidden="true">🌳</span>
+          <span class="hub-corner-tree bl" aria-hidden="true">🌳</span>
+          <span class="hub-corner-tree br" aria-hidden="true">🌳</span>
+          <div class="hub-freezer-wrap" onclick="event.stopPropagation();openColdModal()" title="냉동 창고">
+            <div class="hub-freezer hub-fridge" id="hub-freezer"><div class="hub-fridge-door" aria-hidden="true"></div>
+              <img class="hub-freezer-img" src="assets/freeze.png" alt="" aria-hidden="true">
+              <div class="hub-freezer-lab" id="fz-lab">❄️ 냉동</div>
+              <div class="hub-fz-mini" id="fz-mini"></div></div>
+          </div>
+          <div class="hub-tavern-wrap" aria-label="음식점">
+            <div class="hub-tavern-frame">
+              <img class="hub-tavern-img" src="assets/garden_tavern_garden.png" width="386" height="446" alt="">
+              <button type="button" class="hub-tavern-door" id="hub-tavern-go"
+                onclick="event.stopPropagation();enterRestaurant();"
+                aria-label="음식점으로 들어가기"></button>
+            </div>
+          </div>
+          <div class="hub-crop-zones" id="hub-crop-zones" aria-label="채소별 텃밭" onclick="event.stopPropagation()"></div>
+          <div class="hub-char-wrap" id="hub-char-box" onclick="event.stopPropagation();hubCharTap()">
+            <div class="hub-bub" id="hub-bubble">…</div>
+            <div class="hub-charSprite" id="hub-char" role="img" aria-label="farmer"></div>
+            <span class="hub-char-em" id="hub-char-em" aria-hidden="true">👩‍🌾</span>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="hub-enter" onclick="enterPlay()"><span id="hub-enter-t">🍳 머지 쿠킹으로</span></button>
+    </div>
+    <div class="hub-hint" id="hub-hint"></div>
+  </div>
+
+  <div class="pane" id="pane-board">
+    <div class="mban" id="mban"></div>
+    <div class="subtabs" id="subtabs">
+      <div class="stab on" id="stab-v" onclick="goSubBoard('veg')"><span id="st-v">🌿 텃밭</span></div>
+      <div class="stab" id="stab-m" onclick="goSubBoard('meat')"><span id="st-m">🥩 정육·수산</span> <span class="lk" id="m-lock-ico">🔒</span></div>
+    </div>
+    <div class="btop">
+      <div class="btip" id="btip">같은 재료 선택 후 합치세요</div>
+      <button class="sbtn" id="sbtn" onclick="doSpawn()">
+        <span id="sico">🌱</span><span id="stxt">재료 받기</span><span id="sen" style="font-size:.76em;opacity:.7">⚡1</span>
+      </button>
+    </div>
+    <div id="grid-veg-wrap" class="on"><div class="grid" id="grid"></div></div>
+    <div id="grid-meat-wrap"><div class="grid" id="grid-meat"></div></div>
+    <div class="leg"><div class="legtit" id="legt">머지 체인</div><div class="legrow" id="legr"></div></div>
+  </div>
+
+  <div class="pane" id="pane-story">
+    <div class="epl" id="epl"></div>
+  </div>
+
+  <div class="pane" id="pane-rest">
+    <canvas id="rc" width="556" height="340"></canvas>
+    <div class="rst" id="rst"></div>
+  </div>
+
+  <div class="pane" id="pane-up">
+    <div class="upl" id="upl">
+      <!-- renderUps가 배너 + 카드 채움 -->
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="mbg" id="mbg" onclick="closeModal()">
+  <div class="md" onclick="event.stopPropagation()">
+    <div class="mi" id="mi">🎉</div>
+    <div class="mt" id="mt">레벨 업!</div>
+    <div class="ms" id="ms"></div>
+    <button class="mb" onclick="closeModal()" id="mb">계속하기</button>
+  </div>
+</div>
+
+<div class="fs-mbg" id="fs-mbg" onclick="if(event.target.id==='fs-mbg')closeColdModal()">
+  <div class="fs-md" onclick="event.stopPropagation()">
+    <div class="fs-mt" id="fs-mt">❄️ 냉동 창고</div>
+    <div class="fs-ms" id="fs-ms"></div>
+    <div class="fs-grid" id="fs-grid"></div>
+    <div class="fs-mtrow" id="fs-mtrow"></div>
+    <div class="fs-actions">
+      <button type="button" class="fs-btn fs-btn-cl" id="fs-b-cl" onclick="closeColdModal()">닫기</button>
+      <button type="button" class="fs-btn fs-btn-go" id="fs-b-go" onclick="fromColdToMeat()">정육 머지로</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── BOARD / CHAIN (5×6, 12 tiers) ────────────────────────────────
+const BOARD_W=5,BOARD_H=6,BOARD_SIZE=BOARD_W*BOARD_H,MAX_T=12;
+const VALID_TABS=['garden','board','story','rest','up'];
+// ── ITEMS (채소 7 → 요리 5) ───────────────────────────────────────
+const ITEMS = [
+  {id:1,e:'🌱',ko:'씨앗',      en:'Seed'},
+  {id:2,e:'🌿',ko:'새싹',      en:'Sprout'},
+  {id:3,e:'🥕',ko:'당근',      en:'Carrot'},
+  {id:4,e:'🍅',ko:'토마토',    en:'Tomato'},
+  {id:5,e:'🌽',ko:'옥수수',    en:'Corn'},
+  {id:6,e:'🥬',ko:'상추',      en:'Lettuce'},
+  {id:7,e:'🥔',ko:'감자',      en:'Potato'},
+  {id:8,e:'🥗',ko:'샐러드',    en:'Salad'},
+  {id:9,e:'🍲',ko:'채소 스튜', en:'Veggie Stew'},
+  {id:10,e:'🍛',ko:'황금 카레',en:'Golden Curry'},
+  {id:11,e:'🍝',ko:'정원 파스타',en:'Garden Pasta'},
+  {id:12,e:'👑',ko:'셰프의 걸작',en:"Chef's Masterpiece"},
+];
+const MRW=[null,null,
+  {xp:4,c:2},{xp:8,c:4},{xp:16,c:8},{xp:28,c:14},{xp:44,c:22},
+  {xp:62,c:32},{xp:78,c:40},
+  {xp:100,c:50},{xp:135,c:68},{xp:185,c:95},{xp:260,c:135},{xp:380,c:200},
+];
+const DOUBLE12={xp:1200,c:700};
+// ── MEAT / SEAFOOD CHAIN (same board rules, 12 tiers) ───────────────
+const MEAT_ITEMS=[
+  {id:1,e:'📦',ko:'입고 박스',en:'Inbound'},
+  {id:2,e:'🥩',ko:'원료 컷',en:'Raw cut'},
+  {id:3,e:'🔪',ko:'손질 고기',en:'Trimmed'},
+  {id:4,e:'🧂',ko:'숙성',en:'Cured'},
+  {id:5,e:'🍖',ko:'큐브 컷',en:'Cube cut'},
+  {id:6,e:'🥓',ko:'프리미엄 컷',en:'Prime cut'},
+  {id:7,e:'🐟',ko:'해산 필레',en:'Sea fillet'},
+  {id:8,e:'🍳',ko:'팬 구이',en:'Pan fry'},
+  {id:9,e:'♨️',ko:'스모크',en:'Smoked'},
+  {id:10,e:'🍲',ko:'미트 스튜',en:'Meat stew'},
+  {id:11,e:'🦞',ko:'랍스터 플래터',en:'Sea platter'},
+  {id:12,e:'🏅',ko:'정육 셰프 걸작',en:"Butcher's Masterpiece"},
+];
+const MRW_MEAT=MRW;
+const DOUBLE_M12={xp:1200,c:700};
+const LV_XP=[0,300,800,1800,3500,6000,10000]; // 7 levels
+const LV_NM={
+  ko:['텃밭 초보','새싹 농부','텃밭 농부','요리 견습생','요리사','수석 셰프','마스터 셰프'],
+  en:['Garden Novice','Sprout Farmer','Garden Farmer','Cook Apprentice','Cook','Head Chef','Master Chef']
+};
+const EN_MAX=20, EN_SEC=45;
+
+// ── GARDEN SPAWN TABLE ─────────────────────────────────────────────
+// garden upgrade level → [T1 weight, T2 weight, T3 weight, T4 weight]
+const G_SPAWN=[[100,0,0,0],[70,25,5,0],[55,30,12,3],[40,35,18,7],[30,35,22,13]];
+const K_SPAWN=G_SPAWN;
+
+// ── EPISODES (20 chapters) ─────────────────────────────────────────
+const EPS=[
+  {char:'👩‍🌾',title:{ko:'제1화: 봄의 시작',en:'Ch.1: Spring Begins'},
+   quote:{ko:'"올봄엔 직접 텃밭을 가꿔볼 거야! 씨앗을 심고 새싹을 키워봐요."',en:'"This spring, I\'ll grow my own garden! Let\'s plant seeds and raise sprouts."'},
+   objs:[{i:'🌿',ko:'새싹 5개 만들기',en:'Make 5 Sprouts',type:'merge',item:2,need:5},{i:'🥕',ko:'당근 3개 만들기',en:'Make 3 Carrots',type:'merge',item:3,need:3}],
+   rwd:{c:150,xp:100},rt:{ko:'🪙150 + 100XP + 간판 해금',en:'🪙150 + 100XP + Sign unlock'}},
+  {char:'🧑‍🌾',title:{ko:'제2화: 첫 수확의 기쁨',en:'Ch.2: First Harvest'},
+   quote:{ko:'"와, 토마토가 새빨갛게 익었어! 이웃들에게 나눠줄까?"',en:'"Wow, the tomatoes are bright red! Shall we share with the neighbors?"'},
+   objs:[{i:'🍅',ko:'토마토 5개 만들기',en:'Make 5 Tomatoes',type:'merge',item:4,need:5},{i:'🌽',ko:'옥수수 3개 만들기',en:'Make 3 Corn',type:'merge',item:5,need:3}],
+   rwd:{c:250,xp:180},rt:{ko:'🪙250 + 180XP + 테이블 해금',en:'🪙250 + 180XP + Table unlock'}},
+  {char:'👩‍🍳',title:{ko:'제3화: 주방을 열다',en:'Ch.3: Open the Kitchen'},
+   quote:{ko:'"텃밭 채소로 직접 요리할 거야! 첫 메뉴는 신선한 샐러드!"',en:'"I\'ll cook with my own veggies! First menu: fresh garden salad!"'},
+   objs:[{i:'🥗',ko:'샐러드 3개 만들기',en:'Make 3 Salads',type:'merge',item:8,need:3},{i:'🪑',ko:'테이블 업그레이드',en:'Upgrade Table',type:'upgrade',key:'table',need:1}],
+   rwd:{c:350,xp:250},rt:{ko:'🪙350 + 250XP + 주방 해금',en:'🪙350 + 250XP + Kitchen unlock'}},
+  {char:'👵',title:{ko:'제4화: 첫 손님',en:'Ch.4: First Customers'},
+   quote:{ko:'"이 동네 텃밭 요리 맛집이라고요? 스튜 한 그릇 주세요!"',en:'"Is this the garden-to-table place? One bowl of stew, please!"'},
+   objs:[{i:'🍲',ko:'채소 스튜 2개 만들기',en:'Make 2 Veggie Stews',type:'merge',item:9,need:2},{i:'⭐',ko:'레벨 3 달성',en:'Reach Level 3',type:'level',need:3}],
+   rwd:{c:500,xp:320},rt:{ko:'🪙500 + 320XP',en:'🪙500 + 320XP'}},
+  {char:'📱',title:{ko:'제5화: SNS 화제',en:'Ch.5: Going Viral'},
+   quote:{ko:'"팔로워 300만! 텃밭 카레가 대박났어요~ 간판 좀 바꿔봐요!"',en:'"3M followers! Your garden curry is blowing up~ Update the sign!"'},
+   objs:[{i:'🍛',ko:'황금 카레 2개 만들기',en:'Make 2 Golden Curries',type:'merge',item:10,need:2},{i:'🪧',ko:'간판 업그레이드',en:'Upgrade Sign',type:'upgrade',key:'sign',need:1}],
+   rwd:{c:650,xp:420},rt:{ko:'🪙650 + 420XP + 인테리어 해금',en:'🪙650 + 420XP + Interior unlock'}},
+  {char:'👨‍👩‍👧',title:{ko:'제6화: 가족 방문',en:'Ch.6: Family Visit'},
+   quote:{ko:'"온 가족이 왔어요! 셰프의 걸작을 선보일 절호의 기회!"',en:'"The whole family came! This is the perfect chance to show your masterpiece!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 1개 만들기',en:"Make 1 Chef's Masterpiece",type:'merge',item:12,need:1},{i:'👨‍🍳',ko:'주방 업그레이드',en:'Upgrade Kitchen',type:'upgrade',key:'kitchen',need:1}],
+   rwd:{c:850,xp:550},rt:{ko:'🪙850 + 550XP',en:'🪙850 + 550XP'}},
+  {char:'🎭',title:{ko:'제7화: 전국 요리 경연',en:'Ch.7: National Contest'},
+   quote:{ko:'"전국 텃밭 요리 대회! 걸작 3개로 우승을 노려봐요!"',en:'"National Garden Cooking Contest! Aim for gold with 3 masterpieces!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 3개(누적)',en:'3 Masterpieces (total)',type:'merge',item:12,need:3},{i:'⭐',ko:'레벨 5 달성',en:'Reach Level 5',type:'level',need:5}],
+   rwd:{c:1100,xp:700},rt:{ko:'🪙1100 + 700XP',en:'🪙1100 + 700XP'}},
+  {char:'📺',title:{ko:'제8화: TV 출연',en:'Ch.8: TV Appearance'},
+   quote:{ko:'"유명 요리 프로그램 출연 제의! 텃밭 스토리로 전국을 감동시켜봐요."',en:'"Invited to a famous cooking show! Touch the nation with your garden story."'},
+   objs:[{i:'🪙',ko:'코인 5000 모으기(누적)',en:'Earn 5000 coins (total)',type:'coins',need:5000},{i:'🎨',ko:'인테리어 업그레이드',en:'Upgrade Interior',type:'upgrade',key:'interior',need:1}],
+   rwd:{c:1300,xp:850},rt:{ko:'🪙1300 + 850XP',en:'🪙1300 + 850XP'}},
+  {char:'🎩',title:{ko:'제9화: 미식 평론가',en:'Ch.9: The Food Critic'},
+   quote:{ko:'"소문의 텃밭 셰프를 만나러 왔소. 걸작 5개를 보여주시오."',en:'"I\'ve come to meet the famous garden chef. Show me 5 masterpieces."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 5개(누적)',en:'5 Masterpieces (total)',type:'merge',item:12,need:5},{i:'⭐',ko:'레벨 6 달성',en:'Reach Level 6',type:'level',need:6}],
+   rwd:{c:1600,xp:1100},rt:{ko:'🪙1600 + 1100XP',en:'🪙1600 + 1100XP'}},
+  {char:'⭐',title:{ko:'제10화: 별이 빛나는 밤',en:'Ch.10: Starry Night'},
+   quote:{ko:'"텃밭이 넓어졌어요! 상추와 감자로 메뉴판을 채워볼까요?"',en:'"The patch grew! Let\'s fill the menu with lettuce and potatoes!"'},
+   objs:[{i:'🥬',ko:'상추 8개 만들기(누적)',en:'Make 8 Lettuces (total)',type:'merge',item:6,need:8},{i:'🥔',ko:'감자 5개 만들기(누적)',en:'Make 5 Potatoes (total)',type:'merge',item:7,need:5}],
+   rwd:{c:900,xp:600},rt:{ko:'🪙900 + 600XP',en:'🪙900 + 600XP'}},
+  {char:'🌙',title:{ko:'제11화: 야식 메뉴 개발',en:'Ch.11: Late-Night Menu'},
+   quote:{ko:'"샐러드랑 스튜로 야식 코스를 짜볼까?"',en:'"Salads and stew for a late-night course?"'},
+   objs:[{i:'🥗',ko:'샐러드 5개(누적)',en:'5 Salads (total)',type:'merge',item:8,need:5},{i:'🍲',ko:'스튜 3개(누적)',en:'3 Stews (total)',type:'merge',item:9,need:3}],
+   rwd:{c:1000,xp:680},rt:{ko:'🪙1000 + 680XP',en:'🪙1000 + 680XP'}},
+  {char:'🚌',title:{ko:'제12화: 시장 통닭 버스',en:'Ch.12: Market Day'},
+   quote:{ko:'"시장에서 들은 소문—여기 파스타가 일품이래요!"',en:'"Word from the market — your pasta is legendary!"'},
+   objs:[{i:'🍛',ko:'황금 카레 4개(누적)',en:'4 Golden Curries (total)',type:'merge',item:10,need:4},{i:'⭐',ko:'레벨 4 달성',en:'Reach Level 4',type:'level',need:4}],
+   rwd:{c:1200,xp:750},rt:{ko:'🪙1200 + 750XP',en:'🪙1200 + 750XP'}},
+  {char:'🍝',title:{ko:'제13화: 파스타의 마법',en:'Ch.13: Pasta Magic'},
+   quote:{ko:'"정원 파스타 한 접시면 충분해요."',en:'"One plate of garden pasta is enough…"'},
+   objs:[{i:'🍝',ko:'정원 파스타 2개 만들기',en:'Make 2 Garden Pastas',type:'merge',item:11,need:2},{i:'🪙',ko:'코인 8000 모으기(누적)',en:'Earn 8000 coins (total)',type:'coins',need:8000}],
+   rwd:{c:1400,xp:820},rt:{ko:'🪙1400 + 820XP',en:'🪙1400 + 820XP'}},
+  {char:'🎪',title:{ko:'제14화: 축제 주간',en:'Ch.14: Festival Week'},
+   quote:{ko:'"축제 기간엔 걸작이 메인이죠!"',en:'"Festival week calls for masterpieces!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 4개(누적)',en:'4 Masterpieces (total)',type:'merge',item:12,need:4},{i:'🌱',ko:'텃밭 업그레이드 3단계',en:'Garden upgrade Lv.3',type:'upgrade',key:'garden',need:3}],
+   rwd:{c:1700,xp:950},rt:{ko:'🪙1700 + 950XP',en:'🪙1700 + 950XP'}},
+  {char:'🦄',title:{ko:'제15화: 동화 같은 저녁',en:'Ch.15: Fairytale Dinner'},
+   quote:{ko:'"동화에 나올 법한 한 상 차려주세요!"',en:'"Serve a dinner straight out of a fairytale!"'},
+   objs:[{i:'🍝',ko:'정원 파스타 5개(누적)',en:'5 Garden Pastas (total)',type:'merge',item:11,need:5},{i:'🍲',ko:'스튜 6개(누적)',en:'6 Stews (total)',type:'merge',item:9,need:6}],
+   rwd:{c:1900,xp:1050},rt:{ko:'🪙1900 + 1050XP',en:'🪙1900 + 1050XP'}},
+  {char:'🏅',title:{ko:'제16화: 금메달 도전',en:'Ch.16: Gold Medal Run'},
+   quote:{ko:'"금메달은 걸작으로만 증명돼요!"',en:'"Gold medals are won with masterpieces!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 8개(누적)',en:'8 Masterpieces (total)',type:'merge',item:12,need:8},{i:'⭐',ko:'레벨 6 달성',en:'Reach Level 6',type:'level',need:6}],
+   rwd:{c:2200,xp:1200},rt:{ko:'🪙2200 + 1200XP',en:'🪙2200 + 1200XP'}},
+  {char:'🌈',title:{ko:'제17화: 무지개 디너',en:'Ch.17: Rainbow Dinner'},
+   quote:{ko:'"채소 무지개를 한 그릇에!"',en:'"A rainbow of veggies in one bowl!"'},
+   objs:[{i:'🥗',ko:'샐러드 12개(누적)',en:'12 Salads (total)',type:'merge',item:8,need:12},{i:'🍛',ko:'황금 카레 6개(누적)',en:'6 Golden Curries (total)',type:'merge',item:10,need:6}],
+   rwd:{c:2600,xp:1500},rt:{ko:'🪙2600 + 1500XP',en:'🪙2600 + 1500XP'}},
+  {char:'🏆',title:{ko:'제18화: 미슐랭 스타!',en:'Ch.18: Michelin Star!'},
+   quote:{ko:'"이 텃밭에서 시작한 요리가 미슐랭 스타를 받는 날이 왔습니다!"',en:'"The day has come when cooking from this garden earns a Michelin Star!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 15개(누적)',en:'15 Masterpieces (total)',type:'merge',item:12,need:15},{i:'🏡',ko:'모든 업그레이드 3단계+',en:'All upgrades level 3+',type:'allup',need:3},{i:'⭐',ko:'레벨 7 달성',en:'Reach Level 7',type:'level',need:7}],
+   rwd:{c:3500,xp:2400},rt:{ko:'🏆 미슐랭 스타 엔딩!',en:'🏆 Michelin Star Ending!'}},
+  {char:'🥘',title:{ko:'제19화: 풍성한 저녁 준비',en:'Ch.19: Surf & Turf Prep'},
+   quote:{ko:'"텃밭 샐러드에 스모크 한 점이면 완벽해요!"',en:'"Garden salad plus a smoked cut—perfect pairing!"'},
+   objs:[{i:'♨️',ko:'정육 스모크 3개(누적)',en:'3 Smoked cuts (meat)',type:'mergeM',item:9,need:3},{i:'🥗',ko:'샐러드 6개(누적)',en:'6 Salads (total)',type:'merge',item:8,need:6}],
+   rwd:{c:2800,xp:1600},rt:{ko:'🪙2800 + 1600XP · 정육 스토리!',en:'🪙2800 + 1600XP · meat story!'}},
+  {char:'🍽️',title:{ko:'제20화: 레전드 셰프의 밤',en:'Ch.20: Legend Chef Night'},
+   quote:{ko:'"정육 걸작과 텃밭 걸작—오늘 밤 메인은 두 개예요!"',en:'"Two masterpieces—land and sea—for one legendary night!"'},
+   objs:[{i:'🍲',ko:'미트 스튜 2개(누적)',en:'2 Meat stews (total)',type:'mergeM',item:10,need:2},{i:'👑',ko:'셰프의 걸작 2개(누적)',en:'2 Garden masterpieces',type:'merge',item:12,need:2},{i:'🏅',ko:'정육 셰프 걸작 1개(누적)',en:'1 Butcher masterpiece',type:'mergeM',item:12,need:1}],
+   rwd:{c:4200,xp:2600},rt:{ko:'🎊 레전드 엔딩 보너스!',en:'🎊 Legend ending bonus!'}},
+];
+
+// ── UPGRADES (5 categories, 4 levels) ──────────────────────────────
+const UP_TAB_STORY={
+  ko:{
+    title:'손님에게 보여줄 꿈을 조금씩 쌓아요',
+    body:'텃밭에서 나온 재료로 요리를 만들고, 번 코인으로 가게를 고쳐 나갑니다. 낡은 간판이 빛나고, 테이블에 촛불이 켜지고, 주방이 커질 때마다 이 동네 작은 식당은 조금씩 다른 이야기를 쓰게 돼요.',
+  },
+  en:{
+    title:'Stack the dream you\'ll show your guests',
+    body:'Cook from the patch, spend coins to mend the place. Each neon glow, candle, and wider kitchen writes a new chapter for this little neighborhood spot.',
+  },
+};
+const UPS=[
+  {key:'garden',  ko:'텃밭',     en:'Garden',   e:'🌱',costs:[80,200,450,900],
+   desc:{ko:['새싹 확률 +15%','당근 확률 추가','옥수수 확률 추가','최고급 재료 확률'],
+         en:['+15% Sprout chance','Add Carrot chance','Add Corn chance','Best ingredient chance']},
+   narrative:{ko:[
+     '할머니가 남긴 밭이 아직은 초라해요. 씨앗부터 다시 믿어볼까요.',
+     '새싹이 더 자주 올라와요. 아침마다 밭 가는 길이 설레기 시작했어요.',
+     '당근과 옥수수가 밭에 이름을 올리기 시작했어요. 이웃이 창 넘어 물어봐요.',
+     '최고급 재료까지 손에 잡히는 날엔, 스스로도 농부인 줄 잊을 뻔해요.',
+   ],en:[
+     'Grandma\'s patch still looks humble. Maybe we trust the seeds again.',
+     'More sprouts every day. The walk to the beds feels lighter.',
+     'Carrots and corn claim their rows. Neighbors peek over the fence.',
+     'When rare crops land in your hands, you almost forget you\'re the cook too.',
+   ]}},
+  {key:'sign',    ko:'간판',     en:'Sign',     e:'🪧',costs:[100,250,600,1200],
+   desc:{ko:['네온 간판','화려한 조명 간판','그랜드 일루미네이션','미슐랭 스타 간판'],
+         en:['Neon sign','Lit sign','Grand illumination','Michelin sign']},
+   narrative:{ko:[
+     '지나가던 사람이 한 번은 봐줄 간판이 필요해요. 아직은 손글씨에 가깝죠.',
+     '네온이 켜지자 밤거리에 "여기 있어요"라고 말하는 것 같아요.',
+     '불빛이 화려해질수록 발걸음이 느려져요. 사진 찍는 사람도 생겼어요.',
+     '간판이 말해요. 이 집은 그냥 동네 밥집이 아니라고.',
+   ],en:[
+     'Passersby need a reason to look up. It still feels like chalk on wood.',
+     'Neon hums: we\'re open. The street remembers the glow.',
+     'The brighter the lights, the slower the steps. Phones come out.',
+     'The sign says it: this isn\'t just another corner spot.',
+   ]}},
+  {key:'table',   ko:'테이블',   en:'Table',    e:'🪑',costs:[150,350,800,1600],
+   desc:{ko:['고급 테이블','캔들 테이블','VIP 테이블','로얄 테이블'],
+         en:['Premium table','Candle table','VIP table','Royal table']},
+   narrative:{ko:[
+     '의자가 삐걱거려도, 첫 손님을 앉힐 자리는 있어야 해요.',
+     '천이 바뀌고 촛불이 생겼어요. 저녁마다 작은 연극이 열려요.',
+     'VIP라는 말이 부끄럽지만, 단골이 지정석을 말할 만큼 익숙해졌어요.',
+     '로얄 테이블 앞에선 숟가락 소리까지 조심스러워요. 오늘은 특별한 날이에요.',
+   ],en:[
+     'Chairs creak, but you need a place for the first guest to sit.',
+     'Cloth and candles arrive. Every dinner feels like a tiny play.',
+     '“VIP” still feels big, but regulars already claim their seats.',
+     'At the royal table, even spoons sound careful. Tonight is the night.',
+   ]}},
+  {key:'kitchen', ko:'주방',     en:'Kitchen',  e:'👨‍🍳',costs:[200,500,1100,2200],
+   desc:{ko:['중급 주방','프리미엄 주방','마스터 주방','별 셰프 주방'],
+         en:['Advanced kitchen','Premium kitchen','Master kitchen','Star chef kitchen']},
+   narrative:{ko:[
+     '냄비 하나로 시작한 주방. 레시피는 머릿속에만 가득해요.',
+     '불 세기를 조절할 수 있게 됐어요. 타이밍이 조금씩 제 손을 믿어요.',
+     '프리미엄 장비가 들어오자 동시에 여러 냄비를 돌릴 수 있어요.',
+     '별 셰프 주방이라니… 어제의 나에게 말해주고 싶어요.',
+   ],en:[
+     'One pot, one stove. Recipes still live mostly in your head.',
+     'You tame the heat. Timing starts to trust your hands.',
+     'Better gear means more pots singing at once.',
+     'A star-chef kitchen—you\'d tell yesterday-you to sit down.',
+   ]}},
+  {key:'interior',ko:'인테리어', en:'Interior', e:'🎨',costs:[300,700,1500,3000],
+   desc:{ko:['세련된 인테리어','럭셔리 인테리어','로얄 인테리어','미슐랭 인테리어'],
+         en:['Stylish interior','Luxury interior','Royal interior','Michelin interior']},
+   narrative:{ko:[
+     '벽지가 바랬지만, 마음만은 이미 레스토랑이에요.',
+     '벽과 바닥이 숨을 고쳐요. 손님이 들어올 때마다 한숨이 나와요.',
+     '럭셔리라는 말이 무색할 만큼, 빛이 각도를 아네요.',
+     '미슐랭이 오기 전에, 우리 가게는 이미 오늘의 무대예요.',
+   ],en:[
+     'The wallpaper faded, but the heart was already a dining room.',
+     'Walls and floors breathe again. Guests step in—you exhale.',
+     'Light learns its angles. “Luxury” almost feels small.',
+     'Before any star, this room is already tonight\'s stage.',
+   ]}},
+];
+// ep needed to unlock (0 = always)
+const UP_UNLOCK={garden:0,sign:1,table:2,kitchen:3,interior:5};
+
+// ── STATE ──────────────────────────────────────────────────────────
+let S={
+  board:Array(BOARD_SIZE).fill(null),boardMeat:Array(BOARD_SIZE).fill(null),
+  coins:0,xp:0,level:1,
+  sel:null,selMeat:null,subBoard:'veg',
+  ups:{garden:0,sign:0,table:0,kitchen:0,interior:0},
+  ep:0,epDone:[],
+  mt:new Array(MAX_T+1).fill(0),mtMeat:new Array(MAX_T+1).fill(0),
+  tc:0,
+  energy:EN_MAX,lastEn:Date.now(),
+  lang:'ko',tab:'garden',
+  gCharX:50,gCharY:52,gCharDir:'d',
+};
+const save=()=>{try{localStorage.setItem('gk3',JSON.stringify(S));}catch(e){}};
+function remapOldTier(v){
+  if(v==null)return null;
+  if(v<=5)return v;
+  if(v===6)return 8;
+  if(v===7)return 9;
+  if(v===8)return 10;
+  if(v===9)return 12;
+  return Math.min(MAX_T,Math.max(1,v));
+}
+function migrateSave(){
+  const b=S.board;
+  if(Array.isArray(b)&&b.length===20&&BOARD_SIZE===36){
+    const nb=Array(BOARD_SIZE).fill(null);
+    for(let i=0;i<b.length;i++)nb[i]=remapOldTier(b[i]);
+    S.board=nb;
+  }else if(!Array.isArray(b)||b.length!==BOARD_SIZE){
+    const nb=Array(BOARD_SIZE).fill(null);
+    if(Array.isArray(b))for(let i=0;i<Math.min(b.length,BOARD_SIZE);i++)nb[i]=b[i];
+    S.board=nb;
+  }
+  const m=S.mt;
+  if(Array.isArray(m)&&m.length===10){
+    const nm=new Array(MAX_T+1).fill(0);
+    for(let t=1;t<=5;t++)nm[t]=m[t]||0;
+    nm[8]=m[6]||0; nm[9]=m[7]||0; nm[10]=m[8]||0; nm[12]=m[9]||0;
+    S.mt=nm;
+  }else if(!Array.isArray(m)||m.length<MAX_T+1){
+    const nm=new Array(MAX_T+1).fill(0);
+    if(Array.isArray(m))for(let t=0;t<m.length&&t<=MAX_T;t++)nm[t]=m[t]|0;
+    S.mt=nm;
+  }
+  const bm=S.boardMeat;
+  if(!Array.isArray(bm)||bm.length!==BOARD_SIZE){
+    const nb=Array(BOARD_SIZE).fill(null);
+    if(Array.isArray(bm))for(let i=0;i<Math.min(bm.length,BOARD_SIZE);i++)nb[i]=bm[i];
+    S.boardMeat=nb;
+  }
+  const mm=S.mtMeat;
+  if(!Array.isArray(mm)||mm.length<MAX_T+1){
+    const nm=new Array(MAX_T+1).fill(0);
+    if(Array.isArray(mm))for(let t=0;t<mm.length&&t<=MAX_T;t++)nm[t]=mm[t]|0;
+    S.mtMeat=nm;
+  }
+  if(S.subBoard!=='veg'&&S.subBoard!=='meat')S.subBoard='veg';
+  const _epd=new Set(S.epDone||[]);
+  if(S.subBoard==='meat'&&!_epd.has(2))S.subBoard='veg';
+  if(typeof S.gCharX!=='number'||S.gCharX<12||S.gCharX>88)S.gCharX=50;
+  if(typeof S.gCharY!=='number'||S.gCharY<22||S.gCharY>78)S.gCharY=52;
+  if(!{u:1,d:1,l:1,r:1}[S.gCharDir])S.gCharDir='d';
+  if(!VALID_TABS.includes(S.tab))S.tab='garden';
+}
+const load=()=>{try{const r=localStorage.getItem('gk3');if(r){Object.assign(S,JSON.parse(r));migrateSave();save();}}catch(e){}};
+
+function applyTabToDom(){
+  if(!VALID_TABS.includes(S.tab))S.tab='garden';
+  const tab=S.tab;
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pane-'+tab)?.classList.add('on');
+  VALID_TABS.forEach((n,i)=>{if(n===tab)document.querySelectorAll('.tabs .tab')[i]?.classList.add('on');});
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────
+const T=(ko,en)=>S.lang==='ko'?ko:en;
+let _tt=null;
+function toast(msg,type='',dur=2300){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast show '+(type||'');
+  if(_tt)clearTimeout(_tt);_tt=setTimeout(()=>el.className='toast',dur);
+}
+function showModal(ico,title,sub){
+  document.getElementById('mi').textContent=ico;
+  document.getElementById('mt').textContent=title;
+  document.getElementById('ms').textContent=sub;
+  document.getElementById('mb').textContent=T('계속하기','Continue');
+  document.getElementById('mbg').classList.add('show');
+}
+function closeModal(){document.getElementById('mbg').classList.remove('show');}
+
+// ── ENERGY ─────────────────────────────────────────────────────────
+function regenEn(){
+  if(S.energy>=EN_MAX)return;
+  const g=Math.floor((Date.now()-S.lastEn)/1000/EN_SEC);
+  if(g>0){S.energy=Math.min(EN_MAX,S.energy+g);S.lastEn+=g*EN_SEC*1000;save();}
+}
+function renderEn(){
+  document.getElementById('enval').textContent=S.energy;
+  const rem=S.energy>=EN_MAX?0:Math.max(0,EN_SEC-Math.floor((Date.now()-S.lastEn)/1000)%EN_SEC);
+  document.getElementById('etm').textContent=S.energy<EN_MAX?` ${Math.floor(rem/60)}:${String(rem%60).padStart(2,'0')}`:'';
+  document.getElementById('sbtn').disabled=S.energy<=0;
+}
+setInterval(()=>{regenEn();renderEn();},1000);
+
+// ── COINS / XP ─────────────────────────────────────────────────────
+function addC(n){S.coins+=n;S.tc+=n;document.getElementById('hcoin').textContent=S.coins;checkEp();}
+function spendC(n){if(S.coins<n)return false;S.coins-=n;document.getElementById('hcoin').textContent=S.coins;return true;}
+function addXP(n){
+  if(S.level>=7)return;S.xp+=n;
+  while(S.level<7&&S.xp>=LV_XP[S.level]){
+    S.level++;
+    showModal('🎉',T('레벨 업!','Level Up!'),
+      T(`Lv.${S.level} 달성!\n${LV_NM.ko[S.level-1]}`,`Reached Lv.${S.level}!\n${LV_NM.en[S.level-1]}`));
+    save();if(S.tab==='up')renderUps();if(S.tab==='rest')drawRest();
+  }
+  renderXP();checkEp();
+}
+function renderXP(){
+  const lv=S.level;
+  if(lv>=7){
+    document.getElementById('xpf').style.width='100%';
+    document.getElementById('xpt').textContent='MAX';
+    document.getElementById('lvc').textContent='Lv.7 ✨';return;
+  }
+  const prev=lv>1?LV_XP[lv-1]:0,next=LV_XP[lv];
+  document.getElementById('xpf').style.width=Math.min(100,((S.xp-prev)/(next-prev))*100)+'%';
+  document.getElementById('xpt').textContent=`${S.xp}/${next}`;
+  document.getElementById('lvc').textContent=`Lv.${lv}`;
+}
+
+// ── EPISODE LOGIC ──────────────────────────────────────────────────
+function objProg(ep,oi){
+  const o=ep.objs[oi];
+  if(o.type==='merge') return S.mt[o.item]||0;
+  if(o.type==='mergeM') return S.mtMeat[o.item]||0;
+  if(o.type==='coins') return S.tc;
+  if(o.type==='upgrade') return S.ups[o.key]||0;
+  if(o.type==='level')  return S.level;
+  if(o.type==='allup')  return Math.min(...Object.values(S.ups));
+  return 0;
+}
+function epAllDone(ei){return EPS[ei].objs.every((_,i)=>objProg(EPS[ei],i)>=EPS[ei].objs[i].need);}
+function checkEp(){
+  if(S.tab==='board')renderBanner();
+  if(S.tab==='story')renderStory();
+  if(S.tab==='garden'){renderFreezerMini();renderGardenCropZones();}
+}
+
+function meatUnlocked(){return S.epDone.includes(2);}
+function seedMeatIfEligible(){
+  if(!meatUnlocked())return;
+  if(S.boardMeat.some(x=>x!=null))return;
+  [0,1,2,3,4,5,6].forEach(i=>{S.boardMeat[i]=1;});
+  save();
+  if(S.tab==='board'&&S.subBoard==='meat')buildGridMeat();
+  hubBoardChanged();
+}
+
+// ── PARTICLES ──────────────────────────────────────────────────────
+function particles(el){
+  const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  const cols=['#ffd700','#ff9900','#ff5500','#fff','#00ff88','#88ddff','#ff88cc'];
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div'),a=Math.random()*Math.PI*2,d=28+Math.random()*48;
+    p.className='pt';
+    p.style.cssText=`left:${cx}px;top:${cy}px;width:${5+Math.random()*6}px;height:${5+Math.random()*6}px;background:${cols[Math.floor(Math.random()*cols.length)]};margin-left:-3px;margin-top:-3px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),650);
+  }
+}
+
+// ── SPAWN ──────────────────────────────────────────────────────────
+function spawnTier(){
+  const gLv=Math.min(4,S.ups.garden);
+  const w=G_SPAWN[gLv];
+  const total=w.reduce((a,b)=>a+b,0);
+  let r=Math.random()*total;
+  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i+1;}
+  return 1;
+}
+function spawnTierMeat(){
+  const kLv=Math.min(4,S.ups.kitchen);
+  const w=K_SPAWN[kLv];
+  const total=w.reduce((a,b)=>a+b,0);
+  let r=Math.random()*total;
+  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i+1;}
+  return 1;
+}
+function doSpawn(){
+  regenEn();
+  if(S.energy<=0){toast(T('에너지 부족! 잠시 기다려주세요.','No energy! Wait a moment.'),'err');return;}
+  const emp=S.board.map((v,i)=>v==null?i:-1).filter(i=>i>=0);
+  if(!emp.length){toast(T('보드가 가득 찼어요! 합쳐서 공간을 만드세요.','Board full! Merge to free space.'),'err');return;}
+  S.energy--;S.lastEn=Date.now();
+  const idx=emp[Math.floor(Math.random()*emp.length)];
+  S.board[idx]=spawnTier();
+  renderCell(idx,'ap');save();renderEn();hubBoardChanged();
+}
+function doSpawnMeat(){
+  if(!meatUnlocked()){toast(T('제3화를 완료하면 정육 코너가 열려요.','Finish Ch.3 to unlock the butcher corner.'),'err');return;}
+  regenEn();
+  if(S.energy<=0){toast(T('에너지 부족! 잠시 기다려주세요.','No energy! Wait a moment.'),'err');return;}
+  const emp=S.boardMeat.map((v,i)=>v==null?i:-1).filter(i=>i>=0);
+  if(!emp.length){toast(T('정육 보드가 가득 찼어요!','Meat board full!'),'err');return;}
+  S.energy--;S.lastEn=Date.now();
+  const idx=emp[Math.floor(Math.random()*emp.length)];
+  S.boardMeat[idx]=spawnTierMeat();
+  renderCellMeat(idx,'ap');save();renderEn();hubBoardChanged();
+}
+
+// ── BOARD ──────────────────────────────────────────────────────────
+function clickCell(idx){
+  const item=S.board[idx];
+  if(S.sel===null){if(item==null)return;S.sel=idx;applyHL();return;}
+  if(S.sel===idx){S.sel=null;applyHL();return;}
+  const si=S.board[S.sel];
+  if(item==null){
+    S.board[idx]=si;S.board[S.sel]=null;
+    renderCell(S.sel,'');renderCell(idx,'ap');
+    S.sel=null;applyHL();save();hubBoardChanged();return;
+  }
+  if(item===si){
+    const nxt=si+1,src=S.sel;
+    S.board[src]=null;S.sel=null;
+    if(nxt>MAX_T){
+      S.board[idx]=null;renderCell(src,'');renderCell(idx,'');applyHL();
+      addC(DOUBLE12.c);addXP(DOUBLE12.xp);
+      toast(T(`👑×2 합치기! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`,`👑×2 Merged! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`),'gd',3000);
+    } else {
+      S.board[idx]=nxt;S.mt[nxt]=(S.mt[nxt]||0)+1;
+      renderCell(src,'');
+      const cel=renderCell(idx,'am');if(cel)particles(cel);
+      applyHL();
+      const rw=MRW[nxt];
+      if(rw){addC(rw.c);addXP(rw.xp);}
+      const show=ITEMS[nxt-1];
+      toast(show?T(`${show.e} ${show.ko} 완성! +${rw?.c||0}🪙`,`${show.e} ${show.en} made! +${rw?.c||0}🪙`):T('합치기 완료!','Merged!'),'ok');
+      checkEp();
+    }
+    save();hubBoardChanged();return;
+  }
+  S.sel=idx;applyHL();
+}
+function applyHL(){
+  document.querySelectorAll('#grid .cell').forEach((el,i)=>el.classList.toggle('sel',i===S.sel));
+}
+function applyHLMeat(){
+  document.querySelectorAll('#grid-meat .cell').forEach((el,i)=>el.classList.toggle('sel',i===S.selMeat));
+}
+function renderCell(idx,anim){
+  const cells=document.querySelectorAll('#grid .cell');
+  if(!cells[idx])return null;
+  const el=cells[idx],item=S.board[idx];
+  if(item==null){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');}
+  else{
+    const it=ITEMS[item-1];
+    if(!it){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');S.board[idx]=null;return null;}
+    const dots=[...Array(MAX_T)].map((_,d)=>`<div class="td${d<item?' lit':''}"></div>`).join('');
+    el.setAttribute('data-t',item);el.classList.add('has-item');
+    el.innerHTML=`<div class="ibub"><div class="ico">${it.e}</div></div><div class="iname">${S.lang==='ko'?it.ko:it.en}</div><div class="tdots">${dots}</div>`;
+    if(anim){el.classList.add(anim);setTimeout(()=>el.classList.remove(anim),500);}
+    if(idx===S.sel)el.classList.add('sel');else el.classList.remove('sel');
+  }
+  return el;
+}
+function buildGrid(){
+  const g=document.getElementById('grid');g.innerHTML='';
+  for(let i=0;i<BOARD_SIZE;i++){
+    const c=document.createElement('div');c.className='cell';c.onclick=()=>clickCell(i);
+    g.appendChild(c);renderCell(i,'');
+  }
+}
+function clickCellMeat(idx){
+  const item=S.boardMeat[idx];
+  if(S.selMeat===null){if(item==null)return;S.selMeat=idx;applyHLMeat();return;}
+  if(S.selMeat===idx){S.selMeat=null;applyHLMeat();return;}
+  const si=S.boardMeat[S.selMeat];
+  if(item==null){
+    S.boardMeat[idx]=si;S.boardMeat[S.selMeat]=null;
+    renderCellMeat(S.selMeat,'');renderCellMeat(idx,'ap');
+    S.selMeat=null;applyHLMeat();save();hubBoardChanged();return;
+  }
+  if(item===si){
+    const nxt=si+1,src=S.selMeat;
+    S.boardMeat[src]=null;S.selMeat=null;
+    if(nxt>MAX_T){
+      S.boardMeat[idx]=null;renderCellMeat(src,'');renderCellMeat(idx,'');applyHLMeat();
+      addC(DOUBLE_M12.c);addXP(DOUBLE_M12.xp);
+      toast(T(`🏅×2 정육 합치기! +${DOUBLE_M12.c}🪙`,`🏅×2 Meat merge! +${DOUBLE_M12.c}🪙`),'gd',3000);
+    } else {
+      S.boardMeat[idx]=nxt;S.mtMeat[nxt]=(S.mtMeat[nxt]||0)+1;
+      renderCellMeat(src,'');
+      const cel=renderCellMeat(idx,'am');if(cel)particles(cel);
+      applyHLMeat();
+      const rw=MRW_MEAT[nxt];
+      if(rw){addC(rw.c);addXP(rw.xp);}
+      const show=MEAT_ITEMS[nxt-1];
+      toast(show?T(`${show.e} ${show.ko} 완성! +${rw?.c||0}🪙`,`${show.e} ${show.en} made! +${rw?.c||0}🪙`):T('합치기!','Merged!'),'ok');
+      checkEp();
+    }
+    save();hubBoardChanged();return;
+  }
+  S.selMeat=idx;applyHLMeat();
+}
+function renderCellMeat(idx,anim){
+  const cells=document.querySelectorAll('#grid-meat .cell');
+  if(!cells[idx])return null;
+  const el=cells[idx],item=S.boardMeat[idx];
+  if(item==null){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');}
+  else{
+    const it=MEAT_ITEMS[item-1];
+    if(!it){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');S.boardMeat[idx]=null;return null;}
+    const dots=[...Array(MAX_T)].map((_,d)=>`<div class="td${d<item?' lit':''}"></div>`).join('');
+    el.setAttribute('data-t',item);el.classList.add('has-item');
+    el.innerHTML=`<div class="ibub"><div class="ico">${it.e}</div></div><div class="iname">${S.lang==='ko'?it.ko:it.en}</div><div class="tdots">${dots}</div>`;
+    if(anim){el.classList.add(anim);setTimeout(()=>el.classList.remove(anim),500);}
+    if(idx===S.selMeat)el.classList.add('sel');else el.classList.remove('sel');
+  }
+  return el;
+}
+function buildGridMeat(){
+  const g=document.getElementById('grid-meat');g.innerHTML='';
+  for(let i=0;i<BOARD_SIZE;i++){
+    const c=document.createElement('div');c.className='cell';c.onclick=()=>clickCellMeat(i);
+    g.appendChild(c);renderCellMeat(i,'');
+  }
+}
+
+function hubBoardChanged(){
+  if(S.tab!=='garden')return;
+  renderFreezerMini();renderGardenCropZones();
+}
+function vegTierBoardCount(tier){
+  let n=0;
+  for(let i=0;i<BOARD_SIZE;i++)if(S.board[i]===tier)n++;
+  return n;
+}
+function renderGardenCropZones(){
+  const root=document.getElementById('hub-crop-zones');
+  if(!root)return;
+  root.innerHTML='';
+  const ko=S.lang==='ko';
+  for(let ti=1;ti<=7;ti++){
+    const it=ITEMS[ti-1];
+    const onB=vegTierBoardCount(ti);
+    const zone=document.createElement('article');
+    zone.className='hub-crop-zone';
+    const head=document.createElement('div');
+    head.className='hub-zone-head';
+    head.textContent=ko?`${it.ko} 정원`:`${it.en} garden`;
+    const bed=document.createElement('div');
+    bed.className='hub-zone-bed';
+    const pile=document.createElement('div');
+    pile.className='hub-zone-pile';
+    if(onB>0){
+      const show=Math.min(onB,12);
+      for(let i=0;i<show;i++){
+        const s=document.createElement('span');
+        s.className='hub-zone-plant';
+        s.textContent=it.e;
+        pile.appendChild(s);
+      }
+      if(onB>show){
+        const m=document.createElement('span');
+        m.className='hub-zone-more';
+        m.textContent='+'+(onB-show);
+        pile.appendChild(m);
+      }
+    }
+    bed.appendChild(pile);
+    zone.appendChild(head);
+    zone.appendChild(bed);
+    root.appendChild(zone);
+  }
+}
+const FARMER_SHEET={cellW:48,cellH:96,cols:3,rows:4,src:'assets/farmer.png'};
+let _farmerWalkTimer=null;
+function farmerFacingRow(){
+  const d=S.gCharDir||'d';
+  if(d==='u')return 3;
+  if(d==='r')return 2;
+  if(d==='l')return 1;
+  return 0;
+}
+function setFarmerSprite(col,row){
+  const el=document.getElementById('hub-char');
+  const em=document.getElementById('hub-char-em');
+  if(!el||el.style.display==='none')return;
+  if(em&&em.style.display==='flex')return;
+  el.style.backgroundPosition=`${-col*FARMER_SHEET.cellW}px ${-row*FARMER_SHEET.cellH}px`;
+}
+function syncHubCharSpriteIdle(){
+  setFarmerSprite(1,farmerFacingRow());
+}
+function stopFarmerWalkAnim(){
+  if(_farmerWalkTimer){clearInterval(_farmerWalkTimer);_farmerWalkTimer=null;}
+}
+function startFarmerWalkAnim(){
+  stopFarmerWalkAnim();
+  const em=document.getElementById('hub-char-em');
+  if(em&&em.style.display==='flex')return;
+  const row=farmerFacingRow();
+  setFarmerSprite(0,row);
+  let tick=0;
+  _farmerWalkTimer=setInterval(()=>{
+    tick^=1;
+    setFarmerSprite(tick?2:0,row);
+  },125);
+  setTimeout(()=>{stopFarmerWalkAnim();syncHubCharSpriteIdle();},430);
+}
+function hubCharSpriteFail(){
+  const el=document.getElementById('hub-char');
+  const em=document.getElementById('hub-char-em');
+  if(el)el.style.display='none';
+  if(em){em.style.display='flex';}
+}
+function renderFreezerMini(){
+  const box=document.getElementById('hub-freezer');
+  if(!box)return;
+  box.classList.toggle('dim',!meatUnlocked());
+}
+function renderHubBubble(){
+  const b=document.getElementById('hub-bubble');if(!b)return;
+  const lines=[
+    T('한번 당신의 정원을 아름답게 꾸며보세요🥬','Take care of your garden beautifully 🥬'),
+    T('레스토랑은 문을 클릭하면 열려요💡','The restaurant opens when you tap the door 💡'),
+    T('냉동 창고에는 뭐가 있을까요?🥩','What could be inside the freezer? 🥩'),
+    T('텃밭 가꾸기 너무 설레는 일이에요!🧑‍🌾','Tending the garden is so exciting! 🧑‍🌾'),
+  ];
+  b.textContent=lines[Math.floor(Math.random()*lines.length)];
+}
+let _hubTipT=null;
+function hubCharTap(){renderHubBubble();if(_hubTipT)clearTimeout(_hubTipT);_hubTipT=setTimeout(renderHubBubble,4500);}
+
+function _rectsOverlap(a,b){
+  return !(a.right<=b.left || a.left>=b.right || a.bottom<=b.top || a.top>=b.bottom);
+}
+function _inflateRect(r,m){
+  return {left:r.left-m,top:r.top-m,right:r.right+m,bottom:r.bottom+m};
+}
+function _getHubFieldEl(){
+  return document.getElementById('g-walk-hit') || document.querySelector('.hub-walk-field');
+}
+function _getHubObstacles(){
+  // 충돌 비활성화(우선): 장애물 목록을 비워 이동이 막히지 않게 합니다.
+  return [];
+}
+function moveCharConstrained(targetX, targetY){
+  const field=_getHubFieldEl();
+  const box=document.getElementById('hub-char-box');
+  const sprite=document.getElementById('hub-char');
+  if(!field||!box||!sprite)return false;
+
+  const fieldRect=field.getBoundingClientRect();
+  const sprRect0=sprite.getBoundingClientRect();
+  const halfW=sprRect0.width/2;
+  const halfH=sprRect0.height/2;
+  // 캐릭터 중심이 필드 내부를 벗어나지 않게 1차 클램프
+  const minX=(halfW/fieldRect.width)*100;
+  const maxX=((fieldRect.width-halfW)/fieldRect.width)*100;
+  const minY=(halfH/fieldRect.height)*100;
+  const maxY=((fieldRect.height-halfH)/fieldRect.height)*100;
+
+  const oldX=S.gCharX, oldY=S.gCharY;
+  let tx=Math.max(minX,Math.min(maxX,targetX));
+  let ty=Math.max(minY,Math.min(maxY,targetY));
+
+  const obs=_getHubObstacles();
+  const snapCharRect=()=>{
+    const r=sprite.getBoundingClientRect();
+    return _inflateRect(r,0); // 충돌 탐지를 너무 타이트하게 만들지 않음
+  };
+
+  // candidate를 직접 배치해서 충돌 여부 확인
+  const placeAndCheck=(x,y)=>{
+    box.style.left=x+'%';
+    box.style.top=y+'%';
+    // 충돌 체크는 sprite(말머리 제외) 기준
+    const cRect=snapCharRect();
+    for(const el of obs){
+      const r=el.getBoundingClientRect();
+      if(_rectsOverlap(cRect,r))return true;
+    }
+    return false;
+  };
+
+  // 직선 방향으로 가장 가까운 유효 위치 탐색
+  let accepted=null;
+  for(let t=1;t>=0;t-=0.12){
+    const x=oldX+(tx-oldX)*t;
+    const y=oldY+(ty-oldY)*t;
+    if(!placeAndCheck(x,y)){accepted={x,y};break;}
+  }
+
+  if(!accepted){
+    // 실패하면 원복
+    box.style.left=oldX+'%';
+    box.style.top=oldY+'%';
+    return false;
+  }
+  S.gCharX=accepted.x;S.gCharY=accepted.y;
+  syncHubChar();
+  return true;
+}
+
+let _hubSkipNextWalkClickUntil=0;
+function hubWalkClick(ev){
+  // touch swipe로 이동했을 때 이어서 발생하는 click 이벤트를 무시
+  if(Date.now() < _hubSkipNextWalkClickUntil)return;
+  const r=ev.currentTarget.getBoundingClientRect();
+  const tx=((ev.clientX-r.left)/r.width)*100;
+  const ty=((ev.clientY-r.top)/r.height)*100;
+  if(Math.abs(tx-S.gCharX)<0.4&&Math.abs(ty-S.gCharY)<0.4)return;
+
+  const dx=tx-S.gCharX,dy=ty-S.gCharY;
+  if(Math.abs(dx)>=Math.abs(dy))S.gCharDir=dx>=0?'r':'l';
+  else S.gCharDir=dy>=0?'d':'u';
+
+  const ok=moveCharConstrained(tx,ty);
+  if(!ok)return;
+  startFarmerWalkAnim();
+  save();
+}
+function syncHubChar(){
+  const box=document.getElementById('hub-char-box');
+  if(!box)return;
+  box.style.left=S.gCharX+'%';box.style.top=S.gCharY+'%';
+  box.style.transform='translate(-50%,-50%)';
+}
+function syncHubCharFull(){
+  syncHubChar();
+  syncHubCharSpriteIdle();
+}
+function renderHubUi(){
+  const lbl=document.getElementById('hub-scene-lbl');
+  if(lbl)lbl.textContent=T('🌱 내 텃밭 · 오늘의 정원','🌱 My garden patch');
+  document.getElementById('hub-enter-t').textContent=T('🍳 머지 쿠킹으로','🍳 Enter merge cooking');
+  document.getElementById('hub-hint').textContent=T('각 정원 이모지는 머지 텃밭 개수와 같아요 · 잔디 탭 이동 · 오른쪽 집 문→음식점 · 왼쪽 ❄️','Garden emoji = veg board · tap to walk · house door → restaurant · ❄️ fridge');
+  document.getElementById('fz-lab').textContent=T('❄️ 냉동','❄️ Cold');
+  const tg=document.getElementById('hub-tavern-go');
+  if(tg)tg.title=T('문을 눌러 음식점으로','Enter through the door');
+  renderGardenCropZones();renderFreezerMini();renderHubBubble();syncHubCharFull();
+}
+function enterRestaurant(){goTab('rest');save();}
+function enterPlay(){
+  goTab('board');save();
+}
+function goSubBoard(which){
+  let w=which;
+  if(w==='meat'&&!meatUnlocked()){
+    toast(T('제3화 「주방을 열다」 보상을 받으면 정육·수산이 열려요.','Claim Ch.3 reward to unlock butcher & seafood.'),'err');
+    w='veg';
+  }
+  S.subBoard=w;
+  document.getElementById('stab-v').classList.toggle('on',w==='veg');
+  document.getElementById('stab-m').classList.toggle('on',w==='meat');
+  document.getElementById('grid-veg-wrap').classList.toggle('on',w==='veg');
+  document.getElementById('grid-meat-wrap').classList.toggle('on',w==='meat');
+  document.getElementById('m-lock-ico').style.display=meatUnlocked()?'none':'inline';
+  const vegTip=T('같은 재료 선택 후 합치세요','Select same items to merge');
+  const meatTip=T('정육·수산은 주방 업그레이드에 따라 입고 품질이 좋아져요.','Kitchen upgrades improve meat spawn tiers.');
+  document.getElementById('btip').textContent=w==='veg'?vegTip:meatTip;
+  document.getElementById('sico').textContent=w==='veg'?'🌱':'📦';
+  document.getElementById('stxt').textContent=w==='veg'?T('재료 받기','Get item'):T('입고 받기','Inbound');
+  document.getElementById('sbtn').onclick=w==='veg'?doSpawn:doSpawnMeat;
+  buildGrid();buildGridMeat();
+  S.sel=null;S.selMeat=null;applyHL();applyHLMeat();
+  renderLeg();
+  renderEn();
+}
+function openColdModal(){
+  document.getElementById('fs-mt').textContent=T('❄️ 냉동 창고','❄️ Cold storage');
+  document.getElementById('fs-ms').textContent=meatUnlocked()
+    ?T('정육 보드와 같은 내용이 비춰져요.','Mirrors your meat merge board.')
+    :T('제3화를 완료하면 냉동 창고가 열려요.','Finish Ch.3 to unlock cold storage.');
+  const g=document.getElementById('fs-grid');g.innerHTML='';
+  if(meatUnlocked()){
+    for(let i=0;i<BOARD_SIZE;i++){
+      const d=document.createElement('div');d.className='fs-cell';
+      const t=S.boardMeat[i];
+      d.textContent=t&&MEAT_ITEMS[t-1]?MEAT_ITEMS[t-1].e:'';
+      g.appendChild(d);
+    }
+  }
+  let mtTxt=T('누적 합성 기록(정육):','Meat merge totals:')+'\n';
+  for(let i=2;i<=MAX_T;i++){
+    if(S.mtMeat[i])mtTxt+=`${MEAT_ITEMS[i-1].e}${i}티어 ${S.mtMeat[i]}  `;
+  }
+  document.getElementById('fs-mtrow').textContent=mtTxt.trim()||T('아직 기록이 없어요.','No records yet.');
+  document.getElementById('fs-b-cl').textContent=T('닫기','Close');
+  document.getElementById('fs-b-go').textContent=T('정육 머지로 이동','Go to meat merge');
+  document.getElementById('fs-b-go').style.display=meatUnlocked()?'inline-block':'none';
+  document.getElementById('fs-mbg').classList.add('show');
+}
+function closeColdModal(){document.getElementById('fs-mbg').classList.remove('show');}
+function fromColdToMeat(){closeColdModal();goTab('board');goSubBoard('meat');save();}
+function renderBanner(){
+  const b=document.getElementById('mban');
+  if(S.ep>=EPS.length){b.style.display='none';return;}
+  b.style.display='flex';
+  const ep=EPS[S.ep];
+  const isDone=epAllDone(S.ep)&&!S.epDone.includes(S.ep);
+  const objs=ep.objs.map((o,i)=>{
+    const pr=Math.min(objProg(ep,i),o.need),pct=Math.min(100,pr/o.need*100),dk=pr>=o.need;
+    return `<div class="mo${dk?' dk':''}"><span>${o.i}</span><span style="flex:1;font-size:.73em">${S.lang==='ko'?o.ko:o.en}</span><div class="mobg"><div class="mof" style="width:${pct}%"></div></div><span class="mot">${pr}/${o.need}</span></div>`;
+  }).join('');
+  b.innerHTML=`<div class="mchar">${ep.char}</div><div class="mbody">
+    <div class="mep">${S.lang==='ko'?ep.title.ko:ep.title.en}</div>
+    <div class="mq">${S.lang==='ko'?ep.quote.ko:ep.quote.en}</div>
+    <div class="mos">${objs}</div>
+    ${isDone?`<button onclick="claimEp()" style="margin-top:7px;width:100%;background:linear-gradient(135deg,#1a5a10,#3a9920);border:none;color:#fff;padding:7px;border-radius:8px;cursor:pointer;font-size:.82em;font-weight:700">${T('보상 받기 🎁','Claim Reward 🎁')}</button>`:''}
+  </div>`;
+}
+function renderLeg(){
+  const r=document.getElementById('legr');r.innerHTML='';
+  const list=S.subBoard==='meat'?MEAT_ITEMS:ITEMS;
+  list.forEach((it,i)=>{
+    const s=document.createElement('span');s.className='legit';
+    s.textContent=it.e+' '+(S.lang==='ko'?it.ko:it.en);r.appendChild(s);
+    if(i<list.length-1){const a=document.createElement('span');a.className='legarr';a.textContent='→';r.appendChild(a);}
+  });
+  document.getElementById('legt').textContent=S.subBoard==='meat'?T('정육·수산 체인','Meat & seafood chain'):T('머지 체인','Merge chain');
+}
+
+// ── STORY ──────────────────────────────────────────────────────────
+function claimEp(){
+  if(!epAllDone(S.ep)||S.epDone.includes(S.ep))return;
+  const ep=EPS[S.ep];
+  S.epDone.push(S.ep);
+  addC(ep.rwd.c);addXP(ep.rwd.xp);
+  showModal('🎊',T('에피소드 완료!','Episode Complete!'),
+    T(`${ep.title.ko}\n보상: ${ep.rwd.c}🪙 ${ep.rwd.xp}XP`,`${ep.title.en}\nReward: ${ep.rwd.c}🪙 ${ep.rwd.xp}XP`));
+  if(S.ep<EPS.length-1)S.ep++;else S.ep=EPS.length;
+  seedMeatIfEligible();
+  save();renderBanner();renderStory();renderUps();
+  if(S.tab==='garden')renderHubUi();
+}
+function renderStory(){
+  const el=document.getElementById('epl');el.innerHTML='';
+  if(EPS.every((_,i)=>S.epDone.includes(i))){
+    el.innerHTML=`<div class="ending"><div class="endb">🏆🌟🌱</div>
+      <div class="endtt">${T('미슐랭 스타 달성!','Michelin Star Achieved!')}</div>
+      <div class="endsb">${T('텃밭의 씨앗 하나가\n세계 최고의 음식점이 되었습니다.\n당신은 진정한 마스터 셰프입니다!',
+        'A single seed from the garden\nbecame the world\'s finest restaurant.\nYou are a true Master Chef!')}</div></div>`;
+  }
+  EPS.forEach((ep,ei)=>{
+    const done=S.epDone.includes(ei),curr=S.ep===ei&&!done,locked=ei>S.ep;
+    const cls=done?'done':curr?'curr':'lock';
+    const badge=done?`✅ ${T('완료','Done')}`:curr?`▶ ${T('진행중','In Progress')}`:`🔒 ${T('잠김','Locked')}`;
+    const bcls=done?'bd':curr?'bc':'bl';
+    const objs=ep.objs.map((o,oi)=>{
+      const pr=Math.min(objProg(ep,oi),o.need),pct=Math.min(100,pr/o.need*100),dk=pr>=o.need;
+      return `<div class="epo${dk?' dk':''}"><span class="epoi">${o.i}</span><span class="epod">${S.lang==='ko'?o.ko:o.en}</span><div class="epobb"><div class="epob" style="width:${pct}%"></div></div><span class="epoc">${pr}/${o.need}</span></div>`;
+    }).join('');
+    const claimable=curr&&epAllDone(ei)&&!done;
+    el.innerHTML+=`<div class="epc ${cls}">
+      <div class="eph"><div class="epch">${ep.char}</div><div class="eptb">
+        <div class="epn">${T(`에피소드 ${ei+1}/${EPS.length}`,`Episode ${ei+1}/${EPS.length}`)}</div>
+        <div class="ept">${S.lang==='ko'?ep.title.ko:ep.title.en}</div>
+        <div class="epbdg ${bcls}">${badge}</div>
+      </div></div>
+      <div class="epq">${S.lang==='ko'?ep.quote.ko:ep.quote.en}</div>
+      <div class="epos">${objs}</div>
+      <div class="eprw">${T('보상:','Reward:')} ${S.lang==='ko'?ep.rt.ko:ep.rt.en}</div>
+      ${claimable?`<button class="epcl" onclick="claimEp()">${T('보상 받기 🎁','Claim Reward 🎁')}</button>`:''}
+      ${done?`<div class="epcld">🏆 ${T('완료','Claimed')}</div>`:''}
+    </div>`;
+  });
+}
+
+// ── UPGRADES ───────────────────────────────────────────────────────
+function buyUp(key){
+  const def=UPS.find(u=>u.key===key);
+  const cur=S.ups[key];if(cur>=4)return;
+  const cost=def.costs[cur];
+  if(!spendC(cost)){toast(T(`코인 부족! ${cost}🪙 필요`,`Need ${cost}🪙!`),'err');return;}
+  S.ups[key]++;save();renderUps();
+  if(S.tab==='rest')drawRest();
+  toast(T(`${def.ko} ${S.ups[key]}단계!`,`${def.en} Lv.${S.ups[key]}!`),'gd',2500);
+  checkEp();
+}
+function renderUps(){
+  const el=document.getElementById('upl');el.innerHTML='';
+  const st=S.lang==='ko'?UP_TAB_STORY.ko:UP_TAB_STORY.en;
+  el.innerHTML+=`<div class="up-banner"><div class="up-banner-t">${st.title}</div><p class="up-banner-p">${st.body}</p></div>`;
+  UPS.forEach(def=>{
+    const cur=S.ups[def.key],mx=cur>=4,unlocked=S.epDone.length>=UP_UNLOCK[def.key];
+    const cost=mx?null:def.costs[cur],canAfford=cost!==null&&S.coins>=cost;
+    const desc=mx?T('최고 등급 달성! 🏆','Max level reached! 🏆'):(S.lang==='ko'?def.desc.ko[cur]:def.desc.en[cur]);
+    let flavorText='';
+    if(!unlocked){
+      flavorText=T('이 항목의 이야기는 에피소드 해금 후 펼쳐져요.','This story unlocks when you clear the listed episode.');
+    }else if(def.narrative){
+      flavorText=mx
+        ?T('이 이야기는 여기까지예요. 손님 앞에서 계속 이어지길!','This chapter ends here—may it live on at the tables!')
+        :(S.lang==='ko'?def.narrative.ko[cur]:def.narrative.en[cur]);
+    }
+    const flavor=flavorText?`<div class="up-flavor">${flavorText}</div>`:'';
+    const dots=[0,1,2,3].map(i=>`<div class="upd${i<cur?' lit':''}"></div>`).join('');
+    let btn;
+    if(!unlocked){const ne=UP_UNLOCK[def.key];btn=`<div class="uplk">🔒 ${T(`제${ne}화 완료 후 해금 · 스토리도 함께 열려요`,`Complete Ch.${ne} to unlock · story opens too`)}</div>`;}
+    else if(mx) btn=`<button class="upbtn mx" disabled>${T('최고 등급 ✨','Max Level ✨')}</button>`;
+    else btn=`<button class="upbtn" onclick="buyUp('${def.key}')" ${canAfford?'':'disabled'}>${T('업그레이드','Upgrade')} — ${cost}🪙</button>`;
+    const updeLine=mx
+      ?`<div class="upde">${desc}</div>`
+      :`<div class="upde">${T('다음:','Next:')} ${desc}</div>`;
+    el.innerHTML+=`<div class="upc"><div class="uph"><div class="upi">${def.e}</div><div class="upif"><div class="upn">${S.lang==='ko'?def.ko:def.en}</div><div class="upc2">${cur}/4</div></div></div>${flavor}<div class="upds">${dots}</div>${updeLine}${btn}</div>`;
+  });
+}
+
+// ── RESTAURANT CANVAS ──────────────────────────────────────────────
+function drawRest(){
+  const cv=document.getElementById('rc'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height;
+  const sg=S.ups.sign,tb=S.ups.table,kt=S.ups.kitchen,it=S.ups.interior,gd=S.ups.garden;
+
+  // Sky/background
+  const bgC=[['#0a0e06','#151e0a'],['#0e1628','#1a2444'],['#0a1a36','#142e60'],['#160820','#280840'],['#0a0a18','#181030']];
+  const [b1,b2]=bgC[Math.min(it,4)];
+  const bgr=ctx.createLinearGradient(0,0,0,H);bgr.addColorStop(0,b1);bgr.addColorStop(1,b2);
+  ctx.fillStyle=bgr;ctx.fillRect(0,0,W,H);
+
+  // Wall texture
+  if(it>=1){ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;for(let y=15;y<H*.6;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}
+  if(it>=2){ctx.strokeStyle='rgba(255,255,255,.05)';for(let x=0;x<W;x+=32)for(let y=0;y<H*.6;y+=32){ctx.beginPath();ctx.moveTo(x+16,y);ctx.lineTo(x+32,y+16);ctx.lineTo(x+16,y+32);ctx.lineTo(x,y+16);ctx.closePath();ctx.stroke();}}
+
+  // Ceiling
+  ctx.fillStyle=['#0c1006','#141020','#0a1430','#120018','#080812'][Math.min(it,4)];ctx.fillRect(0,0,W,12);
+
+  // Sconces
+  if(it>=2){[W*.15,W*.5,W*.85].forEach(lx=>{
+    ctx.fillStyle='rgba(200,255,150,.18)';ctx.beginPath();ctx.arc(lx,H*.18,28,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=it>=3?'#ccff88':'#88cc44';ctx.shadowColor=it>=3?'#aeff44':'#66cc22';ctx.shadowBlur=12;
+    ctx.beginPath();ctx.arc(lx,H*.18,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    ctx.fillStyle='#5a3010';ctx.fillRect(lx-5,H*.18,10,14);ctx.fillRect(lx-10,H*.18+4,20,6);
+  });}
+
+  // Chandelier
+  if(it>=3){const cx=W/2;ctx.strokeStyle='#4a3010';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,12);ctx.lineTo(cx,50);ctx.stroke();
+    [-48,0,48].forEach(dx=>{ctx.strokeStyle='#6a4818';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,50);ctx.lineTo(cx+dx,60);ctx.stroke();
+      ctx.fillStyle='#ddff66';ctx.shadowColor='#bbff00';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx+dx,65,5,0,Math.PI*2);ctx.fill();});
+    ctx.shadowBlur=0;ctx.fillStyle='#8a6010';ctx.beginPath();ctx.arc(cx,50,10,0,Math.PI*2);ctx.fill();}
+
+  // ── GARDEN SECTION (left side) ──
+  const gardenW=W*.28,gardenX=0,gardenY=H*.14,gardenH=H*.5;
+  // Garden background
+  ctx.fillStyle=['#1a2a0c','#1e3010','#243814','#2a4018','#304820'][gd];
+  ctx.fillRect(gardenX,gardenY,gardenW,gardenH);
+  ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=1;
+  ctx.strokeRect(gardenX,gardenY,gardenW,gardenH);
+
+  // Garden label
+  ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold 9px sans-serif';ctx.textAlign='center';
+  ctx.fillText(S.lang==='ko'?'🌱 텃밭':'🌱 Garden',gardenX+gardenW/2,gardenY+14);
+
+  // Garden beds
+  const bedColors=['#3a2010','#4a2a12','#5a3414','#6a3e18','#7a4a1c'];
+  [[10,30,60,18],[10,56,60,18],[10,82,60,18]].forEach(([bx,by,bw,bh])=>{
+    ctx.fillStyle=bedColors[gd];ctx.beginPath();ctx.roundRect(gardenX+bx,gardenY+by,bw,bh,3);ctx.fill();
+  });
+
+  // Plants in garden based on garden level
+  const plantEmojis=['🌱','🌿','🥕','🍅','🌽'];
+  const plantCount=Math.min(gd+1,5);
+  for(let p=0;p<plantCount;p++){
+    const px=gardenX+15+p*(gardenW-20)/Math.max(plantCount-1,1);
+    ctx.font='13px sans-serif';ctx.textAlign='center';
+    ctx.fillText(plantEmojis[Math.min(p,gd)],px,gardenY+48);
+  }
+
+  // Floor
+  const fy=H*.63;
+  ctx.fillStyle=['#2a1808','#3a2210','#50301a','#6a4028','#907050'][Math.min(it,4)];
+  ctx.fillRect(0,fy,W,H-fy);
+  ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=1;
+  const ts=it>=2?42:34;
+  for(let x=0;x<W;x+=ts){ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=fy;y<H;y+=ts){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.fillStyle=['#1e1006','#2a1808','#3a200e','#503018','#705040'][Math.min(it,4)];
+  ctx.fillRect(0,fy-6,W,6);
+
+  // ── KITCHEN COUNTER ──
+  const kx=gardenW+4,ky=H*.27,kw=W-gardenW-4,kh=H*.13;
+  ctx.fillStyle=['#3a1806','#541e06','#782e10','#a04020','#c06030'][Math.min(kt,4)];
+  ctx.fillRect(kx,ky,kw,kh);
+  ctx.fillStyle=['#6a3010','#8a4018','#b05828','#d07840','#e09858'][Math.min(kt,4)];
+  ctx.fillRect(kx,ky,kw,8);
+  ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(kx+kw*.35,ky+8,kw*.28,kh-8);
+
+  if(kt>=1){ctx.fillStyle='#555';ctx.fillRect(kx+12,ky+10,60,26);
+    [[kx+18,ky+17],[kx+24,ky+17],[kx+18,ky+26],[kx+24,ky+26]].forEach(([bx,by])=>{
+      ctx.strokeStyle=kt>=2?'#ff4400':'#bb2200';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.stroke();});}
+  if(kt>=2){ctx.fillStyle='#c0c0c0';ctx.fillRect(kx+kw*.7,ky+3,38,kh-3);
+    ctx.strokeStyle='#888';ctx.lineWidth=1;ctx.strokeRect(kx+kw*.72,ky+6,34,(kh-10)*.45);
+    ctx.strokeRect(kx+kw*.72,ky+6+(kh-10)*.47,34,(kh-10)*.47);}
+  if(kt>=3){ctx.fillStyle='#a8a8a8';ctx.beginPath();ctx.moveTo(kx+8,ky+4);ctx.lineTo(kx+26,ky+4);ctx.lineTo(kx+23,ky-26);ctx.lineTo(kx+11,ky-26);ctx.closePath();ctx.fill();}
+  if(kt>=4){// Extra equipment
+    ctx.fillStyle='#888';ctx.fillRect(kx+76,ky+10,50,26);
+    ctx.fillStyle='#666';ctx.beginPath();ctx.arc(kx+101,ky+23,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#444';ctx.beginPath();ctx.arc(kx+101,ky+23,6,0,Math.PI*2);ctx.fill();}
+
+  // ── TABLES ──
+  const tbCount=[1,2,3,4,4][Math.min(tb,4)],tgap=(W-gardenW)/(tbCount+1),tox=gardenW;
+  const ttopC=['#5a2808','#8a4018','#b05828','#d07840','#e09858'];
+  const clothC=[null,'#a02020','#1830a0','#501880','#801a50'];
+  for(let i=0;i<tbCount;i++){
+    const tx=tox+tgap*(i+1),ty=fy+10;
+    ctx.fillStyle='#321406';ctx.fillRect(tx-22,ty+18,7,28);ctx.fillRect(tx+15,ty+18,7,28);
+    ctx.fillStyle=ttopC[Math.min(tb,4)];ctx.beginPath();ctx.roundRect(tx-26,ty,52,18,3);ctx.fill();
+    if(tb>=1&&clothC[Math.min(tb,4)]){ctx.fillStyle=clothC[Math.min(tb,4)];ctx.globalAlpha=.72;ctx.beginPath();ctx.roundRect(tx-24,ty+1,48,14,2);ctx.fill();ctx.globalAlpha=1;}
+    ctx.fillStyle='#f4eee0';ctx.beginPath();ctx.ellipse(tx,ty+8,9,6,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#ff7820';ctx.beginPath();ctx.ellipse(tx,ty+8,5,3,0,0,Math.PI*2);ctx.fill();
+    if(tb>=2){ctx.fillStyle='#f4eee0';ctx.fillRect(tx+13,ty-14,5,14);ctx.fillStyle='#ff8800';ctx.shadowColor='#ff8800';ctx.shadowBlur=7;ctx.beginPath();ctx.arc(tx+15.5,ty-16,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+    if(tb>=3){ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(tx-13,ty);ctx.lineTo(tx-10,ty+4);ctx.moveTo(tx-11,ty+2);ctx.lineTo(tx-11,ty-7);ctx.stroke();ctx.strokeStyle='#dd4444aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(tx-11,ty-8,4,.4,Math.PI-.4);ctx.stroke();}
+    // Chair
+    ctx.fillStyle=ttopC[Math.min(tb,2)];ctx.fillRect(tx-12,ty+30,24,14);ctx.fillRect(tx-10,ty+18,5,12);ctx.fillRect(tx+5,ty+18,5,12);
+    // Customers (based on ep done)
+    if(i<S.epDone.length){
+      const cuy=fy+54;ctx.fillStyle='rgba(255,220,180,.85)';ctx.beginPath();ctx.arc(tx,cuy,7,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(60,100,200,.7)';ctx.beginPath();ctx.ellipse(tx,cuy+18,7,12,0,0,Math.PI);ctx.fill();
+    }
+  }
+
+  // Plants/decor
+  if(it>=1){[[14,H-20],[W-14,H-20]].forEach(([px,py])=>{
+    ctx.fillStyle='#5a2808';ctx.beginPath();ctx.roundRect(px-7,py-14,14,18,2);ctx.fill();
+    ctx.fillStyle=it>=3?'#1a5018':'#243e14';ctx.beginPath();ctx.arc(px,py-18,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=it>=3?'#267828':'#346020';
+    ctx.beginPath();ctx.arc(px-8,py-22,7,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(px+8,py-22,7,0,Math.PI*2);ctx.fill();
+    if(it>=2){ctx.fillStyle='#3aaa30';ctx.beginPath();ctx.arc(px,py-26,5,0,Math.PI*2);ctx.fill();}
+  });}
+
+  // ── SIGN ──
+  ctx.save();
+  if(sg===0){ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillText('🌱 GARDEN KITCHEN',W/2,36);}
+  else if(sg===1){
+    ctx.fillStyle='#4a2a08';ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.fill();
+    ctx.strokeStyle='#8ac828';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.stroke();
+    ctx.fillStyle='#e8ffc0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,32);
+    ctx.fillStyle='#aad860';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,46);}
+  else if(sg===2){
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.roundRect(W/2-96,8,192,44,8);ctx.fill();
+    ctx.shadowColor='#44ff00';ctx.shadowBlur=14;ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-94,10,188,40,6);ctx.stroke();ctx.shadowBlur=0;
+    ctx.shadowColor='#88ff44';ctx.shadowBlur=10;ctx.fillStyle='#88ff44';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.shadowBlur=5;ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,45);ctx.shadowBlur=0;}
+  else if(sg===3){
+    const sg2=ctx.createLinearGradient(W/2-108,0,W/2+108,0);sg2.addColorStop(0,'#060e02');sg2.addColorStop(.5,'#0e2006');sg2.addColorStop(1,'#060e02');
+    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.fill();
+    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=10;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-98;bx<=W/2+98;bx+=17){ctx.fillStyle='#eeff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,9,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,53,3,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,46);}
+  else{// sg 4 — Michelin star
+    const mg=ctx.createLinearGradient(W/2-110,0,W/2+110,0);mg.addColorStop(0,'#100808');mg.addColorStop(.5,'#201200');mg.addColorStop(1,'#100808');
+    ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.fill();
+    ctx.strokeStyle=S.gold||'#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=12;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-100;bx<=W/2+100;bx+=16){ctx.fillStyle='#ffff88';ctx.shadowColor='#ffff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,8,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,54,3,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;ctx.fillStyle='#ffd700';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
+    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,30);ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,46);}
+  ctx.restore();
+
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,.45)';ctx.beginPath();ctx.roundRect(W-96,H-28,90,20,5);ctx.fill();
+  ctx.fillStyle='#ffd700';ctx.font='bold 10px sans-serif';ctx.textAlign='right';
+  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`,W-7,H-13);
+}
+function renderRst(){
+  const el=document.getElementById('rst');el.innerHTML='';
+  [{k:'garden',ko:'텃밭',en:'Garden',e:'🌱'},{k:'sign',ko:'간판',en:'Sign',e:'🪧'},
+   {k:'table',ko:'테이블',en:'Table',e:'🪑'},{k:'kitchen',ko:'주방',en:'Kitchen',e:'👨‍🍳'},
+   {k:'interior',ko:'인테리어',en:'Interior',e:'🎨'}].forEach(u=>{
+    const lv=S.ups[u.k];
+    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${'★'.repeat(lv)}${'☆'.repeat(4-lv)} ${lv}/4</div></div>`;
+  });
+}
+
+// ── TABS ───────────────────────────────────────────────────────────
+function goTab(name){
+  S.tab=name;
+  applyTabToDom();
+  if(name==='rest'){drawRest();renderRst();}
+  if(name==='up')renderUps();
+  if(name==='story')renderStory();
+  if(name==='board'){renderBanner();goSubBoard(S.subBoard);}
+  if(name==='garden')renderHubUi();
+}
+function toggleLang(){S.lang=S.lang==='ko'?'en':'ko';save();renderAll();}
+function renderAll(){
+  applyTabToDom();
+  document.getElementById('hcoin').textContent=S.coins;
+  document.getElementById('t0').textContent=T('정원','Garden');
+  document.getElementById('t1').textContent=T('머지','Merge');
+  document.getElementById('t2').textContent=T('스토리','Story');
+  document.getElementById('t3').textContent=T('음식점','Restaurant');
+  document.getElementById('t4').textContent=T('업그레이드 · 이야기','Upgrades · Story');
+  renderXP();renderEn();
+  if(S.tab==='board'){
+    document.getElementById('m-lock-ico').style.display=meatUnlocked()?'none':'inline';
+    goSubBoard(S.subBoard);
+    renderBanner();
+  }else{
+    buildGrid();buildGridMeat();
+  }
+  if(S.tab==='garden')renderHubUi();
+  if(S.tab==='story')renderStory();
+  if(S.tab==='up')renderUps();
+  if(S.tab==='rest'){drawRest();renderRst();}
+}
+
+// ── INIT ───────────────────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(S.tab!=='garden')return;
+  let moved=false;
+  let tx=S.gCharX, ty=S.gCharY, dir=S.gCharDir;
+  const step=5; // percent
+  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){tx=S.gCharX-step;dir='l';moved=true;}
+  else if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){tx=S.gCharX+step;dir='r';moved=true;}
+  else if(e.key==='ArrowUp'||e.key==='w'||e.key==='W'){ty=S.gCharY-step;dir='u';moved=true;}
+  else if(e.key==='ArrowDown'||e.key==='s'||e.key==='S'){ty=S.gCharY+step;dir='d';moved=true;}
+  if(!moved)return;
+  S.gCharDir=dir;
+  const ok=moveCharConstrained(tx,ty);
+  if(!ok)return;
+  startFarmerWalkAnim();
+  save();
+});
+(function(){
+  load();regenEn();
+  // 새로고침/재진입 시 기본 화면을 정원으로 고정
+  S.tab='garden';
+  if(S.board.every(c=>c==null))[0,2,4,6,8,10,12,14].forEach(i=>S.board[i]=1);
+  seedMeatIfEligible();
+  const _fp=new Image();
+  _fp.onerror=hubCharSpriteFail;
+  _fp.src=FARMER_SHEET.src;
+  renderAll();
+
+  // 모바일: 필드 드래그(스와이프)로 상/하/좌/우 이동
+  const field=document.getElementById('g-walk-hit');
+  if(field){
+    const step=5; // percent
+    const MOVE_TH=16; // px threshold
+    const MOVE_COOLDOWN=90; // ms
+    let activeTouchId=null;
+    let swipeEnabled=false;
+    let lastMoveAt=0;
+    let lastX=0,lastY=0;
+
+    const touchXY=(t)=>{
+      return {x:t.clientX,y:t.clientY};
+    };
+
+    field.addEventListener('touchstart',(ev)=>{
+      if(S.tab!=='garden')return;
+      const t=ev.changedTouches && ev.changedTouches[0];
+      if(!t)return;
+      activeTouchId=t.identifier;
+      const {x,y}=touchXY(t);
+      lastX=x;lastY=y;
+
+      // 정원 위의 "제어 버튼"(레스토랑 문/냉동창고)을 눌렀다면
+      // 스와이프 이동 로직을 비활성화해서 click이 정상 동작하게 합니다.
+      const startEl=ev.target;
+      swipeEnabled=!!(startEl && startEl.closest && (
+        startEl.closest('.hub-tavern-door') ||
+        startEl.closest('.hub-freezer-wrap')
+      )) ? false : true;
+
+      if(swipeEnabled)ev.preventDefault();
+    },{passive:false});
+
+    field.addEventListener('touchmove',(ev)=>{
+      if(S.tab!=='garden')return;
+      if(activeTouchId==null)return;
+      if(!swipeEnabled)return;
+      const t=Array.from(ev.changedTouches||[]).find(tt=>tt.identifier===activeTouchId);
+      if(!t)return;
+
+      const now=Date.now();
+      if(now-lastMoveAt<MOVE_COOLDOWN)return;
+
+      const {x,y}=touchXY(t);
+      const dx=x-lastX;
+      const dy=y-lastY;
+      if(Math.abs(dx)<MOVE_TH && Math.abs(dy)<MOVE_TH)return;
+
+      lastMoveAt=now;
+
+      // 더 큰 이동 축 기준으로 방향 결정
+      let tx=S.gCharX, ty=S.gCharY, dir=S.gCharDir;
+      if(Math.abs(dx)>=Math.abs(dy)){
+        dir=dx>0?'r':'l';
+        tx=S.gCharX + (dx>0?step:-step);
+      }else{
+        dir=dy>0?'d':'u';
+        ty=S.gCharY + (dy>0?step:-step);
+      }
+      S.gCharDir=dir;
+      const ok=moveCharConstrained(tx,ty);
+      if(ok){
+        syncHubCharFull();
+        startFarmerWalkAnim();
+        save();
+      }
+
+      // 같은 방향으로 연속 이동 가능하게 기준점을 최신 위치로 갱신
+      lastX=x;lastY=y;
+      _hubSkipNextWalkClickUntil=Date.now()+450;
+      ev.preventDefault();
+    },{passive:false});
+
+    const reset=()=>{
+      activeTouchId=null;
+      swipeEnabled=false;
+    };
+    field.addEventListener('touchend',reset,{passive:true});
+    field.addEventListener('touchcancel',reset,{passive:true});
+  }
+})();
+</script>
+</body>
+</html>
