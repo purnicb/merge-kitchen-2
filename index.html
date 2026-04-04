@@ -587,6 +587,15 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   padding:6px 10px 0;line-height:1.45;
 }
 
+/* ══ GARDEN ANIMALS ══ */
+.garden-animal{
+  position:absolute;pointer-events:none;z-index:3;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.28));
+  transform:translate(-50%,-50%);
+  transition:none;
+}
+
 /* merge subtabs */
 .subtabs{display:flex;gap:6px;margin-bottom:8px}
 .stab{flex:1;text-align:center;padding:7px 4px;border-radius:10px;font-size:.68em;font-weight:800;
@@ -815,8 +824,9 @@ const EN_MAX=20, EN_SEC=45;
 const G_SPAWN=[[100,0,0,0],[70,25,5,0],[55,30,12,3],[40,35,18,7],[30,35,22,13]];
 const K_SPAWN=G_SPAWN;
 
-// ── EPISODES (20 chapters) ─────────────────────────────────────────
+// ── EPISODES (30 chapters) ─────────────────────────────────────────
 const EPS=[
+  // ─ Ch.1~10: 봄의 씨앗, 동네 식당 개업 ─
   {char:'👩‍🌾',title:{ko:'제1화: 봄의 시작',en:'Ch.1: Spring Begins'},
    quote:{ko:'"올봄엔 직접 텃밭을 가꿔볼 거야! 씨앗을 심고 새싹을 키워봐요."',en:'"This spring, I\'ll grow my own garden! Let\'s plant seeds and raise sprouts."'},
    objs:[{i:'🌿',ko:'새싹 5개 만들기',en:'Make 5 Sprouts',type:'merge',item:2,need:5},{i:'🥕',ko:'당근 3개 만들기',en:'Make 3 Carrots',type:'merge',item:3,need:3}],
@@ -857,6 +867,7 @@ const EPS=[
    quote:{ko:'"텃밭이 넓어졌어요! 상추와 감자로 메뉴판을 채워볼까요?"',en:'"The patch grew! Let\'s fill the menu with lettuce and potatoes!"'},
    objs:[{i:'🥬',ko:'상추 8개 만들기(누적)',en:'Make 8 Lettuces (total)',type:'merge',item:6,need:8},{i:'🥔',ko:'감자 5개 만들기(누적)',en:'Make 5 Potatoes (total)',type:'merge',item:7,need:5}],
    rwd:{c:900,xp:600},rt:{ko:'🪙900 + 600XP',en:'🪙900 + 600XP'}},
+  // ─ Ch.11~18: 성장기, 전국 무대 ─
   {char:'🌙',title:{ko:'제11화: 야식 메뉴 개발',en:'Ch.11: Late-Night Menu'},
    quote:{ko:'"샐러드랑 스튜로 야식 코스를 짜볼까?"',en:'"Salads and stew for a late-night course?"'},
    objs:[{i:'🥗',ko:'샐러드 5개(누적)',en:'5 Salads (total)',type:'merge',item:8,need:5},{i:'🍲',ko:'스튜 3개(누적)',en:'3 Stews (total)',type:'merge',item:9,need:3}],
@@ -889,6 +900,7 @@ const EPS=[
    quote:{ko:'"이 텃밭에서 시작한 요리가 미슐랭 스타를 받는 날이 왔습니다!"',en:'"The day has come when cooking from this garden earns a Michelin Star!"'},
    objs:[{i:'👑',ko:'셰프의 걸작 15개(누적)',en:'15 Masterpieces (total)',type:'merge',item:12,need:15},{i:'🏡',ko:'모든 업그레이드 3단계+',en:'All upgrades level 3+',type:'allup',need:3},{i:'⭐',ko:'레벨 7 달성',en:'Reach Level 7',type:'level',need:7}],
    rwd:{c:3500,xp:2400},rt:{ko:'🏆 미슐랭 스타 엔딩!',en:'🏆 Michelin Star Ending!'}},
+  // ─ Ch.19~20: 정육·수산 확장 ─
   {char:'🥘',title:{ko:'제19화: 풍성한 저녁 준비',en:'Ch.19: Surf & Turf Prep'},
    quote:{ko:'"텃밭 샐러드에 스모크 한 점이면 완벽해요!"',en:'"Garden salad plus a smoked cut—perfect pairing!"'},
    objs:[{i:'♨️',ko:'정육 스모크 3개(누적)',en:'3 Smoked cuts (meat)',type:'mergeM',item:9,need:3},{i:'🥗',ko:'샐러드 6개(누적)',en:'6 Salads (total)',type:'merge',item:8,need:6}],
@@ -897,6 +909,47 @@ const EPS=[
    quote:{ko:'"정육 걸작과 텃밭 걸작—오늘 밤 메인은 두 개예요!"',en:'"Two masterpieces—land and sea—for one legendary night!"'},
    objs:[{i:'🍲',ko:'미트 스튜 2개(누적)',en:'2 Meat stews (total)',type:'mergeM',item:10,need:2},{i:'👑',ko:'셰프의 걸작 2개(누적)',en:'2 Garden masterpieces',type:'merge',item:12,need:2},{i:'🏅',ko:'정육 셰프 걸작 1개(누적)',en:'1 Butcher masterpiece',type:'mergeM',item:12,need:1}],
    rwd:{c:4200,xp:2600},rt:{ko:'🎊 레전드 엔딩 보너스!',en:'🎊 Legend ending bonus!'}},
+  // ─ Ch.21~30: 스타 이후, 두 번째 별을 향해 ─
+  {char:'🌅',title:{ko:'제21화: 별 이후의 아침',en:'Ch.21: Morning After the Star'},
+   quote:{ko:'"미슐랭 다음 날 아침, 가장 먼저 텃밭부터 돌아봤어요."',en:'"The morning after, I walked to the garden before checking my phone."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 20개(누적)',en:'20 Masterpieces (total)',type:'merge',item:12,need:20},{i:'🪙',ko:'코인 15000 모으기(누적)',en:'Earn 15000 coins (total)',type:'coins',need:15000}],
+   rwd:{c:3000,xp:1800},rt:{ko:'🪙3000 + 1800XP',en:'🪙3000 + 1800XP'}},
+  {char:'📰',title:{ko:'제22화: 미식 잡지 화보',en:'Ch.22: Magazine Feature'},
+   quote:{ko:'"텃밭 배경으로 사진 한 장만요! 커버 스토리가 될 거예요."',en:'"Just one shot with the garden behind you—it\'ll be our cover story."'},
+   objs:[{i:'🍝',ko:'정원 파스타 8개(누적)',en:'8 Garden Pastas (total)',type:'merge',item:11,need:8},{i:'🥗',ko:'샐러드 15개(누적)',en:'15 Salads (total)',type:'merge',item:8,need:15}],
+   rwd:{c:3200,xp:2000},rt:{ko:'🪙3200 + 2000XP',en:'🪙3200 + 2000XP'}},
+  {char:'✈️',title:{ko:'제23화: 해외 손님의 방문',en:'Ch.23: International Guests'},
+   quote:{ko:'"도쿄에서 왔어요! 잡지에서 텃밭 카레 보고 비행기 탔어요."',en:'"We flew in from Tokyo just for your garden curry—it was in the magazine!"'},
+   objs:[{i:'🍛',ko:'황금 카레 10개(누적)',en:'10 Golden Curries (total)',type:'merge',item:10,need:10},{i:'🏅',ko:'정육 셰프 걸작 3개(누적)',en:'3 Butcher masterpieces (total)',type:'mergeM',item:12,need:3}],
+   rwd:{c:3600,xp:2200},rt:{ko:'🪙3600 + 2200XP',en:'🪙3600 + 2200XP'}},
+  {char:'🌿',title:{ko:'제24화: 텃밭 확장 프로젝트',en:'Ch.24: Garden Expansion'},
+   quote:{ko:'"이웃 밭까지 빌렸어요. 텃밭이 두 배로 넓어졌어요!"',en:'"I borrowed the neighbor\'s lot—the garden just doubled in size!"'},
+   objs:[{i:'🌱',ko:'텃밭 업그레이드 최대(4단계)',en:'Garden upgrade maxed (Lv.4)',type:'upgrade',key:'garden',need:4},{i:'🍲',ko:'채소 스튜 10개(누적)',en:'10 Veggie Stews (total)',type:'merge',item:9,need:10}],
+   rwd:{c:4000,xp:2400},rt:{ko:'🪙4000 + 2400XP',en:'🪙4000 + 2400XP'}},
+  {char:'👨‍🏫',title:{ko:'제25화: 셰프 클래스',en:'Ch.25: Chef\'s Class'},
+   quote:{ko:'"셰프님, 가르쳐주세요! 텃밭 요리의 모든 걸 배우고 싶어요."',en:'"Teach me everything, chef—I want to master this garden-to-table way."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 25개(누적)',en:'25 Masterpieces (total)',type:'merge',item:12,need:25},{i:'🎨',ko:'인테리어 최대(4단계)',en:'Interior maxed (Lv.4)',type:'upgrade',key:'interior',need:4}],
+   rwd:{c:4500,xp:2700},rt:{ko:'🪙4500 + 2700XP',en:'🪙4500 + 2700XP'}},
+  {char:'🍂',title:{ko:'제26화: 계절의 맛',en:'Ch.26: Taste of Seasons'},
+   quote:{ko:'"가을 텃밭은 또 달라요. 감자와 옥수수가 계절을 말해줘요."',en:'"The autumn garden is different. Potatoes and corn tell you the season."'},
+   objs:[{i:'🥔',ko:'감자 10개(누적)',en:'10 Potatoes (total)',type:'merge',item:7,need:10},{i:'🌽',ko:'옥수수 8개(누적)',en:'8 Corn (total)',type:'merge',item:5,need:8}],
+   rwd:{c:4800,xp:2900},rt:{ko:'🪙4800 + 2900XP',en:'🪙4800 + 2900XP'}},
+  {char:'🥂',title:{ko:'제27화: 두 번째 별을 향해',en:'Ch.27: Chasing the Second Star'},
+   quote:{ko:'"첫 번째 별은 실력이었고, 두 번째는 꾸준함이에요."',en:'"The first star was talent. The second is earned with consistency."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 30개(누적)',en:'30 Masterpieces (total)',type:'merge',item:12,need:30},{i:'🍲',ko:'미트 스튜 5개(누적)',en:'5 Meat stews (total)',type:'mergeM',item:10,need:5}],
+   rwd:{c:5500,xp:3200},rt:{ko:'🪙5500 + 3200XP',en:'🪙5500 + 3200XP'}},
+  {char:'🌍',title:{ko:'제28화: 세계 요리 페스티벌',en:'Ch.28: World Culinary Festival'},
+   quote:{ko:'"파리, 도쿄, 뉴욕에서도 텃밭 키친을 알아봐요!"',en:'"Paris, Tokyo, New York—Garden Kitchen is now a name the world knows!"'},
+   objs:[{i:'🏅',ko:'정육 셰프 걸작 5개(누적)',en:'5 Butcher masterpieces (total)',type:'mergeM',item:12,need:5},{i:'🪙',ko:'코인 30000 모으기(누적)',en:'Earn 30000 coins (total)',type:'coins',need:30000}],
+   rwd:{c:6000,xp:3600},rt:{ko:'🪙6000 + 3600XP',en:'🪙6000 + 3600XP'}},
+  {char:'🏡',title:{ko:'제29화: 고향의 레시피',en:'Ch.29: Hometown Recipe'},
+   quote:{ko:'"할머니 레시피를 다시 꺼냈어요. 처음과 지금을 연결하는 맛."',en:'"I pulled out grandma\'s recipe again—the taste that bridges then and now."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 38개(누적)',en:'38 Masterpieces (total)',type:'merge',item:12,need:38},{i:'🥗',ko:'샐러드 20개(누적)',en:'20 Salads (total)',type:'merge',item:8,need:20}],
+   rwd:{c:6500,xp:4000},rt:{ko:'🪙6500 + 4000XP',en:'🪙6500 + 4000XP'}},
+  {char:'👑',title:{ko:'제30화: 텃밭 키친의 전설',en:'Ch.30: Legend of Garden Kitchen'},
+   quote:{ko:'"씨앗 하나에서 시작해 두 개의 별까지. 이 텃밭이 전부였어요."',en:'"From a single seed to two stars. This garden was the whole story."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 45개(누적)',en:'45 Masterpieces (total)',type:'merge',item:12,need:45},{i:'🏅',ko:'정육 셰프 걸작 8개(누적)',en:'8 Butcher masterpieces (total)',type:'mergeM',item:12,need:8},{i:'🪙',ko:'코인 50000 모으기(누적)',en:'Earn 50000 coins (total)',type:'coins',need:50000}],
+   rwd:{c:9999,xp:6000},rt:{ko:'🏆🌟 텃밭 키친 전설 엔딩!',en:'🏆🌟 Garden Kitchen Legend Ending!'}},
 ];
 
 // ── UPGRADES (5 categories, 4 levels) ──────────────────────────────
@@ -1363,6 +1416,122 @@ function renderGardenCropZones(){
   }
 }
 const FARMER_SHEET={cellW:48,cellH:96,cols:3,rows:4,src:'assets/farmer.png'};
+
+// ── GARDEN ANIMALS ──────────────────────────────────────────────────
+// 스프라이트 시트 구조: 3열(애니메이션 프레임) × 4행(방향: 하/좌/우/상)
+// cellW×cellH = 한 프레임 크기(px). 전체 시트 = cellW×3, cellH×4
+// 예) 16×16 → 시트 48×64px / 32×32 → 시트 96×128px
+const ANIM_CW=16, ANIM_CH=16;   // ← 실제 프레임 크기에 맞게 조정
+const ANIM_SCALE=3;              // 화면 표시 배율 (16×3=48px 표시)
+const ANIM_DIR_ROW={d:0,l:1,r:2,u:3}; // 방향→행 매핑 (시트 순서에 따라 조정)
+
+const ANIMAL_TYPES=[
+  {src:'assets/calf_holstein.png', ko:'홀스타인 송아지'},
+  {src:'assets/calf_white.png',    ko:'흰 송아지'},
+  {src:'assets/cow_holstein.png',  ko:'홀스타인 소'},
+  {src:'assets/chicken_hen.png',   ko:'암탉'},
+  {src:'assets/sheep.png',         ko:'양'},
+  {src:'assets/chicken.png',       ko:'병아리'},
+  {src:'assets/cow_white.png',     ko:'흰 소'},
+  {src:'assets/goat.png',          ko:'염소'},
+];
+const ANIMAL_COUNT=4; // 정원에 동시 등장할 동물 수
+
+let _animals=[];
+let _animalRaf=null;
+let _animalLastT=0;
+let _animalsInited=false;
+
+function _mkAnimal(id,typeIdx){
+  const t=ANIMAL_TYPES[typeIdx];
+  const dispW=ANIM_CW*ANIM_SCALE, dispH=ANIM_CH*ANIM_SCALE;
+  const el=document.createElement('div');
+  el.className='garden-animal';
+  // background-size = 전체 시트 크기 × 배율
+  el.style.cssText=`width:${dispW}px;height:${dispH}px;`
+    +`background:url(${t.src}) no-repeat;`
+    +`background-size:${ANIM_CW*3*ANIM_SCALE}px ${ANIM_CH*4*ANIM_SCALE}px;`;
+  const dirs=['d','l','r','u'];
+  const dir=dirs[Math.floor(Math.random()*4)];
+  const x=15+Math.random()*70;
+  const y=25+Math.random()*55;
+  const nextChg=1500+Math.random()*3000;
+  return {id,typeIdx,x,y,dir,frame:0,frameT:0,moveT:0,nextChg,
+    paused:false,pauseLeft:0,speed:0.005+Math.random()*0.006,el};
+}
+
+function _setAnimalBgPos(a){
+  const row=ANIM_DIR_ROW[a.dir]??0;
+  const col=a.paused?1:a.frame;
+  const bx=-col*ANIM_CW*ANIM_SCALE;
+  const by=-row*ANIM_CH*ANIM_SCALE;
+  a.el.style.backgroundPosition=`${bx}px ${by}px`;
+}
+
+function _tickAnimals(dt){
+  const FRAME_MS=180, MARGIN=12;
+  for(const a of _animals){
+    a.frameT+=dt; a.moveT+=dt;
+    if(a.paused){
+      a.pauseLeft-=dt;
+      if(a.pauseLeft<=0){a.paused=false;a.moveT=0;a.nextChg=1500+Math.random()*3000;}
+      _setAnimalBgPos(a); continue;
+    }
+    // 방향 변경 or 잠깐 멈추기
+    if(a.moveT>=a.nextChg){
+      a.moveT=0; a.nextChg=1500+Math.random()*3000;
+      if(Math.random()<0.22){
+        a.paused=true; a.pauseLeft=800+Math.random()*2000; a.frame=1;
+        _setAnimalBgPos(a); continue;
+      }
+      const dirs=['d','l','r','u'];
+      a.dir=dirs[Math.floor(Math.random()*4)];
+    }
+    // 이동
+    let nx=a.x, ny=a.y;
+    const sp=a.speed*dt;
+    if(a.dir==='l')nx-=sp; else if(a.dir==='r')nx+=sp;
+    else if(a.dir==='u')ny-=sp; else ny+=sp;
+    // 경계에서 반전
+    if(nx<MARGIN){nx=MARGIN;a.dir='r';a.moveT=0;}
+    if(nx>100-MARGIN){nx=100-MARGIN;a.dir='l';a.moveT=0;}
+    if(ny<MARGIN){ny=MARGIN;a.dir='d';a.moveT=0;}
+    if(ny>88-MARGIN){ny=88-MARGIN;a.dir='u';a.moveT=0;}
+    a.x=nx; a.y=ny;
+    a.el.style.left=nx+'%'; a.el.style.top=ny+'%';
+    // 애니메이션 프레임
+    if(a.frameT>=FRAME_MS){a.frameT=0;a.frame=(a.frame+1)%3;}
+    _setAnimalBgPos(a);
+  }
+}
+
+function _animalLoop(ts){
+  const dt=Math.min(ts-_animalLastT,100);
+  _animalLastT=ts;
+  if(S.tab==='garden'&&dt>0)_tickAnimals(dt);
+  _animalRaf=requestAnimationFrame(_animalLoop);
+}
+
+function initGardenAnimals(){
+  if(_animalsInited)return;
+  _animalsInited=true;
+  const field=document.getElementById('g-walk-hit');
+  if(!field)return;
+  // 동물 타입 셔플 후 ANIMAL_COUNT개 선택
+  const idxs=[...Array(ANIMAL_TYPES.length).keys()];
+  for(let i=idxs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idxs[i],idxs[j]]=[idxs[j],idxs[i]];}
+  for(let i=0;i<ANIMAL_COUNT;i++){
+    const a=_mkAnimal(i,idxs[i%idxs.length]);
+    a.el.style.left=a.x+'%'; a.el.style.top=a.y+'%';
+    _setAnimalBgPos(a);
+    // 캐릭터 랩 앞에 삽입 (z-index 순서 유지)
+    const charBox=document.getElementById('hub-char-box');
+    field.insertBefore(a.el,charBox||null);
+    _animals.push(a);
+  }
+  _animalLastT=performance.now();
+  _animalRaf=requestAnimationFrame(_animalLoop);
+}
 let _farmerWalkTimer=null;
 function farmerFacingRow(){
   const d=S.gCharDir||'d';
@@ -1922,6 +2091,7 @@ document.addEventListener('keydown',e=>{
   _fp.onerror=hubCharSpriteFail;
   _fp.src=FARMER_SHEET.src;
   renderAll();
+  initGardenAnimals();
 
   // 모바일: 필드 드래그(스와이프)로 상/하/좌/우 이동
   const field=document.getElementById('g-walk-hit');
