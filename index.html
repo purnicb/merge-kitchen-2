@@ -411,16 +411,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   .hub-freezer-img{width:20px;height:20px;mix-blend-mode:normal}
   .hub-freezer.hub-fridge::after{width:22px;height:8px}
 }
-/* 모바일: JS가 그리드 크기를 명시적으로 계산할 때 aspect-ratio 해제 */
-@media(max-width:640px){
-  .grid.fit-mode{
-    margin:0 auto;
-    overflow:visible;
-  }
-  .grid.fit-mode .cell{
-    aspect-ratio:unset;
-  }
-}
+
 @media(max-width:360px){
   .hub-crop-zone{flex:0 0 calc(33.33% - 9px);min-width:64px;max-width:92px}
   /* 초소형 화면에서 5x6 보드 더 타이트하게 */
