@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>🌱Garden Kitchen🌱</title>
+<title>🌱 텃밭 키친 · Garden Kitchen</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -217,15 +217,11 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
 .endsb{color:var(--txt2);font-size:.84em;line-height:1.6}
 
 /* ══ RESTAURANT CANVAS ══ */
-#rc{width:100%;max-width:556px;border-radius:18px;border:2px solid #1e3028;display:block;margin:0 auto;
-  box-shadow:0 12px 40px rgba(0,0,0,.65),0 0 0 1px rgba(0,200,140,.12)}
+#rc{width:100%;max-width:556px;border-radius:14px;border:2px solid var(--bdr);display:block;margin:0 auto;
+  box-shadow:0 8px 28px rgba(0,0,0,.6)}
 .rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
-.rs{background:#0e1612;border-radius:10px;padding:9px 10px;border:1px solid #1e3028;position:relative;overflow:hidden}
-.rs::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00c896,transparent)}
-.rsl{font-size:.62em;color:#4a8060;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
-.rsv{font-size:.78em;font-weight:700;color:#e8f0ea;display:flex;align-items:center;gap:4px}
-.rs-bar{height:3px;background:#0a1410;border-radius:2px;overflow:hidden;margin-top:4px}
-.rs-bar-fill{height:100%;background:linear-gradient(90deg,#00c896,#40e8b8);border-radius:2px;transition:width .4s}
+.rs{background:var(--s1);border-radius:8px;padding:8px 10px;border:1px solid var(--bdr)}
+.rsl{font-size:.66em;color:var(--txt2)}.rsv{font-size:.85em;font-weight:700;color:var(--gold)}
 
 /* ══ UPGRADES ══ */
 .upl{display:flex;flex-direction:column;gap:10px}
@@ -411,7 +407,6 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   .hub-freezer-img{width:20px;height:20px;mix-blend-mode:normal}
   .hub-freezer.hub-fridge::after{width:22px;height:8px}
 }
-
 @media(max-width:360px){
   .hub-crop-zone{flex:0 0 calc(33.33% - 9px);min-width:64px;max-width:92px}
   /* 초소형 화면에서 5x6 보드 더 타이트하게 */
@@ -739,7 +734,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   </div>
 
   <div class="pane" id="pane-rest">
-    <canvas id="rc" width="556" height="380"></canvas>
+    <canvas id="rc" width="556" height="340"></canvas>
     <div class="rst" id="rst"></div>
   </div>
 
@@ -1871,317 +1866,160 @@ function renderUps(){
   });
 }
 
-// ── RESTAURANT: pixel-art top-down scene ───────────────────────────
-// Image cache: null = loading, Image = ready
-const _RI={};
-function _rImg(src){
-  if(!Object.prototype.hasOwnProperty.call(_RI,src)){
-    _RI[src]=null;
-    const img=new Image();
-    img.onload=()=>{_RI[src]=img;if(S.tab==='rest')drawRest();};
-    img.onerror=()=>{_RI[src]=false;};
-    img.src=src;
-  }
-  return _RI[src]||null;
-}
-function preloadRestImgs(){
-  ['assets/TopDownHouse_FloorsAndWalls.png',
-   'assets/TopDownHouse_FurnitureState1.png',
-   'assets/TopDownHouse_FurnitureState2.png',
-   'assets/TopDownHouse_DoorsAndWindows.png',
-   'assets/TopDownHouse_SmallItems.png'].forEach(s=>_rImg(s));
-}
-
+// ── RESTAURANT CANVAS ──────────────────────────────────────────────
 function drawRest(){
   const cv=document.getElementById('rc'),ctx=cv.getContext('2d');
   const W=cv.width,H=cv.height;
-  ctx.imageSmoothingEnabled=false;
-  ctx.clearRect(0,0,W,H);
-
-  const IMG_FW=_rImg('assets/TopDownHouse_FloorsAndWalls.png');
-  const IMG_F1=_rImg('assets/TopDownHouse_FurnitureState1.png');
-  const IMG_F2=_rImg('assets/TopDownHouse_FurnitureState2.png');
-  const IMG_DW=_rImg('assets/TopDownHouse_DoorsAndWindows.png');
-  const IMG_SI=_rImg('assets/TopDownHouse_SmallItems.png');
-
-  if(!IMG_FW||!IMG_F1){
-    ctx.fillStyle='#1a1208';ctx.fillRect(0,0,W,H);
-    ctx.fillStyle='#c89a40';ctx.font='bold 13px sans-serif';ctx.textAlign='center';
-    ctx.fillText('로딩 중…',W/2,H/2);
-    return;
-  }
-
   const sg=S.ups.sign,tb=S.ups.table,kt=S.ups.kitchen,it=S.ups.interior,gd=S.ups.garden;
-  const FURN=(it>=3&&IMG_F2)?IMG_F2:IMG_F1;
 
-  // SC=2 → 1 sprite pixel = 2 canvas pixels (compact pixel art)
-  const SC=2, T=16*SC; // T=32px per tile
+  // Sky/background
+  const bgC=[['#0a0e06','#151e0a'],['#0e1628','#1a2444'],['#0a1a36','#142e60'],['#160820','#280840'],['#0a0a18','#181030']];
+  const [b1,b2]=bgC[Math.min(it,4)];
+  const bgr=ctx.createLinearGradient(0,0,0,H);bgr.addColorStop(0,b1);bgr.addColorStop(1,b2);
+  ctx.fillStyle=bgr;ctx.fillRect(0,0,W,H);
 
-  const spr=(img,sx,sy,sw,sh,dx,dy,sc=SC)=>{
-    if(!img)return;
-    ctx.drawImage(img,sx,sy,sw,sh,~~dx,~~dy,~~(sw*sc),~~(sh*sc));
-  };
-  const tileFill=(img,sx,sy,sw,sh,dx,dy,dw,dh,sc=SC)=>{
-    if(!img)return;
-    ctx.save();ctx.beginPath();ctx.rect(~~dx,~~dy,~~dw,~~dh);ctx.clip();
-    const pw=~~(sw*sc),ph=~~(sh*sc);
-    for(let ry=0;ry<dh;ry+=ph)for(let rx=0;rx<dw;rx+=pw)
-      ctx.drawImage(img,sx,sy,sw,sh,~~(dx+rx),~~(dy+ry),pw,ph);
-    ctx.restore();
-  };
+  // Wall texture
+  if(it>=1){ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;for(let y=15;y<H*.6;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}
+  if(it>=2){ctx.strokeStyle='rgba(255,255,255,.05)';for(let x=0;x<W;x+=32)for(let y=0;y<H*.6;y+=32){ctx.beginPath();ctx.moveTo(x+16,y);ctx.lineTo(x+32,y+16);ctx.lineTo(x+16,y+32);ctx.lineTo(x,y+16);ctx.closePath();ctx.stroke();}}
 
-  // ── Room geometry ──────────────────────────────────────────
-  // Wall strip on top, kitchen on left, dining on right
-  const WALL_H=50;         // px — back wall strip height
-  const KIT_W=152;         // px — kitchen column width
-  const DIV=4;             // px — divider strip
-  const DIN_X=KIT_W+DIV;  // dining area left edge
-  const DIN_W=W-DIN_X;    // dining area width  (400px)
-  const FLY=WALL_H;        // floor Y start
-  const FLH=H-WALL_H;     // floor height       (330px)
+  // Ceiling
+  ctx.fillStyle=['#0c1006','#141020','#0a1430','#120018','#080812'][Math.min(it,4)];ctx.fillRect(0,0,W,12);
 
-  // ── 1. WALL ────────────────────────────────────────────────
-  // wall color tints per interior level
-  const wallTint=['rgba(14,10,4,.82)','rgba(16,12,6,.8)','rgba(10,20,12,.78)','rgba(8,16,22,.76)','rgba(14,10,20,.74)'];
-  tileFill(IMG_FW,72,0,48,48,0,0,W,WALL_H);
-  ctx.fillStyle=wallTint[Math.min(it,4)];ctx.fillRect(0,0,W,WALL_H);
-  // baseboard trim
-  ctx.fillStyle='#3a2610';ctx.fillRect(0,WALL_H-7,W,7);
-  ctx.fillStyle='#7a5228';ctx.fillRect(0,WALL_H-7,W,2);
-  ctx.fillStyle='#b07840';ctx.fillRect(2,WALL_H-6,W-4,1);
+  // Sconces
+  if(it>=2){[W*.15,W*.5,W*.85].forEach(lx=>{
+    ctx.fillStyle='rgba(200,255,150,.18)';ctx.beginPath();ctx.arc(lx,H*.18,28,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=it>=3?'#ccff88':'#88cc44';ctx.shadowColor=it>=3?'#aeff44':'#66cc22';ctx.shadowBlur=12;
+    ctx.beginPath();ctx.arc(lx,H*.18,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    ctx.fillStyle='#5a3010';ctx.fillRect(lx-5,H*.18,10,14);ctx.fillRect(lx-10,H*.18+4,20,6);
+  });}
 
-  // ── 2. FLOOR ───────────────────────────────────────────────
-  // it 0-1: basic, it 2+: wood, it 3+: tinted
-  tileFill(IMG_FW,128,0,48,48,0,FLY,W,FLH);
-  if(it>=1){ctx.fillStyle='rgba(180,140,80,.1)';ctx.fillRect(0,FLY,W,FLH);}
-  if(it>=3){ctx.fillStyle='rgba(20,50,25,.15)';ctx.fillRect(0,FLY,W,FLH);}
-  if(it>=4){ctx.fillStyle='rgba(10,20,40,.14)';ctx.fillRect(0,FLY,W,FLH);}
+  // Chandelier
+  if(it>=3){const cx=W/2;ctx.strokeStyle='#4a3010';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,12);ctx.lineTo(cx,50);ctx.stroke();
+    [-48,0,48].forEach(dx=>{ctx.strokeStyle='#6a4818';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,50);ctx.lineTo(cx+dx,60);ctx.stroke();
+      ctx.fillStyle='#ddff66';ctx.shadowColor='#bbff00';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx+dx,65,5,0,Math.PI*2);ctx.fill();});
+    ctx.shadowBlur=0;ctx.fillStyle='#8a6010';ctx.beginPath();ctx.arc(cx,50,10,0,Math.PI*2);ctx.fill();}
 
-  // ── 3. DINING ROOM RUG (it>=2) ────────────────────────────
-  if(it>=2){
-    const rugColors=['','','rgba(80,30,80,.18)','rgba(30,60,100,.2)','rgba(100,30,30,.2)'];
-    const rugBorder=['','','rgba(140,60,160,.3)','rgba(60,100,180,.32)','rgba(180,60,60,.3)'];
-    const rx=DIN_X+12,ry=FLY+10,rw=DIN_W-24,rh=FLH-20;
-    ctx.fillStyle=rugColors[Math.min(it,4)];ctx.fillRect(rx,ry,rw,rh);
-    ctx.strokeStyle=rugBorder[Math.min(it,4)];ctx.lineWidth=2;ctx.strokeRect(rx+4,ry+4,rw-8,rh-8);
-    ctx.lineWidth=1;ctx.strokeRect(rx+8,ry+8,rw-16,rh-16);
-  }
+  // ── GARDEN SECTION (left side) ──
+  const gardenW=W*.28,gardenX=0,gardenY=H*.14,gardenH=H*.5;
+  // Garden background
+  ctx.fillStyle=['#1a2a0c','#1e3010','#243814','#2a4018','#304820'][gd];
+  ctx.fillRect(gardenX,gardenY,gardenW,gardenH);
+  ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=1;
+  ctx.strokeRect(gardenX,gardenY,gardenW,gardenH);
 
-  // ── 4. DIVIDER WALL ────────────────────────────────────────
-  ctx.fillStyle='#2e1c0a';ctx.fillRect(KIT_W,FLY,DIV,FLH);
-  ctx.fillStyle='#7a4820';ctx.fillRect(KIT_W,FLY,2,FLH);
+  // Garden label
+  ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold 9px sans-serif';ctx.textAlign='center';
+  ctx.fillText(S.lang==='ko'?'🌱 텃밭':'🌱 Garden',gardenX+gardenW/2,gardenY+14);
 
-  // ── 5. WINDOWS ─────────────────────────────────────────────
-  if(IMG_DW){
-    // Window sprite: x=176,y=16,w=32,h=48 in DoorsAndWindows.png
-    const wsz=SC*1.4;
-    if(it>=1) spr(IMG_DW,176,16,32,48,DIN_X+DIN_W*0.62,2,wsz);
-    if(it>=2) spr(IMG_DW,176,16,32,48,DIN_X+DIN_W*0.22,2,wsz);
-    if(it>=4) spr(IMG_DW,176,16,32,48,T*0.6,2,wsz);
-  }
-
-  // ── 6. KITCHEN ─────────────────────────────────────────────
-  // Back counter shelf strip
-  ctx.fillStyle='#241808';ctx.fillRect(0,FLY,KIT_W,T*0.8);
-  ctx.fillStyle='#503820';ctx.fillRect(0,FLY,KIT_W,2);
-
-  // Fridge always present — x=0,y=192,w=32,h=64 → 64×128px at SC=2
-  spr(FURN,0,192,32,64,6,FLY+2);
-
-  if(kt>=1){
-    // Stove — x=48,y=192,w=32,h=64
-    spr(FURN,48,192,32,64,6+T*2+4,FLY+2);
-    // Pass-through opening in divider
-    ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(KIT_W,FLY+T*2.8,DIV,T*1.6);
-    ctx.fillStyle='#8a5e28';ctx.fillRect(KIT_W-2,FLY+T*2.8+T*1.6,DIV+4,5);
-  }
-  if(kt>=2){
-    // Bottom counter along left-side wall  x=80,y=208,w=48,h=32
-    spr(FURN,80,208,48,32,4,H-T*2.6);
-    spr(FURN,80,208,48,32,4+T*2+6,H-T*2.6);
-    // Light counter surface tint
-    ctx.fillStyle='rgba(230,220,190,.12)';ctx.fillRect(4,H-T*2.6,KIT_W-8,T*2);
-  }
-  if(kt>=3){
-    // Range hood above stove
-    ctx.fillStyle='rgba(20,14,8,.8)';ctx.fillRect(T*2+4,FLY,T*2+4,16);
-    ctx.strokeStyle='#6a5030';ctx.lineWidth=1;ctx.strokeRect(T*2+4,FLY,T*2+4,16);
-    // Stove heat glow
-    ctx.fillStyle='rgba(255,70,15,.35)';
-    ctx.shadowColor='rgba(255,80,20,.5)';ctx.shadowBlur=10;
-    ctx.fillRect(T*2+14,FLY+T*2.4,T*1.4,3);ctx.shadowBlur=0;
-    // Wall rack on divider side
-    spr(FURN,128,192,16,80,KIT_W-T*1.1,FLY+2);
-  }
-  if(kt>=4){
-    // Hanging pots above counter
-    if(IMG_SI){
-      ctx.fillStyle='#5a3e18';ctx.fillRect(4,FLY+6,KIT_W*0.75,6);
-      for(let i=0;i<4;i++) spr(IMG_SI,i*16,48,16,16,8+i*T*0.82,FLY+10,SC*0.85);
-    }
-    // Chef emoji bigger at max level
-    if(kt>=2){ctx.font='18px sans-serif';ctx.textAlign='center';ctx.fillText('👨‍🍳',KIT_W-4,FLY+T*3.4);}
-  } else if(kt>=2){
-    ctx.font='15px sans-serif';ctx.textAlign='center';ctx.fillText('👨‍🍳',KIT_W-4,FLY+T*3.4);
-  }
-
-  // Garden herbs shelf (gd level, top of kitchen wall)
-  if(gd>=1&&IMG_SI){
-    const herbCount=Math.min(gd+1,5);
-    ctx.fillStyle='#8a6028';ctx.fillRect(4,WALL_H-16,KIT_W-T*1.8,5);
-    for(let i=0;i<herbCount;i++)
-      spr(IMG_SI,i*16,0,16,16,6+i*T*0.72,WALL_H-14,SC*0.8);
-  }
-
-  // ── 7. DINING TABLES ───────────────────────────────────────
-  // Table sprite: x=48,y=16,w=32,h=32 → 64×64 canvas at SC=2
-  // Chairs (4 dirs): x={0,16,32,48},y=0,w=16,h=16 (front/left/back/right)
-  const TSC=SC;                   // table draw scale
-  const CSC=SC*0.9;               // chair draw scale (slightly smaller)
-  const TW=~~(32*TSC),TH=~~(32*TSC);  // 64×64
-  const CW=~~(16*CSC),CH=~~(16*CSC);  // ~29×29
-
-  // Table positions as ratio of dining area (compact 2-column grid)
-  const tblPos=[
-    null,
-    [{rx:0.44,ry:0.42}],
-    [{rx:0.20,ry:0.30},{rx:0.65,ry:0.57}],
-    [{rx:0.16,ry:0.24},{rx:0.63,ry:0.24},{rx:0.40,ry:0.62}],
-    [{rx:0.12,ry:0.20},{rx:0.58,ry:0.20},{rx:0.12,ry:0.61},{rx:0.58,ry:0.61}],
-  ];
-  const tables=tblPos[Math.min(Math.max(tb,0),4)]||[];
-
-  // Tablecloth tints per upgrade level
-  const clothTint=['','rgba(255,248,218,.32)','rgba(218,248,228,.3)','rgba(255,224,224,.3)','rgba(224,218,255,.32)'];
-
-  tables.forEach(({rx,ry},idx)=>{
-    const tx=~~(DIN_X+DIN_W*rx);
-    const ty=~~(FLY+FLH*ry);
-
-    // Back chair (facing up = sprite x=32)
-    spr(FURN,32,0,16,16,tx+TW/2-CW/2,ty-CH-2,CSC);
-    // Left chair (facing right = sprite x=48)
-    spr(FURN,48,0,16,16,tx-CW-2,ty+TH/2-CH/2,CSC);
-    // Right chair (facing left = sprite x=16)
-    spr(FURN,16,0,16,16,tx+TW+2,ty+TH/2-CH/2,CSC);
-
-    // Table
-    spr(FURN,48,16,32,32,tx,ty,TSC);
-
-    // Tablecloth tint
-    if(tb>=1){
-      ctx.fillStyle=clothTint[Math.min(tb,4)];
-      ctx.fillRect(tx+4,ty+4,TW-8,TH-8);
-    }
-
-    // Candle (tb>=2)
-    if(tb>=2){
-      const cx=~~(tx+TW/2-2),cy=~~(ty+TH/2-5);
-      ctx.fillStyle='#ede8cc';ctx.fillRect(cx,cy,4,8);
-      ctx.fillStyle='#c8a030';
-      ctx.shadowColor='rgba(255,170,50,.8)';ctx.shadowBlur=8;
-      ctx.beginPath();ctx.arc(cx+2,cy,2.5,0,Math.PI*2);ctx.fill();
-      ctx.shadowBlur=0;
-    }
-
-    // Wine glass (tb>=3)
-    if(tb>=3){
-      ctx.save();
-      ctx.strokeStyle='rgba(190,215,255,.75)';ctx.lineWidth=1;
-      const gx=~~(tx+TW*0.24),gy=~~(ty+TH*0.40);
-      ctx.beginPath();ctx.moveTo(gx-3,gy+4);ctx.lineTo(gx,gy-7);ctx.lineTo(gx+3,gy+4);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(gx-4,gy+5);ctx.lineTo(gx+4,gy+5);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(gx,gy+5);ctx.lineTo(gx,gy+9);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(gx-3,gy+10);ctx.lineTo(gx+3,gy+10);ctx.stroke();
-      ctx.restore();
-    }
-
-    // Flower / premium decor (tb>=4)
-    if(tb>=4){
-      ctx.font='9px sans-serif';ctx.textAlign='center';
-      ctx.fillText('🌸',tx+TW*0.77,ty+TH*0.36);
-    }
-
-    // Front chair (facing down = sprite x=0, drawn last = in front)
-    spr(FURN,0,0,16,16,tx+TW/2-CW/2,ty+TH+2,CSC);
-
-    // Seated customer silhouette (if episode done)
-    if(S.epDone&&idx<S.epDone.length){
-      ctx.fillStyle='rgba(255,210,165,.9)';
-      ctx.beginPath();ctx.arc(~~(tx+TW/2),~~(ty+TH+CH+6),5,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='rgba(60,90,175,.7)';
-      ctx.beginPath();ctx.ellipse(~~(tx+TW/2),~~(ty+TH+CH+13),8,6,0,0,Math.PI);ctx.fill();
-    }
+  // Garden beds
+  const bedColors=['#3a2010','#4a2a12','#5a3414','#6a3e18','#7a4a1c'];
+  [[10,30,60,18],[10,56,60,18],[10,82,60,18]].forEach(([bx,by,bw,bh])=>{
+    ctx.fillStyle=bedColors[gd];ctx.beginPath();ctx.roundRect(gardenX+bx,gardenY+by,bw,bh,3);ctx.fill();
   });
 
-  // tb=0 placeholder
-  if(tb===0){
-    ctx.fillStyle='rgba(255,255,255,.07)';ctx.font='11px sans-serif';ctx.textAlign='center';
-    ctx.fillText(S.lang==='ko'?'테이블 없음':'No tables yet',DIN_X+DIN_W/2,FLY+FLH*0.5);
+  // Plants in garden based on garden level
+  const plantEmojis=['🌱','🌿','🥕','🍅','🌽'];
+  const plantCount=Math.min(gd+1,5);
+  for(let p=0;p<plantCount;p++){
+    const px=gardenX+15+p*(gardenW-20)/Math.max(plantCount-1,1);
+    ctx.font='13px sans-serif';ctx.textAlign='center';
+    ctx.fillText(plantEmojis[Math.min(p,gd)],px,gardenY+48);
   }
 
-  // ── 8. PLANTS & CORNER DECOR ──────────────────────────────
-  // Plant sprite: x=112,y=0,w=16,h=32
-  const psz=SC*1.1;
-  if(it>=1) spr(FURN,112,0,16,32,W-T*1.2-2,FLY+3,psz);
-  if(it>=2) spr(FURN,112,0,16,32,DIN_X+4,FLY+3,psz);
-  if(it>=3) spr(FURN,112,0,16,32,W-T*1.2-2,H-T*2.1,psz);
-  if(it>=4) spr(FURN,112,0,16,32,DIN_X+4,H-T*2.1,psz);
+  // Floor
+  const fy=H*.63;
+  ctx.fillStyle=['#2a1808','#3a2210','#50301a','#6a4028','#907050'][Math.min(it,4)];
+  ctx.fillRect(0,fy,W,H-fy);
+  ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=1;
+  const ts=it>=2?42:34;
+  for(let x=0;x<W;x+=ts){ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=fy;y<H;y+=ts){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.fillStyle=['#1e1006','#2a1808','#3a200e','#503018','#705040'][Math.min(it,4)];
+  ctx.fillRect(0,fy-6,W,6);
 
-  // ── 9. SIGN ────────────────────────────────────────────────
+  // ── KITCHEN COUNTER ──
+  const kx=gardenW+4,ky=H*.27,kw=W-gardenW-4,kh=H*.13;
+  ctx.fillStyle=['#3a1806','#541e06','#782e10','#a04020','#c06030'][Math.min(kt,4)];
+  ctx.fillRect(kx,ky,kw,kh);
+  ctx.fillStyle=['#6a3010','#8a4018','#b05828','#d07840','#e09858'][Math.min(kt,4)];
+  ctx.fillRect(kx,ky,kw,8);
+  ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(kx+kw*.35,ky+8,kw*.28,kh-8);
+
+  if(kt>=1){ctx.fillStyle='#555';ctx.fillRect(kx+12,ky+10,60,26);
+    [[kx+18,ky+17],[kx+24,ky+17],[kx+18,ky+26],[kx+24,ky+26]].forEach(([bx,by])=>{
+      ctx.strokeStyle=kt>=2?'#ff4400':'#bb2200';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.stroke();});}
+  if(kt>=2){ctx.fillStyle='#c0c0c0';ctx.fillRect(kx+kw*.7,ky+3,38,kh-3);
+    ctx.strokeStyle='#888';ctx.lineWidth=1;ctx.strokeRect(kx+kw*.72,ky+6,34,(kh-10)*.45);
+    ctx.strokeRect(kx+kw*.72,ky+6+(kh-10)*.47,34,(kh-10)*.47);}
+  if(kt>=3){ctx.fillStyle='#a8a8a8';ctx.beginPath();ctx.moveTo(kx+8,ky+4);ctx.lineTo(kx+26,ky+4);ctx.lineTo(kx+23,ky-26);ctx.lineTo(kx+11,ky-26);ctx.closePath();ctx.fill();}
+  if(kt>=4){// Extra equipment
+    ctx.fillStyle='#888';ctx.fillRect(kx+76,ky+10,50,26);
+    ctx.fillStyle='#666';ctx.beginPath();ctx.arc(kx+101,ky+23,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#444';ctx.beginPath();ctx.arc(kx+101,ky+23,6,0,Math.PI*2);ctx.fill();}
+
+  // ── TABLES ──
+  const tbCount=[1,2,3,4,4][Math.min(tb,4)],tgap=(W-gardenW)/(tbCount+1),tox=gardenW;
+  const ttopC=['#5a2808','#8a4018','#b05828','#d07840','#e09858'];
+  const clothC=[null,'#a02020','#1830a0','#501880','#801a50'];
+  for(let i=0;i<tbCount;i++){
+    const tx=tox+tgap*(i+1),ty=fy+10;
+    ctx.fillStyle='#321406';ctx.fillRect(tx-22,ty+18,7,28);ctx.fillRect(tx+15,ty+18,7,28);
+    ctx.fillStyle=ttopC[Math.min(tb,4)];ctx.beginPath();ctx.roundRect(tx-26,ty,52,18,3);ctx.fill();
+    if(tb>=1&&clothC[Math.min(tb,4)]){ctx.fillStyle=clothC[Math.min(tb,4)];ctx.globalAlpha=.72;ctx.beginPath();ctx.roundRect(tx-24,ty+1,48,14,2);ctx.fill();ctx.globalAlpha=1;}
+    ctx.fillStyle='#f4eee0';ctx.beginPath();ctx.ellipse(tx,ty+8,9,6,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#ff7820';ctx.beginPath();ctx.ellipse(tx,ty+8,5,3,0,0,Math.PI*2);ctx.fill();
+    if(tb>=2){ctx.fillStyle='#f4eee0';ctx.fillRect(tx+13,ty-14,5,14);ctx.fillStyle='#ff8800';ctx.shadowColor='#ff8800';ctx.shadowBlur=7;ctx.beginPath();ctx.arc(tx+15.5,ty-16,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
+    if(tb>=3){ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(tx-13,ty);ctx.lineTo(tx-10,ty+4);ctx.moveTo(tx-11,ty+2);ctx.lineTo(tx-11,ty-7);ctx.stroke();ctx.strokeStyle='#dd4444aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(tx-11,ty-8,4,.4,Math.PI-.4);ctx.stroke();}
+    // Chair
+    ctx.fillStyle=ttopC[Math.min(tb,2)];ctx.fillRect(tx-12,ty+30,24,14);ctx.fillRect(tx-10,ty+18,5,12);ctx.fillRect(tx+5,ty+18,5,12);
+    // Customers (based on ep done)
+    if(i<S.epDone.length){
+      const cuy=fy+54;ctx.fillStyle='rgba(255,220,180,.85)';ctx.beginPath();ctx.arc(tx,cuy,7,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(60,100,200,.7)';ctx.beginPath();ctx.ellipse(tx,cuy+18,7,12,0,0,Math.PI);ctx.fill();
+    }
+  }
+
+  // Plants/decor
+  if(it>=1){[[14,H-20],[W-14,H-20]].forEach(([px,py])=>{
+    ctx.fillStyle='#5a2808';ctx.beginPath();ctx.roundRect(px-7,py-14,14,18,2);ctx.fill();
+    ctx.fillStyle=it>=3?'#1a5018':'#243e14';ctx.beginPath();ctx.arc(px,py-18,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=it>=3?'#267828':'#346020';
+    ctx.beginPath();ctx.arc(px-8,py-22,7,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(px+8,py-22,7,0,Math.PI*2);ctx.fill();
+    if(it>=2){ctx.fillStyle='#3aaa30';ctx.beginPath();ctx.arc(px,py-26,5,0,Math.PI*2);ctx.fill();}
+  });}
+
+  // ── SIGN ──
   ctx.save();
-  const sCX=~~(DIN_X+DIN_W/2);
-  const sY=6, sH=24;
-  const sigW=100+sg*18;
-  if(sg===0){
-    ctx.fillStyle='rgba(200,185,140,.2)';ctx.font='9px sans-serif';ctx.textAlign='center';
-    ctx.fillText(S.lang==='ko'?'텃밭 키친':'Garden Kitchen',sCX,FLY/2+5);
-  } else {
-    // Board background
-    ctx.fillStyle='rgba(28,16,4,.95)';
-    ctx.beginPath();ctx.roundRect(sCX-sigW/2,sY,sigW,sH,4);ctx.fill();
-    // Gold sheen gradient
-    const sg2=ctx.createLinearGradient(sCX-sigW/2,sY,sCX+sigW/2,sY);
-    sg2.addColorStop(0,'rgba(130,75,15,.1)');sg2.addColorStop(0.5,'rgba(220,165,45,.28)');sg2.addColorStop(1,'rgba(130,75,15,.1)');
-    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(sCX-sigW/2,sY,sigW,sH,4);ctx.fill();
-    // Border (glows at sg>=3)
-    ctx.strokeStyle=sg>=4?'#ffd700':sg>=3?'#d4a840':'#9a7430';
-    ctx.lineWidth=1.5;
-    if(sg>=3){ctx.shadowColor='rgba(255,200,50,.6)';ctx.shadowBlur=7;}
-    ctx.beginPath();ctx.roundRect(sCX-sigW/2,sY,sigW,sH,4);ctx.stroke();ctx.shadowBlur=0;
-    // LED dot border (sg>=3)
-    if(sg>=3){
-      for(let bx=sCX-sigW/2+7;bx<=sCX+sigW/2-7;bx+=9){
-        ctx.fillStyle='rgba(255,215,70,.85)';ctx.shadowColor='#ffd040';ctx.shadowBlur=3;
-        ctx.beginPath();ctx.arc(bx,sY+1.5,1.4,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(bx,sY+sH-1.5,1.4,0,Math.PI*2);ctx.fill();
-      }ctx.shadowBlur=0;
-    }
-    // Sign text
-    const sigTxt=[null,'🌱 텃밭 키친','🌱 GARDEN KITCHEN','✨ GARDEN KITCHEN','⭐ 텃밭 키친 ⭐'];
-    ctx.fillStyle=sg>=4?'#ffe060':'#f0d898';
-    ctx.font=`bold ${8+sg*1.2|0}px sans-serif`;ctx.textAlign='center';
-    ctx.fillText(sigTxt[Math.min(sg,4)],sCX,sY+sH/2+4);
-    if(sg>=3){
-      ctx.fillStyle='rgba(255,200,70,.65)';ctx.font='6.5px sans-serif';
-      ctx.fillText(sg>=4?'Michelin ★★★':'Michelin Starred',sCX,sY+sH-2);
-    }
-  }
+  if(sg===0){ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillText('🌱 GARDEN KITCHEN',W/2,36);}
+  else if(sg===1){
+    ctx.fillStyle='#4a2a08';ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.fill();
+    ctx.strokeStyle='#8ac828';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.stroke();
+    ctx.fillStyle='#e8ffc0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,32);
+    ctx.fillStyle='#aad860';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,46);}
+  else if(sg===2){
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.roundRect(W/2-96,8,192,44,8);ctx.fill();
+    ctx.shadowColor='#44ff00';ctx.shadowBlur=14;ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-94,10,188,40,6);ctx.stroke();ctx.shadowBlur=0;
+    ctx.shadowColor='#88ff44';ctx.shadowBlur=10;ctx.fillStyle='#88ff44';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.shadowBlur=5;ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,45);ctx.shadowBlur=0;}
+  else if(sg===3){
+    const sg2=ctx.createLinearGradient(W/2-108,0,W/2+108,0);sg2.addColorStop(0,'#060e02');sg2.addColorStop(.5,'#0e2006');sg2.addColorStop(1,'#060e02');
+    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.fill();
+    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=10;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-98;bx<=W/2+98;bx+=17){ctx.fillStyle='#eeff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,9,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,53,3,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,46);}
+  else{// sg 4 — Michelin star
+    const mg=ctx.createLinearGradient(W/2-110,0,W/2+110,0);mg.addColorStop(0,'#100808');mg.addColorStop(.5,'#201200');mg.addColorStop(1,'#100808');
+    ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.fill();
+    ctx.strokeStyle=S.gold||'#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=12;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-100;bx<=W/2+100;bx+=16){ctx.fillStyle='#ffff88';ctx.shadowColor='#ffff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,8,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,54,3,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;ctx.fillStyle='#ffd700';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
+    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,30);ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,46);}
   ctx.restore();
 
-  // ── 10. AMBIENT LIGHTING POOLS (it>=2) ────────────────────
-  if(it>=2){
-    const lxs=it>=4?[DIN_X+DIN_W*0.25,DIN_X+DIN_W*0.5,DIN_X+DIN_W*0.78]:
-              it>=3?[DIN_X+DIN_W*0.30,DIN_X+DIN_W*0.72]:[DIN_X+DIN_W*0.5];
-    lxs.forEach(lx=>{
-      const g=ctx.createRadialGradient(lx,FLY+4,0,lx,FLY+4,T*4.5);
-      g.addColorStop(0,'rgba(255,230,160,.12)');g.addColorStop(1,'rgba(255,210,120,0)');
-      ctx.fillStyle=g;ctx.fillRect(DIN_X,FLY,DIN_W,FLH);
-    });
-  }
-
-  // ── 11. INNER BORDER ──────────────────────────────────────
-  ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+  // HUD
+  ctx.fillStyle='rgba(0,0,0,.45)';ctx.beginPath();ctx.roundRect(W-96,H-28,90,20,5);ctx.fill();
+  ctx.fillStyle='#ffd700';ctx.font='bold 10px sans-serif';ctx.textAlign='right';
+  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`,W-7,H-13);
 }
 function renderRst(){
   const el=document.getElementById('rst');el.innerHTML='';
@@ -2189,77 +2027,18 @@ function renderRst(){
    {k:'table',ko:'테이블',en:'Table',e:'🪑'},{k:'kitchen',ko:'주방',en:'Kitchen',e:'👨‍🍳'},
    {k:'interior',ko:'인테리어',en:'Interior',e:'🎨'}].forEach(u=>{
     const lv=S.ups[u.k];
-    const pct=lv/4*100;
-    const dots=['◦','◦','◦','◦'].map((d,i)=>i<lv?'<span style="color:#00c896">◆</span>':'<span style="color:#1e3028">◆</span>').join('');
-    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${dots} <span style="color:#4a8060;font-size:.8em">${lv}/4</span></div><div class="rs-bar"><div class="rs-bar-fill" style="width:${pct}%"></div></div></div>`;
+    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${'★'.repeat(lv)}${'☆'.repeat(4-lv)} ${lv}/4</div></div>`;
   });
 }
 
 // ── TABS ───────────────────────────────────────────────────────────
-// ── BOARD GRID FIT (mobile) ────────────────────────────────────────
-// 실제 DOM 높이를 측정해 보드 그리드가 화면에 꼭 맞게 셀 크기를 계산합니다.
-function fitBoardGrid(){
-  const MOBILE_MAX=640;
-  const ids=['grid','grid-meat'];
-  if(window.innerWidth>MOBILE_MAX){
-    // 넓은 화면: fit-mode 제거하고 CSS 기본값 복원
-    ids.forEach(id=>{
-      const g=document.getElementById(id);
-      if(!g)return;
-      g.classList.remove('fit-mode');
-      g.style.gridTemplateColumns='';
-      g.style.gridTemplateRows='';
-      g.style.width='';
-      g.style.height='';
-    });
-    return;
-  }
-  // 가용 높이 계산: visualViewport 우선, 없으면 innerHeight
-  const vh=(window.visualViewport?window.visualViewport.height:window.innerHeight);
-  const vw=window.innerWidth;
-
-  const hdrH=document.querySelector('.hdr')?.offsetHeight||65;
-  const tabsH=document.querySelector('.tabs')?.offsetHeight||46;
-  // mban, subtabs, btop 높이를 실제로 측정 (보드 pane이 보일 때 호출됨)
-  const mbanH=document.getElementById('mban')?.offsetHeight||75;
-  const subtabsH=document.getElementById('subtabs')?.offsetHeight||42;
-  const btopH=document.querySelector('#pane-board .btop')?.offsetHeight||38;
-  const wrapPad=20; // .wrap 상하 패딩 합산
-
-  const availH=vh-hdrH-tabsH-mbanH-subtabsH-btopH-wrapPad-8;
-  const availW=vw-20; // .wrap 좌우 패딩 합산
-
-  // 현재 media query 단계에 따른 gap/padding/border 값
-  let G,P,B;
-  if(vw<=360){G=2.6;P=5;B=3;}
-  else if(vw<=480){G=3;P=6;B=4;}
-  else{G=3;P=6;B=4;}
-
-  const cellFromH=Math.floor((availH-2*(P+B)-5*G)/6);
-  const cellFromW=Math.floor((availW-2*(P+B)-4*G)/5);
-  const cell=Math.max(34,Math.min(cellFromH,cellFromW));
-
-  const gridW=Math.round(5*cell+4*G+2*(P+B));
-  const gridH=Math.round(6*cell+5*G+2*(P+B));
-
-  ids.forEach(id=>{
-    const g=document.getElementById(id);
-    if(!g)return;
-    g.classList.add('fit-mode');
-    g.style.gridTemplateColumns=`repeat(5,${cell}px)`;
-    g.style.gridTemplateRows=`repeat(6,${cell}px)`;
-    g.style.width=`${gridW}px`;
-    g.style.height=`${gridH}px`;
-  });
-}
-
 function goTab(name){
   S.tab=name;
   applyTabToDom();
   if(name==='rest'){drawRest();renderRst();}
   if(name==='up')renderUps();
   if(name==='story')renderStory();
-  if(name==='board'){renderBanner();goSubBoard(S.subBoard);requestAnimationFrame(fitBoardGrid);}
+  if(name==='board'){renderBanner();goSubBoard(S.subBoard);}
   if(name==='garden')renderHubUi();
 }
 function toggleLang(){S.lang=S.lang==='ko'?'en':'ko';save();renderAll();}
@@ -2312,7 +2091,6 @@ document.addEventListener('keydown',e=>{
   _fp.onerror=hubCharSpriteFail;
   _fp.src=FARMER_SHEET.src;
   renderAll();
-  preloadRestImgs();
   initGardenAnimals();
 
   // 모바일: 필드 드래그(스와이프)로 상/하/좌/우 이동
@@ -2395,19 +2173,6 @@ document.addEventListener('keydown',e=>{
     };
     field.addEventListener('touchend',reset,{passive:true});
     field.addEventListener('touchcancel',reset,{passive:true});
-  }
-
-  // 화면 회전 또는 리사이즈 시 보드 그리드 재계산
-  let _fitTimer=null;
-  window.addEventListener('resize',()=>{
-    clearTimeout(_fitTimer);
-    _fitTimer=setTimeout(()=>{if(S.tab==='board')fitBoardGrid();},120);
-  });
-  if(window.visualViewport){
-    window.visualViewport.addEventListener('resize',()=>{
-      clearTimeout(_fitTimer);
-      _fitTimer=setTimeout(()=>{if(S.tab==='board')fitBoardGrid();},120);
-    });
   }
 })();
 </script>
