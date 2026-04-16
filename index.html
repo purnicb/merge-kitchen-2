@@ -2196,51 +2196,30 @@ function drawRest(){
 
   // ── 10. SIGN ──────────────────────────────────────────────────────
   ctx.save();
-  if(sg===0){
-    ctx.fillStyle='rgba(240,230,200,0.22)';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
-    ctx.fillText('🌱 GARDEN KITCHEN',W/2,18);
-  }else if(sg===1){
-    ctx.fillStyle='#3a2208';ctx.beginPath();ctx.roundRect(W/2-92,3,184,42,7);ctx.fill();
-    ctx.strokeStyle='#7ab020';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-92,3,184,42,7);ctx.stroke();
-    ctx.fillStyle='#dff0a0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,21);
-    ctx.fillStyle='#a0cc50';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,37);
-  }else if(sg===2){
-    ctx.fillStyle='rgba(0,0,0,0.74)';ctx.beginPath();ctx.roundRect(W/2-100,2,200,44,8);ctx.fill();
-    ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.shadowColor='#44ff00';ctx.shadowBlur=16;
-    ctx.beginPath();ctx.roundRect(W/2-98,4,196,40,6);ctx.stroke();ctx.shadowBlur=0;
-    ctx.fillStyle='#88ff44';ctx.shadowColor='#88ff44';ctx.shadowBlur=8;
-    ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,23);ctx.shadowBlur=0;
-    ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,38);
-  }else if(sg===3){
-    const g=ctx.createLinearGradient(W/2-110,0,W/2+110,0);
-    g.addColorStop(0,'#060e02');g.addColorStop(.5,'#0e2008');g.addColorStop(1,'#060e02');
-    ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(W/2-110,2,220,50,8);ctx.fill();
-    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=12;
-    ctx.beginPath();ctx.roundRect(W/2-110,2,220,50,8);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-100;bx<=W/2+100;bx+=18){
-      ctx.fillStyle='#ddff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;
-      ctx.beginPath();ctx.arc(bx,7,3,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(bx,47,3,0,Math.PI*2);ctx.fill();
-    }
-    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
-    ctx.fillText('🌱 GARDEN KITCHEN',W/2,28);
-    ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,43);
-  }else{
-    const g=ctx.createLinearGradient(W/2-114,0,W/2+114,0);
-    g.addColorStop(0,'#120a02');g.addColorStop(.5,'#241600');g.addColorStop(1,'#120a02');
-    ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(W/2-114,1,228,52,9);ctx.fill();
-    ctx.strokeStyle='#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=16;
-    ctx.beginPath();ctx.roundRect(W/2-114,1,228,52,9);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-104;bx<=W/2+104;bx+=16){
-      ctx.fillStyle='#ffff88';ctx.shadowColor='#ffee00';ctx.shadowBlur=8;
-      ctx.beginPath();ctx.arc(bx,6,3,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(bx,49,3,0,Math.PI*2);ctx.fill();
-    }
+  if(sg===0){ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillText('🌱 GARDEN KITCHEN',W/2,36);}
+  else if(sg===1){
+    ctx.fillStyle='#4a2a08';ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.fill();
+    ctx.strokeStyle='#8ac828';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.stroke();
+    ctx.fillStyle='#e8ffc0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,32);
+    ctx.fillStyle='#aad860';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,46);}
+  else if(sg===2){
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.roundRect(W/2-96,8,192,44,8);ctx.fill();
+    ctx.shadowColor='#44ff00';ctx.shadowBlur=14;ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-94,10,188,40,6);ctx.stroke();ctx.shadowBlur=0;
+    ctx.shadowColor='#88ff44';ctx.shadowBlur=10;ctx.fillStyle='#88ff44';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.shadowBlur=5;ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,45);ctx.shadowBlur=0;}
+  else if(sg===3){
+    const sg2=ctx.createLinearGradient(W/2-108,0,W/2+108,0);sg2.addColorStop(0,'#060e02');sg2.addColorStop(.5,'#0e2006');sg2.addColorStop(1,'#060e02');
+    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.fill();
+    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=10;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-98;bx<=W/2+98;bx+=17){ctx.fillStyle='#eeff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,9,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,53,3,0,Math.PI*2);ctx.fill();}
+    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,46);}
+  else{// sg 4 — Michelin star
+    const mg=ctx.createLinearGradient(W/2-110,0,W/2+110,0);mg.addColorStop(0,'#100808');mg.addColorStop(.5,'#201200');mg.addColorStop(1,'#100808');
+    ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.fill();
+    ctx.strokeStyle=S.gold||'#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=12;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-100;bx<=W/2+100;bx+=16){ctx.fillStyle='#ffff88';ctx.shadowColor='#ffff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,8,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,54,3,0,Math.PI*2);ctx.fill();}
     ctx.shadowBlur=0;ctx.fillStyle='#ffd700';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
-    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,28);
-    ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';
-    ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,45);
-  }
+    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,30);ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,46);}
+  ctx.restore();
   ctx.restore();
 
   // ── 11. HUD ───────────────────────────────────────────────────────
