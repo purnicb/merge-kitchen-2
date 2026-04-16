@@ -2300,7 +2300,6 @@ document.addEventListener('keydown',e=>{
   const _fp=new Image();
   _fp.onerror=hubCharSpriteFail;
   _fp.src=FARMER_SHEET.src;
-  preloadRstImgs();
   renderAll();
   initGardenAnimals();
 
@@ -2371,9 +2370,8 @@ document.addEventListener('keydown',e=>{
         startFarmerWalkAnim();
         save();
       }
-
       // 같은 방향으로 연속 이동 가능하게 기준점을 최신 위치로 갱신
-      lastX=x;lastY=y;
+       lastX=x;lastY=y;
       _hubSkipNextWalkClickUntil=Date.now()+450;
       ev.preventDefault();
     },{passive:false});
