@@ -217,11 +217,14 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
 .endsb{color:var(--txt2);font-size:.84em;line-height:1.6}
 
 /* ══ RESTAURANT CANVAS ══ */
-#rc{width:100%;max-width:556px;border-radius:14px;border:2px solid var(--bdr);display:block;margin:0 auto;
-  box-shadow:0 8px 28px rgba(0,0,0,.6)}
-.rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}
-.rs{background:var(--s1);border-radius:8px;padding:8px 10px;border:1px solid var(--bdr)}
-.rsl{font-size:.66em;color:var(--txt2)}.rsv{font-size:.85em;font-weight:700;color:var(--gold)}
+#rc{width:100%;max-width:556px;border-radius:16px;border:3px solid #5a3010;display:block;margin:0 auto;
+  box-shadow:0 8px 32px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,200,120,.08);image-rendering:pixelated}
+.rst{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}
+.rs{background:linear-gradient(160deg,#1a1008,#251508);border-radius:8px;padding:7px 8px;border:1px solid #3a2010}
+.rsl{font-size:.58em;color:#7a5030;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.rsv{font-size:.8em;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:3px}
+.rs-bar{height:3px;background:#0a0804;border-radius:2px;overflow:hidden;margin-top:4px}
+.rs-bar-fill{height:100%;background:linear-gradient(90deg,#c06020,#f09040);border-radius:2px;transition:width .4s}
 
 /* ══ UPGRADES ══ */
 .upl{display:flex;flex-direction:column;gap:10px}
@@ -391,6 +394,11 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   }
   .cell{border-radius:11px}
   .ibub{width:56%}
+  /* 머지 보드: 모바일 전체 화면 채우기 */
+  #pane-board{display:flex;flex-direction:column;min-height:calc(100svh - 115px)}
+  #grid-veg-wrap.on,#grid-meat-wrap.on{flex:1;min-height:0;display:flex;flex-direction:column}
+  #pane-board .grid{flex:1;min-height:0;grid-template-rows:repeat(6,1fr)}
+  #pane-board .cell{aspect-ratio:unset}
   .hub-corner-tree{font-size:clamp(1.4rem,7vw,2.4rem)}
   .hub-char-wrap{width:38px;height:62px}
   /* mobile에서 스프라이트가 밀려 화면 밖으로 나가는 문제 방지 */
@@ -734,7 +742,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   </div>
 
   <div class="pane" id="pane-rest">
-    <canvas id="rc" width="556" height="340"></canvas>
+    <canvas id="rc" width="556" height="380"></canvas>
     <div class="rst" id="rst"></div>
   </div>
 
@@ -882,7 +890,7 @@ const EPS=[
    rwd:{c:1400,xp:820},rt:{ko:'🪙1400 + 820XP',en:'🪙1400 + 820XP'}},
   {char:'🎪',title:{ko:'제14화: 축제 주간',en:'Ch.14: Festival Week'},
    quote:{ko:'"축제 기간엔 걸작이 메인이죠!"',en:'"Festival week calls for masterpieces!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 4개(누적)',en:'4 Masterpieces (total)',type:'merge',item:12,need:4},{i:'🌱',ko:'텃밭 업그레이드 3단계',en:'Garden upgrade Lv.3',type:'upgrade',key:'garden',need:3}],
+   objs:[{i:'👑',ko:'셰프의 걸작 4개(누적)',en:'4 Masterpieces (total)',type:'merge',item:12,need:4},{i:'🪧',ko:'간판 업그레이드 2단계',en:'Sign upgrade Lv.2',type:'upgrade',key:'sign',need:2}],
    rwd:{c:1700,xp:950},rt:{ko:'🪙1700 + 950XP',en:'🪙1700 + 950XP'}},
   {char:'🦄',title:{ko:'제15화: 동화 같은 저녁',en:'Ch.15: Fairytale Dinner'},
    quote:{ko:'"동화에 나올 법한 한 상 차려주세요!"',en:'"Serve a dinner straight out of a fairytale!"'},
@@ -924,7 +932,7 @@ const EPS=[
    rwd:{c:3600,xp:2200},rt:{ko:'🪙3600 + 2200XP',en:'🪙3600 + 2200XP'}},
   {char:'🌿',title:{ko:'제24화: 텃밭 확장 프로젝트',en:'Ch.24: Garden Expansion'},
    quote:{ko:'"이웃 밭까지 빌렸어요. 텃밭이 두 배로 넓어졌어요!"',en:'"I borrowed the neighbor\'s lot—the garden just doubled in size!"'},
-   objs:[{i:'🌱',ko:'텃밭 업그레이드 최대(4단계)',en:'Garden upgrade maxed (Lv.4)',type:'upgrade',key:'garden',need:4},{i:'🍲',ko:'채소 스튜 10개(누적)',en:'10 Veggie Stews (total)',type:'merge',item:9,need:10}],
+   objs:[{i:'👨‍🍳',ko:'주방 업그레이드 최대(4단계)',en:'Kitchen upgrade maxed (Lv.4)',type:'upgrade',key:'kitchen',need:4},{i:'🍲',ko:'채소 스튜 10개(누적)',en:'10 Veggie Stews (total)',type:'merge',item:9,need:10}],
    rwd:{c:4000,xp:2400},rt:{ko:'🪙4000 + 2400XP',en:'🪙4000 + 2400XP'}},
   {char:'👨‍🏫',title:{ko:'제25화: 셰프 클래스',en:'Ch.25: Chef\'s Class'},
    quote:{ko:'"셰프님, 가르쳐주세요! 텃밭 요리의 모든 걸 배우고 싶어요."',en:'"Teach me everything, chef—I want to master this garden-to-table way."'},
@@ -964,86 +972,100 @@ const UP_TAB_STORY={
   },
 };
 const UPS=[
-  {key:'garden',  ko:'텃밭',     en:'Garden',   e:'🌱',costs:[80,200,450,900],
-   desc:{ko:['새싹 확률 +15%','당근 확률 추가','옥수수 확률 추가','최고급 재료 확률'],
-         en:['+15% Sprout chance','Add Carrot chance','Add Corn chance','Best ingredient chance']},
+  {key:'sign',    ko:'간판·창문', en:'Sign & Windows', e:'🪧',costs:[100,250,600,1200],
+   desc:{ko:['나무 간판 + 창문 2개','네온 간판 + 중앙 창문 추가','화려한 조명 간판','미슐랭 스타 외관'],
+         en:['Wood sign + 2 windows','Neon + center window','Grand illuminated sign','Michelin exterior']},
    narrative:{ko:[
-     '할머니가 남긴 밭이 아직은 초라해요. 씨앗부터 다시 믿어볼까요.',
-     '새싹이 더 자주 올라와요. 아침마다 밭 가는 길이 설레기 시작했어요.',
-     '당근과 옥수수가 밭에 이름을 올리기 시작했어요. 이웃이 창 넘어 물어봐요.',
-     '최고급 재료까지 손에 잡히는 날엔, 스스로도 농부인 줄 잊을 뻔해요.',
-   ],en:[
-     'Grandma\'s patch still looks humble. Maybe we trust the seeds again.',
-     'More sprouts every day. The walk to the beds feels lighter.',
-     'Carrots and corn claim their rows. Neighbors peek over the fence.',
-     'When rare crops land in your hands, you almost forget you\'re the cook too.',
-   ]}},
-  {key:'sign',    ko:'간판',     en:'Sign',     e:'🪧',costs:[100,250,600,1200],
-   desc:{ko:['네온 간판','화려한 조명 간판','그랜드 일루미네이션','미슐랭 스타 간판'],
-         en:['Neon sign','Lit sign','Grand illumination','Michelin sign']},
-   narrative:{ko:[
-     '지나가던 사람이 한 번은 봐줄 간판이 필요해요. 아직은 손글씨에 가깝죠.',
-     '네온이 켜지자 밤거리에 "여기 있어요"라고 말하는 것 같아요.',
+     '지나가던 사람이 한 번은 봐줄 간판과 창문이 생겼어요. 빛이 조금씩 새어 나와요.',
+     '네온이 켜지자 밤거리에 “여기 있어요”라고 말하는 것 같아요. 창문에 온기가 어려요.',
      '불빛이 화려해질수록 발걸음이 느려져요. 사진 찍는 사람도 생겼어요.',
      '간판이 말해요. 이 집은 그냥 동네 밥집이 아니라고.',
    ],en:[
-     'Passersby need a reason to look up. It still feels like chalk on wood.',
-     'Neon hums: we\'re open. The street remembers the glow.',
+     'A wood sign and two windows face the street. Light leaks through the glass.',
+     'Neon hums: we\'re open. Windows glow warm against the evening.',
      'The brighter the lights, the slower the steps. Phones come out.',
      'The sign says it: this isn\'t just another corner spot.',
    ]}},
+  {key:'lighting',ko:'조명',     en:'Lighting', e:'💡',costs:[120,300,700,1400],
+   desc:{ko:['따뜻한 전구 조명','천장 펜던트 조명 2개','샹들리에 스타일 3개','프리미엄 무드 조명'],
+         en:['Warm bulb lights','2 pendant ceiling lights','3 chandelier-style lights','Premium mood lighting']},
+   narrative:{ko:[
+     '어두운 구석이 밝아졌어요. 전구 하나가 이렇게 따뜻할 수 있는지 몰랐어요.',
+     '펜던트 조명이 테이블마다 작은 원을 그려요. 손님의 얼굴이 더 환해 보여요.',
+     '조명이 세 개가 되자 공간 전체가 달라졌어요. 그림자도 예쁜 레스토랑이에요.',
+     '무드 조명 아래서는 메뉴판도 예술이 돼요. 이 빛이라면 어떤 요리도 빛날 거예요.',
+   ],en:[
+     'One bulb. The corner brightens. Who knew a single light could feel this warm?',
+     'Pendant lights draw little circles on each table. Guests\' faces glow.',
+     'Three lights and the whole space changed. Even the shadows look good here.',
+     'In this light, even the menu looks like art. Any dish will shine tonight.',
+   ]}},
   {key:'table',   ko:'테이블',   en:'Table',    e:'🪑',costs:[150,350,800,1600],
-   desc:{ko:['고급 테이블','캔들 테이블','VIP 테이블','로얄 테이블'],
-         en:['Premium table','Candle table','VIP table','Royal table']},
+   desc:{ko:['테이블 2개 + 나무 의자','테이블 4개 + 흰 테이블보','고급 식기 + 캔들','VIP 로얄 세팅 + 와인잔'],
+         en:['2 tables + wood chairs','4 tables + white cloth','Fine tableware + candles','VIP royal setting + wine']},
    narrative:{ko:[
      '의자가 삐걱거려도, 첫 손님을 앉힐 자리는 있어야 해요.',
-     '천이 바뀌고 촛불이 생겼어요. 저녁마다 작은 연극이 열려요.',
-     'VIP라는 말이 부끄럽지만, 단골이 지정석을 말할 만큼 익숙해졌어요.',
-     '로얄 테이블 앞에선 숟가락 소리까지 조심스러워요. 오늘은 특별한 날이에요.',
+     '흰 테이블보가 깔리자 레스토랑이 레스토랑답게 보이기 시작했어요.',
+     '고급 식기와 캔들. 촛불 아래서는 소박한 요리도 특별해 보여요.',
+     '로얄 세팅 앞에선 숟가락 소리까지 조심스러워요. 오늘은 특별한 날이에요.',
    ],en:[
      'Chairs creak, but you need a place for the first guest to sit.',
-     'Cloth and candles arrive. Every dinner feels like a tiny play.',
-     '“VIP” still feels big, but regulars already claim their seats.',
+     'White tablecloths. Now it finally looks like a restaurant.',
+     'Fine tableware and candles. Even simple food looks special by candlelight.',
      'At the royal table, even spoons sound careful. Tonight is the night.',
    ]}},
   {key:'kitchen', ko:'주방',     en:'Kitchen',  e:'👨‍🍳',costs:[200,500,1100,2200],
-   desc:{ko:['중급 주방','프리미엄 주방','마스터 주방','별 셰프 주방'],
-         en:['Advanced kitchen','Premium kitchen','Master kitchen','Star chef kitchen']},
+   desc:{ko:['주방 카운터 설치','냉장고 + 조리대 추가','프리미엄 오픈 키친','스타 셰프 풀 키친'],
+         en:['Kitchen counter installed','Fridge + prep counter','Premium open kitchen','Star chef full kitchen']},
    narrative:{ko:[
-     '냄비 하나로 시작한 주방. 레시피는 머릿속에만 가득해요.',
-     '불 세기를 조절할 수 있게 됐어요. 타이밍이 조금씩 제 손을 믿어요.',
-     '프리미엄 장비가 들어오자 동시에 여러 냄비를 돌릴 수 있어요.',
-     '별 셰프 주방이라니… 어제의 나에게 말해주고 싶어요.',
+     '냄비 하나로 시작한 주방. 카운터가 생기니 요리가 진짜같아요.',
+     '냉장고와 조리대가 들어왔어요. 손님이 주방을 기웃거리기 시작했어요.',
+     '오픈 키친으로 바꾸자 요리하는 모습 자체가 볼거리가 됐어요.',
+     '풀 키친. 별 셰프 주방이라니… 어제의 나에게 말해주고 싶어요.',
    ],en:[
-     'One pot, one stove. Recipes still live mostly in your head.',
-     'You tame the heat. Timing starts to trust your hands.',
-     'Better gear means more pots singing at once.',
-     'A star-chef kitchen—you\'d tell yesterday-you to sit down.',
+     'One pot, a counter. Cooking starts to feel real.',
+     'Fridge and prep counter arrive. Guests start peeking at the kitchen.',
+     'Open kitchen—the cooking itself becomes the show.',
+     'Full kitchen. A star-chef setup—you\'d tell yesterday-you to sit down.',
+   ]}},
+  {key:'floor',   ko:'바닥재',   en:'Flooring', e:'🪵',costs:[180,420,950,1900],
+   desc:{ko:['원목 바닥재 시공','고급 원목 + 왁스 마감','헤링본 패턴 파케이','럭셔리 짙은 오크'],
+         en:['Oak wood flooring','Premium hardwood + wax','Herringbone parquet','Luxury dark oak']},
+   narrative:{ko:[
+     '맨바닥에 원목이 깔렸어요. 발소리가 달라졌어요.',
+     '왁스 마감 후 빛이 반사돼요. 손님이 바닥을 보며 걸어요.',
+     '헤링본 패턴이라니. 이 바닥을 밟으러 오는 손님도 생길 것 같아요.',
+     '짙은 오크 바닥 위에서는 모든 게 고급스러워 보여요.',
+   ],en:[
+     'Wood goes down. The footsteps sound different now.',
+     'Wax finish catches the light. Guests walk looking down.',
+     'Herringbone pattern—guests might come just to walk on this floor.',
+     'Dark oak makes everything look expensive.',
    ]}},
   {key:'interior',ko:'인테리어', en:'Interior', e:'🎨',costs:[300,700,1500,3000],
-   desc:{ko:['세련된 인테리어','럭셔리 인테리어','로얄 인테리어','미슐랭 인테리어'],
-         en:['Stylish interior','Luxury interior','Royal interior','Michelin interior']},
+   desc:{ko:['화분 + 벽 정리','서재 책장 + 파티션','소파 라운지 코너 + 벽화','럭셔리 전체 인테리어'],
+         en:['Plants + wall tidy','Bookshelf + partition','Sofa lounge + wall art','Luxury full interior']},
    narrative:{ko:[
-     '벽지가 바랬지만, 마음만은 이미 레스토랑이에요.',
-     '벽과 바닥이 숨을 고쳐요. 손님이 들어올 때마다 한숨이 나와요.',
-     '럭셔리라는 말이 무색할 만큼, 빛이 각도를 아네요.',
+     '화분이 들어오자 공간이 숨을 쉬기 시작했어요.',
+     '책장과 파티션이 생겼어요. 각 테이블이 자기만의 공간을 갖게 됐어요.',
+     '소파 코너와 벽화. 빛이 각도를 알게 됐어요.',
      '미슐랭이 오기 전에, 우리 가게는 이미 오늘의 무대예요.',
    ],en:[
-     'The wallpaper faded, but the heart was already a dining room.',
-     'Walls and floors breathe again. Guests step in—you exhale.',
-     'Light learns its angles. “Luxury” almost feels small.',
+     'A plant arrives. The space starts to breathe.',
+     'Bookshelf and partition. Each table now has its own world.',
+     'Sofa corner and wall art. Light learns its angles.',
      'Before any star, this room is already tonight\'s stage.',
    ]}},
 ];
 // ep needed to unlock (0 = always)
-const UP_UNLOCK={garden:0,sign:1,table:2,kitchen:3,interior:5};
+const UP_UNLOCK={sign:0,lighting:1,table:2,kitchen:3,floor:5,interior:7};
 
 // ── STATE ──────────────────────────────────────────────────────────
 let S={
   board:Array(BOARD_SIZE).fill(null),boardMeat:Array(BOARD_SIZE).fill(null),
   coins:0,xp:0,level:1,
   sel:null,selMeat:null,subBoard:'veg',
-  ups:{garden:0,sign:0,table:0,kitchen:0,interior:0},
+  ups:{sign:0,lighting:0,table:0,kitchen:0,floor:0,interior:0},
   ep:0,epDone:[],
   mt:new Array(MAX_T+1).fill(0),mtMeat:new Array(MAX_T+1).fill(0),
   tc:0,
@@ -1102,6 +1124,10 @@ function migrateSave(){
   if(typeof S.gCharY!=='number'||S.gCharY<22||S.gCharY>78)S.gCharY=52;
   if(!{u:1,d:1,l:1,r:1}[S.gCharDir])S.gCharDir='d';
   if(!VALID_TABS.includes(S.tab))S.tab='garden';
+  // ensure all upgrade keys exist (handles old saves missing new categories)
+  const _defUps={sign:0,lighting:0,table:0,kitchen:0,floor:0,interior:0};
+  if(!S.ups||typeof S.ups!=='object')S.ups={};
+  Object.keys(_defUps).forEach(k=>{if(typeof S.ups[k]!=='number')S.ups[k]=0;});
 }
 const load=()=>{try{const r=localStorage.getItem('gk3');if(r){Object.assign(S,JSON.parse(r));migrateSave();save();}}catch(e){}};
 
@@ -1213,7 +1239,7 @@ function particles(el){
 
 // ── SPAWN ──────────────────────────────────────────────────────────
 function spawnTier(){
-  const gLv=Math.min(4,S.ups.garden);
+  const gLv=Math.min(4,S.level-1);
   const w=G_SPAWN[gLv];
   const total=w.reduce((a,b)=>a+b,0);
   let r=Math.random()*total;
@@ -1416,6 +1442,24 @@ function renderGardenCropZones(){
   }
 }
 const FARMER_SHEET={cellW:48,cellH:96,cols:3,rows:4,src:'assets/farmer.png'};
+
+// ── RESTAURANT IMAGE CACHE ─────────────────────────────────────────
+const RST_IMGS={};
+function preloadRstImgs(){
+  const srcs={
+    floor:'assets/TopDownHouse_FloorsAndWalls.png',
+    d_steak:'assets/96_steak_dish.png',
+    d_sushi:'assets/98_sushi_dish.png',
+    d_sandwich:'assets/93_sandwich_dish.png',
+    d_taco:'assets/100_taco_dish.png',
+    d_waffle:'assets/102_waffle_dish.png',
+  };
+  Object.entries(srcs).forEach(([k,src])=>{
+    const img=new Image();
+    img.onload=()=>{RST_IMGS[k]=img;if(S.tab==='rest')drawRest();};
+    img.src=src;
+  });
+}
 
 // ── GARDEN ANIMALS ──────────────────────────────────────────────────
 // 스프라이트 시트 구조: 3열(애니메이션 프레임) × 4행(방향: 하/좌/우/상)
@@ -1869,165 +1913,352 @@ function renderUps(){
 // ── RESTAURANT CANVAS ──────────────────────────────────────────────
 function drawRest(){
   const cv=document.getElementById('rc'),ctx=cv.getContext('2d');
+  ctx.imageSmoothingEnabled=false;
   const W=cv.width,H=cv.height;
-  const sg=S.ups.sign,tb=S.ups.table,kt=S.ups.kitchen,it=S.ups.interior,gd=S.ups.garden;
+  const sg=S.ups.sign||0,lt=S.ups.lighting||0,tb=S.ups.table||0,
+        kt=S.ups.kitchen||0,fl=S.ups.floor||0,it=S.ups.interior||0;
+  const wallH=Math.round(H*0.42);   // ~160: where wall ends
+  const ctrH=28;                     // kitchen counter thickness
+  const ctrY=wallH-ctrH;            // counter top y ~132
+  const floorY=wallH;               // floor starts ~160
 
-  // Sky/background
-  const bgC=[['#0a0e06','#151e0a'],['#0e1628','#1a2444'],['#0a1a36','#142e60'],['#160820','#280840'],['#0a0a18','#181030']];
-  const [b1,b2]=bgC[Math.min(it,4)];
-  const bgr=ctx.createLinearGradient(0,0,0,H);bgr.addColorStop(0,b1);bgr.addColorStop(1,b2);
-  ctx.fillStyle=bgr;ctx.fillRect(0,0,W,H);
+  // ── 1. BACK WALL ──────────────────────────────────────────────────
+  const wallC=['#3d2515','#472a18','#52301e','#5e3824','#6a402a'];
+  ctx.fillStyle=wallC[Math.min(it,4)];
+  ctx.fillRect(0,0,W,wallH);
+  // Vertical plank texture
+  ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=1;
+  for(let x=22;x<W;x+=22){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,ctrY);ctx.stroke();}
+  ctx.strokeStyle='rgba(255,255,255,0.04)';
+  for(let x=8;x<W;x+=22){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,ctrY);ctx.stroke();}
+  // Ceiling strip
+  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,W,5);
+  ctx.fillStyle='#7a5030';ctx.fillRect(0,3,W,4);
 
-  // Wall texture
-  if(it>=1){ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;for(let y=15;y<H*.6;y+=24){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}
-  if(it>=2){ctx.strokeStyle='rgba(255,255,255,.05)';for(let x=0;x<W;x+=32)for(let y=0;y<H*.6;y+=32){ctx.beginPath();ctx.moveTo(x+16,y);ctx.lineTo(x+32,y+16);ctx.lineTo(x+16,y+32);ctx.lineTo(x,y+16);ctx.closePath();ctx.stroke();}}
-
-  // Ceiling
-  ctx.fillStyle=['#0c1006','#141020','#0a1430','#120018','#080812'][Math.min(it,4)];ctx.fillRect(0,0,W,12);
-
-  // Sconces
-  if(it>=2){[W*.15,W*.5,W*.85].forEach(lx=>{
-    ctx.fillStyle='rgba(200,255,150,.18)';ctx.beginPath();ctx.arc(lx,H*.18,28,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=it>=3?'#ccff88':'#88cc44';ctx.shadowColor=it>=3?'#aeff44':'#66cc22';ctx.shadowBlur=12;
-    ctx.beginPath();ctx.arc(lx,H*.18,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-    ctx.fillStyle='#5a3010';ctx.fillRect(lx-5,H*.18,10,14);ctx.fillRect(lx-10,H*.18+4,20,6);
-  });}
-
-  // Chandelier
-  if(it>=3){const cx=W/2;ctx.strokeStyle='#4a3010';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,12);ctx.lineTo(cx,50);ctx.stroke();
-    [-48,0,48].forEach(dx=>{ctx.strokeStyle='#6a4818';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,50);ctx.lineTo(cx+dx,60);ctx.stroke();
-      ctx.fillStyle='#ddff66';ctx.shadowColor='#bbff00';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx+dx,65,5,0,Math.PI*2);ctx.fill();});
-    ctx.shadowBlur=0;ctx.fillStyle='#8a6010';ctx.beginPath();ctx.arc(cx,50,10,0,Math.PI*2);ctx.fill();}
-
-  // ── GARDEN SECTION (left side) ──
-  const gardenW=W*.28,gardenX=0,gardenY=H*.14,gardenH=H*.5;
-  // Garden background
-  ctx.fillStyle=['#1a2a0c','#1e3010','#243814','#2a4018','#304820'][gd];
-  ctx.fillRect(gardenX,gardenY,gardenW,gardenH);
-  ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=1;
-  ctx.strokeRect(gardenX,gardenY,gardenW,gardenH);
-
-  // Garden label
-  ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='bold 9px sans-serif';ctx.textAlign='center';
-  ctx.fillText(S.lang==='ko'?'🌱 텃밭':'🌱 Garden',gardenX+gardenW/2,gardenY+14);
-
-  // Garden beds
-  const bedColors=['#3a2010','#4a2a12','#5a3414','#6a3e18','#7a4a1c'];
-  [[10,30,60,18],[10,56,60,18],[10,82,60,18]].forEach(([bx,by,bw,bh])=>{
-    ctx.fillStyle=bedColors[gd];ctx.beginPath();ctx.roundRect(gardenX+bx,gardenY+by,bw,bh,3);ctx.fill();
+  // ── 2. WINDOWS (sign upgrade) ─────────────────────────────────────
+  const winW=44,winH=64,winY=12;
+  const winXs=[];
+  if(sg>=1){winXs.push(Math.round(W*0.09),Math.round(W*0.91-winW));}
+  if(sg>=2){winXs.push(Math.round(W/2-winW/2));}
+  winXs.forEach(wx=>{
+    ctx.fillStyle='#4a2808';ctx.fillRect(wx-5,winY-5,winW+10,winH+10);
+    ctx.fillStyle='#8ab8d8';ctx.fillRect(wx,winY,winW,winH);
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.fillRect(wx+2,winY+2,winW/2-4,winH/2-4);
+    ctx.fillRect(wx+winW/2+2,winY+2,winW/2-4,winH/2-4);
+    ctx.fillStyle='#4a2808';
+    ctx.fillRect(wx+winW/2-2,winY,4,winH);
+    ctx.fillRect(wx,winY+winH/2-2,winW,4);
+    if(lt>=1){
+      const beam=ctx.createLinearGradient(wx+winW/2,winY+winH,wx+winW/2,H);
+      beam.addColorStop(0,'rgba(255,245,210,0.14)');beam.addColorStop(1,'rgba(255,245,210,0)');
+      ctx.fillStyle=beam;ctx.fillRect(wx-10,winY+winH,winW+20,H-winY-winH);
+    }
   });
 
-  // Plants in garden based on garden level
-  const plantEmojis=['🌱','🌿','🥕','🍅','🌽'];
-  const plantCount=Math.min(gd+1,5);
-  for(let p=0;p<plantCount;p++){
-    const px=gardenX+15+p*(gardenW-20)/Math.max(plantCount-1,1);
-    ctx.font='13px sans-serif';ctx.textAlign='center';
-    ctx.fillText(plantEmojis[Math.min(p,gd)],px,gardenY+48);
+  // ── 3. WALL DECORATIONS ───────────────────────────────────────────
+  if(it>=2){
+    const bx=6,by=10,bw=38,bh=60;
+    ctx.fillStyle='#5a3010';ctx.fillRect(bx,by,bw,bh);
+    ctx.fillStyle='#7a4820';ctx.fillRect(bx+2,by+2,bw-4,bh-4);
+    const bkC=['#c04020','#2060c0','#20a040','#c0a020','#8020c0'];
+    for(let row=0;row<4;row++){
+      ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(bx+2,by+4+row*14,bw-4,1);
+      bkC.forEach((c,ci)=>{ctx.fillStyle=c;ctx.fillRect(bx+4+ci*7,by+5+row*14,5,8);});
+    }
+  }
+  if(it>=3){
+    const ax=Math.round(W*0.36),ay=14;
+    ctx.fillStyle='#7a5020';ctx.fillRect(ax-3,ay-3,56,44);
+    ctx.fillStyle='#ede0c0';ctx.fillRect(ax,ay,50,38);
+    const sky=ctx.createLinearGradient(ax,ay,ax,ay+22);
+    sky.addColorStop(0,'#3a6ea8');sky.addColorStop(1,'#e8a040');
+    ctx.fillStyle=sky;ctx.fillRect(ax,ay,50,22);
+    ctx.fillStyle='#2a5a20';ctx.fillRect(ax,ay+22,50,16);
+    ctx.fillStyle='#1a3810';
+    ctx.beginPath();ctx.arc(ax+18,ay+26,9,Math.PI,0);ctx.fill();
+    ctx.beginPath();ctx.arc(ax+35,ay+26,7,Math.PI,0);ctx.fill();
+    ctx.strokeStyle='#7a5020';ctx.lineWidth=3;ctx.strokeRect(ax-3,ay-3,56,44);
   }
 
-  // Floor
-  const fy=H*.63;
-  ctx.fillStyle=['#2a1808','#3a2210','#50301a','#6a4028','#907050'][Math.min(it,4)];
-  ctx.fillRect(0,fy,W,H-fy);
-  ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=1;
-  const ts=it>=2?42:34;
-  for(let x=0;x<W;x+=ts){ctx.beginPath();ctx.moveTo(x,fy);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=fy;y<H;y+=ts){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  ctx.fillStyle=['#1e1006','#2a1808','#3a200e','#503018','#705040'][Math.min(it,4)];
-  ctx.fillRect(0,fy-6,W,6);
-
-  // ── KITCHEN COUNTER ──
-  const kx=gardenW+4,ky=H*.27,kw=W-gardenW-4,kh=H*.13;
-  ctx.fillStyle=['#3a1806','#541e06','#782e10','#a04020','#c06030'][Math.min(kt,4)];
-  ctx.fillRect(kx,ky,kw,kh);
-  ctx.fillStyle=['#6a3010','#8a4018','#b05828','#d07840','#e09858'][Math.min(kt,4)];
-  ctx.fillRect(kx,ky,kw,8);
-  ctx.fillStyle='rgba(0,0,0,.28)';ctx.fillRect(kx+kw*.35,ky+8,kw*.28,kh-8);
-
-  if(kt>=1){ctx.fillStyle='#555';ctx.fillRect(kx+12,ky+10,60,26);
-    [[kx+18,ky+17],[kx+24,ky+17],[kx+18,ky+26],[kx+24,ky+26]].forEach(([bx,by])=>{
-      ctx.strokeStyle=kt>=2?'#ff4400':'#bb2200';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.stroke();});}
-  if(kt>=2){ctx.fillStyle='#c0c0c0';ctx.fillRect(kx+kw*.7,ky+3,38,kh-3);
-    ctx.strokeStyle='#888';ctx.lineWidth=1;ctx.strokeRect(kx+kw*.72,ky+6,34,(kh-10)*.45);
-    ctx.strokeRect(kx+kw*.72,ky+6+(kh-10)*.47,34,(kh-10)*.47);}
-  if(kt>=3){ctx.fillStyle='#a8a8a8';ctx.beginPath();ctx.moveTo(kx+8,ky+4);ctx.lineTo(kx+26,ky+4);ctx.lineTo(kx+23,ky-26);ctx.lineTo(kx+11,ky-26);ctx.closePath();ctx.fill();}
-  if(kt>=4){// Extra equipment
-    ctx.fillStyle='#888';ctx.fillRect(kx+76,ky+10,50,26);
-    ctx.fillStyle='#666';ctx.beginPath();ctx.arc(kx+101,ky+23,10,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#444';ctx.beginPath();ctx.arc(kx+101,ky+23,6,0,Math.PI*2);ctx.fill();}
-
-  // ── TABLES ──
-  const tbCount=[1,2,3,4,4][Math.min(tb,4)],tgap=(W-gardenW)/(tbCount+1),tox=gardenW;
-  const ttopC=['#5a2808','#8a4018','#b05828','#d07840','#e09858'];
-  const clothC=[null,'#a02020','#1830a0','#501880','#801a50'];
-  for(let i=0;i<tbCount;i++){
-    const tx=tox+tgap*(i+1),ty=fy+10;
-    ctx.fillStyle='#321406';ctx.fillRect(tx-22,ty+18,7,28);ctx.fillRect(tx+15,ty+18,7,28);
-    ctx.fillStyle=ttopC[Math.min(tb,4)];ctx.beginPath();ctx.roundRect(tx-26,ty,52,18,3);ctx.fill();
-    if(tb>=1&&clothC[Math.min(tb,4)]){ctx.fillStyle=clothC[Math.min(tb,4)];ctx.globalAlpha=.72;ctx.beginPath();ctx.roundRect(tx-24,ty+1,48,14,2);ctx.fill();ctx.globalAlpha=1;}
-    ctx.fillStyle='#f4eee0';ctx.beginPath();ctx.ellipse(tx,ty+8,9,6,0,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#ff7820';ctx.beginPath();ctx.ellipse(tx,ty+8,5,3,0,0,Math.PI*2);ctx.fill();
-    if(tb>=2){ctx.fillStyle='#f4eee0';ctx.fillRect(tx+13,ty-14,5,14);ctx.fillStyle='#ff8800';ctx.shadowColor='#ff8800';ctx.shadowBlur=7;ctx.beginPath();ctx.arc(tx+15.5,ty-16,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}
-    if(tb>=3){ctx.strokeStyle='rgba(255,255,255,.5)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(tx-13,ty);ctx.lineTo(tx-10,ty+4);ctx.moveTo(tx-11,ty+2);ctx.lineTo(tx-11,ty-7);ctx.stroke();ctx.strokeStyle='#dd4444aa';ctx.lineWidth=2;ctx.beginPath();ctx.arc(tx-11,ty-8,4,.4,Math.PI-.4);ctx.stroke();}
-    // Chair
-    ctx.fillStyle=ttopC[Math.min(tb,2)];ctx.fillRect(tx-12,ty+30,24,14);ctx.fillRect(tx-10,ty+18,5,12);ctx.fillRect(tx+5,ty+18,5,12);
-    // Customers (based on ep done)
-    if(i<S.epDone.length){
-      const cuy=fy+54;ctx.fillStyle='rgba(255,220,180,.85)';ctx.beginPath();ctx.arc(tx,cuy,7,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='rgba(60,100,200,.7)';ctx.beginPath();ctx.ellipse(tx,cuy+18,7,12,0,0,Math.PI);ctx.fill();
+  // ── 4. KITCHEN COUNTER (full-width bar) ───────────────────────────
+  // Counter face (dark)
+  ctx.fillStyle='#1e1008';ctx.fillRect(0,ctrY,W,ctrH);
+  ctx.fillStyle='#3a2010';ctx.fillRect(0,ctrY,W,3);
+  // Counter top surface
+  const ctrTopC=['#6a4020','#8a5828','#b09060','#d0b888','#e8d0a8'];
+  ctx.fillStyle=ctrTopC[Math.min(kt,4)];ctx.fillRect(0,ctrY,W,8);
+  ctx.fillStyle='rgba(255,255,255,0.12)';ctx.fillRect(0,ctrY,W,2);
+  ctx.fillStyle='rgba(0,0,0,0.40)';ctx.fillRect(0,ctrY+ctrH-4,W,4);
+  // Kitchen equipment behind/on counter
+  {
+    if(kt>=1){
+      ctx.fillStyle='#333';ctx.fillRect(70,ctrY-26,72,22);
+      ctx.fillStyle='#222';ctx.fillRect(72,ctrY-24,68,18);
+      [[88,ctrY-18],[104,ctrY-18],[88,ctrY-10],[104,ctrY-10]].forEach(([bx2,by2])=>{
+        ctx.strokeStyle=kt>=2?'#ff4400':'#552200';ctx.lineWidth=2.5;
+        ctx.beginPath();ctx.arc(bx2,by2,5.5,0,Math.PI*2);ctx.stroke();
+      });
+    }
+    if(kt>=2){
+      ctx.fillStyle='#909090';ctx.fillRect(W-72,ctrY-50,28,52);
+      ctx.fillStyle='rgba(0,0,0,0.18)';
+      ctx.fillRect(W-70,ctrY-48,24,22);ctx.fillRect(W-70,ctrY-24,24,20);
+      ctx.fillStyle='#c0c0c0';ctx.fillRect(W-58,ctrY-36,4,10);
+    }
+    if(kt>=3){
+      ctx.fillStyle='#666';
+      ctx.beginPath();ctx.moveTo(76,ctrY-40);ctx.lineTo(148,ctrY-40);
+      ctx.lineTo(140,ctrY-26);ctx.lineTo(84,ctrY-26);ctx.closePath();ctx.fill();
+    }
+    // Plates on counter
+    for(let pi=0;pi<Math.min(kt+1,5);pi++){
+      const px=W*0.52+pi*22;
+      ctx.fillStyle='#f0e8d8';ctx.beginPath();ctx.ellipse(px,ctrY-10,9,6,0,0,Math.PI*2);ctx.fill();
     }
   }
 
-  // Plants/decor
-  if(it>=1){[[14,H-20],[W-14,H-20]].forEach(([px,py])=>{
-    ctx.fillStyle='#5a2808';ctx.beginPath();ctx.roundRect(px-7,py-14,14,18,2);ctx.fill();
-    ctx.fillStyle=it>=3?'#1a5018':'#243e14';ctx.beginPath();ctx.arc(px,py-18,10,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=it>=3?'#267828':'#346020';
-    ctx.beginPath();ctx.arc(px-8,py-22,7,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(px+8,py-22,7,0,Math.PI*2);ctx.fill();
-    if(it>=2){ctx.fillStyle='#3aaa30';ctx.beginPath();ctx.arc(px,py-26,5,0,Math.PI*2);ctx.fill();}
-  });}
+  // ── 5. FLOOR ──────────────────────────────────────────────────────
+  {
+    const baseFlC=['#5e3a22','#7a4e30','#9a6440','#b07c50','#c89060'];
+    ctx.fillStyle=baseFlC[Math.min(fl,4)];
+    ctx.fillRect(0,floorY,W,H-floorY);
+    const flrImg=RST_IMGS.floor;
+    if(flrImg&&fl>=1){
+      const flTiles=[null,
+        {sx:96,sy:4,sw:44,sh:36},
+        {sx:48,sy:4,sw:44,sh:36},
+        {sx:96,sy:44,sw:44,sh:36},
+        {sx:144,sy:4,sw:44,sh:36},
+      ];
+      const t=flTiles[Math.min(fl,4)];
+      if(t){try{
+        const ofc=document.createElement('canvas');ofc.width=t.sw;ofc.height=t.sh;
+        const oc=ofc.getContext('2d');oc.imageSmoothingEnabled=false;
+        oc.drawImage(flrImg,t.sx,t.sy,t.sw,t.sh,0,0,t.sw,t.sh);
+        const pat=ctx.createPattern(ofc,'repeat');
+        if(pat){ctx.globalAlpha=fl>=3?0.72:0.58;ctx.fillStyle=pat;ctx.fillRect(0,floorY,W,H-floorY);ctx.globalAlpha=1;}
+      }catch(e){}}
+    }
+    ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(0,floorY,W,5);
+  }
 
-  // ── SIGN ──
+  // ── 6. OVERHEAD LIGHTS (lighting upgrade) ─────────────────────────
+  {
+    const numL=lt>=2?3:lt>=1?2:0;
+    const lxArr=numL===3?[W*0.22,W*0.5,W*0.78]:numL===2?[W*0.3,W*0.7]:[];
+    lxArr.forEach(lx=>{
+      const intensity=lt>=4?0.30:lt>=3?0.24:lt>=2?0.18:0.13;
+      const gcone=ctx.createRadialGradient(lx,floorY,0,lx,floorY+100,150);
+      gcone.addColorStop(0,`rgba(255,240,190,${intensity})`);
+      gcone.addColorStop(1,'rgba(255,240,190,0)');
+      ctx.fillStyle=gcone;
+      ctx.beginPath();ctx.ellipse(lx,floorY+90,145,105,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#2a1808';ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(lx,0);ctx.lineTo(lx,floorY-24);ctx.stroke();
+      if(lt>=3){
+        ctx.fillStyle='#c0901a';
+        ctx.save();ctx.shadowColor='#ffc840';ctx.shadowBlur=20;
+        ctx.beginPath();ctx.moveTo(lx-18,floorY-6);ctx.lineTo(lx+18,floorY-6);
+        ctx.lineTo(lx+12,floorY-26);ctx.lineTo(lx-12,floorY-26);ctx.closePath();ctx.fill();
+        ctx.restore();
+        ctx.fillStyle='rgba(255,240,150,0.95)';
+        ctx.beginPath();ctx.ellipse(lx,floorY-5,9,3.5,0,0,Math.PI*2);ctx.fill();
+      }else if(lt>=2){
+        ctx.fillStyle='#8a6020';
+        ctx.beginPath();ctx.moveTo(lx-12,floorY-4);ctx.lineTo(lx+12,floorY-4);
+        ctx.lineTo(lx+8,floorY-20);ctx.lineTo(lx-8,floorY-20);ctx.closePath();ctx.fill();
+        ctx.fillStyle='rgba(255,235,130,0.9)';
+        ctx.beginPath();ctx.ellipse(lx,floorY-3,6,2.5,0,0,Math.PI*2);ctx.fill();
+      }else{
+        ctx.fillStyle='#6a4818';
+        ctx.beginPath();ctx.arc(lx,floorY-8,7,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='rgba(255,240,140,0.9)';
+        ctx.beginPath();ctx.arc(lx,floorY-8,4,0,Math.PI*2);ctx.fill();
+      }
+    });
+  }
+
+  // ── 7. CORNER PLANTS (interior>=1) ────────────────────────────────
+  if(it>=1){
+    [[20,H-6],[W-20,H-6]].forEach(([px,py])=>{
+      ctx.fillStyle='#9a5530';
+      ctx.beginPath();ctx.moveTo(px-13,py-18);ctx.lineTo(px+13,py-18);
+      ctx.lineTo(px+11,py+4);ctx.lineTo(px-11,py+4);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#7a3a18';ctx.fillRect(px-15,py-22,30,5);
+      ctx.fillStyle='#3a2010';ctx.fillRect(px-11,py-20,22,4);
+      ctx.fillStyle=it>=3?'#1a6824':'#22581c';
+      ctx.beginPath();ctx.arc(px,py-40,18,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=it>=3?'#28a038':'#348026';
+      ctx.beginPath();ctx.arc(px-14,py-30,12,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(px+14,py-30,12,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(px,py-54,11,0,Math.PI*2);ctx.fill();
+      if(it>=2){
+        ctx.fillStyle='#ff5888';
+        ctx.beginPath();ctx.arc(px,py-60,5,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(px-12,py-52,4,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(px+12,py-52,4,0,Math.PI*2);ctx.fill();
+      }
+    });
+  }
+
+  // ── 8. SOFA LOUNGE CORNER (interior>=3) ───────────────────────────
+  if(it>=3){
+    const sx2=W-96,sy2=floorY+8,sw2=88;
+    ctx.fillStyle='#6a3010';ctx.beginPath();ctx.roundRect(sx2,sy2+10,sw2,40,6);ctx.fill();
+    ctx.fillStyle='#8a4018';
+    ctx.beginPath();ctx.roundRect(sx2,sy2,sw2,18,5);ctx.fill();
+    ctx.beginPath();ctx.roundRect(sx2,sy2+10,12,40,4);ctx.fill();
+    ctx.beginPath();ctx.roundRect(sx2+sw2-12,sy2+10,12,40,4);ctx.fill();
+    ctx.fillStyle='#a04820';
+    ctx.beginPath();ctx.roundRect(sx2+12,sy2+18,sw2-24,28,4);ctx.fill();
+    if(it>=4){
+      ctx.fillStyle='#8a5030';
+      ctx.beginPath();ctx.ellipse(W-52,sy2+70,22,8,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#a06040';
+      ctx.beginPath();ctx.ellipse(W-52,sy2+68,20,7,0,0,Math.PI*2);ctx.fill();
+    }
+  }
+
+  // ── 9. TABLES + CHAIRS + FOOD ─────────────────────────────────────
+  {
+    const tbCount=[1,2,3,4,4][Math.min(tb,4)];
+    const tableAreaW=it>=3?(W-106):(W-24);
+    const spacing=tableAreaW/(tbCount+1);
+    const tableY=floorY+Math.round((H-floorY)*0.30);
+    const woodC=['#7a4828','#9a5c34','#ba7040','#d48a50','#e8a060'];
+    const clothC=[null,'rgba(255,255,255,0.88)','rgba(255,248,235,0.92)','rgba(248,238,220,0.94)','rgba(240,230,210,0.96)'];
+    const dishKeys=['d_steak','d_sushi','d_sandwich','d_taco','d_waffle'];
+    for(let i=0;i<tbCount;i++){
+      const tx=Math.round(spacing*(i+1))+12;
+      const ty=tableY;
+      // shadow
+      ctx.fillStyle='rgba(0,0,0,0.22)';
+      ctx.beginPath();ctx.ellipse(tx+2,ty+28,36,11,0,0,Math.PI*2);ctx.fill();
+      // chair back
+      ctx.fillStyle=woodC[Math.min(tb,2)];
+      ctx.fillRect(tx-14,ty-44,28,16);ctx.fillRect(tx-14,ty-30,28,12);
+      ctx.fillStyle='#201008';ctx.fillRect(tx-14,ty-20,5,20);ctx.fillRect(tx+9,ty-20,5,20);
+      // tablecloth
+      if(tb>=1&&clothC[Math.min(tb,4)]){
+        ctx.fillStyle=clothC[Math.min(tb,4)];ctx.globalAlpha=0.95;
+        ctx.beginPath();ctx.roundRect(tx-32,ty-4,64,24,4);ctx.fill();ctx.globalAlpha=1;
+        ctx.fillStyle='rgba(0,0,0,0.08)';
+        ctx.beginPath();ctx.roundRect(tx-32,ty+18,64,4,2);ctx.fill();
+      }
+      // table top
+      ctx.fillStyle=woodC[Math.min(tb,4)];
+      ctx.beginPath();ctx.roundRect(tx-30,ty,60,20,6);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.20)';
+      ctx.beginPath();ctx.roundRect(tx-28,ty+1,56,6,4);ctx.fill();
+      ctx.fillStyle='rgba(0,0,0,0.18)';
+      ctx.beginPath();ctx.roundRect(tx-30,ty+14,60,6,2);ctx.fill();
+      ctx.fillStyle='#201008';
+      [[tx-18,ty+20],[tx+14,ty+20]].forEach(([lx2,ly2])=>{ctx.fillRect(lx2,ly2,5,26);});
+      // chair front
+      ctx.fillStyle=woodC[Math.min(tb,2)];ctx.fillRect(tx-14,ty+28,28,14);
+      ctx.fillStyle='#201008';ctx.fillRect(tx-14,ty+40,5,14);ctx.fillRect(tx+9,ty+40,5,14);
+      // candle
+      if(tb>=2){
+        ctx.fillStyle='#f2ece0';ctx.fillRect(tx-3,ty-14,6,14);
+        const flameC=lt>=2?'#ffee44':'#ffbb22';
+        ctx.fillStyle=flameC;ctx.shadowColor=flameC;ctx.shadowBlur=15;
+        ctx.beginPath();ctx.arc(tx,ty-16,4.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+      }
+      // wine glass
+      if(tb>=3){
+        const gx=tx+23,gy=ty+4;
+        ctx.strokeStyle='rgba(255,255,255,0.70)';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.moveTo(gx-5,gy);ctx.lineTo(gx+5,gy);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx,gy+10);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(gx-5,gy+10);ctx.lineTo(gx+5,gy+10);ctx.stroke();
+        ctx.fillStyle='rgba(160,20,20,0.40)';
+        ctx.beginPath();ctx.ellipse(gx,gy-5,4,5,0,0,Math.PI*2);ctx.fill();
+      }
+      // dish
+      const dKey=dishKeys[(i+Math.max(0,S.epDone.length-1))%dishKeys.length];
+      const dImg=RST_IMGS[dKey];
+      const ds=28;
+      if(dImg){ctx.drawImage(dImg,tx-ds/2,ty+2-ds/2,ds,ds);}
+      else{
+        ctx.fillStyle='#f5eee6';ctx.beginPath();ctx.ellipse(tx,ty+10,9,6,0,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#d09050';ctx.beginPath();ctx.ellipse(tx,ty+10,5,4,0,0,Math.PI*2);ctx.fill();
+      }
+      // customer
+      if(i<S.epDone.length){
+        const cuY=ty+68;
+        ctx.fillStyle='rgba(255,210,160,0.92)';ctx.beginPath();ctx.arc(tx,cuY,9,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle=`hsl(${(i*65+200)%360},42%,30%)`;
+        ctx.beginPath();ctx.ellipse(tx,cuY+21,10,13,0,0,Math.PI);ctx.fill();
+      }
+    }
+  }
+
+  // ── 10. SIGN ──────────────────────────────────────────────────────
   ctx.save();
-  if(sg===0){ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillText('🌱 GARDEN KITCHEN',W/2,36);}
-  else if(sg===1){
-    ctx.fillStyle='#4a2a08';ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.fill();
-    ctx.strokeStyle='#8ac828';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.stroke();
-    ctx.fillStyle='#e8ffc0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,32);
-    ctx.fillStyle='#aad860';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,46);}
-  else if(sg===2){
-    ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.roundRect(W/2-96,8,192,44,8);ctx.fill();
-    ctx.shadowColor='#44ff00';ctx.shadowBlur=14;ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-94,10,188,40,6);ctx.stroke();ctx.shadowBlur=0;
-    ctx.shadowColor='#88ff44';ctx.shadowBlur=10;ctx.fillStyle='#88ff44';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.shadowBlur=5;ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,45);ctx.shadowBlur=0;}
-  else if(sg===3){
-    const sg2=ctx.createLinearGradient(W/2-108,0,W/2+108,0);sg2.addColorStop(0,'#060e02');sg2.addColorStop(.5,'#0e2006');sg2.addColorStop(1,'#060e02');
-    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.fill();
-    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=10;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-98;bx<=W/2+98;bx+=17){ctx.fillStyle='#eeff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,9,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,53,3,0,Math.PI*2);ctx.fill();}
-    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,46);}
-  else{// sg 4 — Michelin star
-    const mg=ctx.createLinearGradient(W/2-110,0,W/2+110,0);mg.addColorStop(0,'#100808');mg.addColorStop(.5,'#201200');mg.addColorStop(1,'#100808');
-    ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.fill();
-    ctx.strokeStyle=S.gold||'#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=12;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-100;bx<=W/2+100;bx+=16){ctx.fillStyle='#ffff88';ctx.shadowColor='#ffff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,8,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,54,3,0,Math.PI*2);ctx.fill();}
+  if(sg===0){
+    ctx.fillStyle='rgba(240,230,200,0.22)';ctx.font='bold 11px sans-serif';ctx.textAlign='center';
+    ctx.fillText('🌱 GARDEN KITCHEN',W/2,18);
+  }else if(sg===1){
+    ctx.fillStyle='#3a2208';ctx.beginPath();ctx.roundRect(W/2-92,3,184,42,7);ctx.fill();
+    ctx.strokeStyle='#7ab020';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-92,3,184,42,7);ctx.stroke();
+    ctx.fillStyle='#dff0a0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,21);
+    ctx.fillStyle='#a0cc50';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,37);
+  }else if(sg===2){
+    ctx.fillStyle='rgba(0,0,0,0.74)';ctx.beginPath();ctx.roundRect(W/2-100,2,200,44,8);ctx.fill();
+    ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.shadowColor='#44ff00';ctx.shadowBlur=16;
+    ctx.beginPath();ctx.roundRect(W/2-98,4,196,40,6);ctx.stroke();ctx.shadowBlur=0;
+    ctx.fillStyle='#88ff44';ctx.shadowColor='#88ff44';ctx.shadowBlur=8;
+    ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,23);ctx.shadowBlur=0;
+    ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,38);
+  }else if(sg===3){
+    const g=ctx.createLinearGradient(W/2-110,0,W/2+110,0);
+    g.addColorStop(0,'#060e02');g.addColorStop(.5,'#0e2008');g.addColorStop(1,'#060e02');
+    ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(W/2-110,2,220,50,8);ctx.fill();
+    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=12;
+    ctx.beginPath();ctx.roundRect(W/2-110,2,220,50,8);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-100;bx<=W/2+100;bx+=18){
+      ctx.fillStyle='#ddff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;
+      ctx.beginPath();ctx.arc(bx,7,3,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(bx,47,3,0,Math.PI*2);ctx.fill();
+    }
+    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
+    ctx.fillText('🌱 GARDEN KITCHEN',W/2,28);
+    ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,43);
+  }else{
+    const g=ctx.createLinearGradient(W/2-114,0,W/2+114,0);
+    g.addColorStop(0,'#120a02');g.addColorStop(.5,'#241600');g.addColorStop(1,'#120a02');
+    ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(W/2-114,1,228,52,9);ctx.fill();
+    ctx.strokeStyle='#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=16;
+    ctx.beginPath();ctx.roundRect(W/2-114,1,228,52,9);ctx.stroke();ctx.shadowBlur=0;
+    for(let bx=W/2-104;bx<=W/2+104;bx+=16){
+      ctx.fillStyle='#ffff88';ctx.shadowColor='#ffee00';ctx.shadowBlur=8;
+      ctx.beginPath();ctx.arc(bx,6,3,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(bx,49,3,0,Math.PI*2);ctx.fill();
+    }
     ctx.shadowBlur=0;ctx.fillStyle='#ffd700';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
-    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,30);ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,46);}
+    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,28);
+    ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';
+    ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,45);
+  }
   ctx.restore();
 
-  // HUD
-  ctx.fillStyle='rgba(0,0,0,.45)';ctx.beginPath();ctx.roundRect(W-96,H-28,90,20,5);ctx.fill();
+  // ── 11. HUD ───────────────────────────────────────────────────────
+  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.beginPath();ctx.roundRect(W-108,H-30,102,22,5);ctx.fill();
   ctx.fillStyle='#ffd700';ctx.font='bold 10px sans-serif';ctx.textAlign='right';
-  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`,W-7,H-13);
+  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`,W-8,H-14);
 }
 function renderRst(){
   const el=document.getElementById('rst');el.innerHTML='';
-  [{k:'garden',ko:'텃밭',en:'Garden',e:'🌱'},{k:'sign',ko:'간판',en:'Sign',e:'🪧'},
-   {k:'table',ko:'테이블',en:'Table',e:'🪑'},{k:'kitchen',ko:'주방',en:'Kitchen',e:'👨‍🍳'},
+  [{k:'sign',ko:'간판·창문',en:'Sign',e:'🪧'},
+   {k:'lighting',ko:'조명',en:'Lighting',e:'💡'},
+   {k:'table',ko:'테이블',en:'Table',e:'🪑'},
+   {k:'kitchen',ko:'주방',en:'Kitchen',e:'👨‍🍳'},
+   {k:'floor',ko:'바닥재',en:'Flooring',e:'🪵'},
    {k:'interior',ko:'인테리어',en:'Interior',e:'🎨'}].forEach(u=>{
-    const lv=S.ups[u.k];
-    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${'★'.repeat(lv)}${'☆'.repeat(4-lv)} ${lv}/4</div></div>`;
+    const lv=S.ups[u.k]||0;
+    const pct=lv/4*100;
+    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${['◆','◆','◆','◆'].map((d,i)=>`<span style="color:${i<lv?'#c07030':'#2a1808'}">${d}</span>`).join('')} <span style="color:#7a5030;font-size:.78em">${lv}/4</span></div><div class="rs-bar"><div class="rs-bar-fill" style="width:${pct}%"></div></div></div>`;
   });
 }
 
@@ -2090,6 +2321,7 @@ document.addEventListener('keydown',e=>{
   const _fp=new Image();
   _fp.onerror=hubCharSpriteFail;
   _fp.src=FARMER_SHEET.src;
+  preloadRstImgs();
   renderAll();
   initGardenAnimals();
 
