@@ -305,34 +305,85 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
 .hub-corner-tree.tl{top:6px;left:4px}
 .hub-corner-tree.br{bottom:6px;right:4px}
 .hub-corner-tree.bl{bottom:6px;left:4px}
-/* 채소별 정원 — 가운데 줄 맞춤·작은 카드 */
-.hub-crop-zones{
-  position:absolute;z-index:4;
-  left:50%;transform:translateX(-50%);
-  width:min(94%,352px);
-  top:38px;bottom:10px;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  display:flex;flex-wrap:wrap;
-  justify-content:center;
-  align-content:flex-start;
-  align-items:stretch;
-  gap:10px 12px;
-  padding:8px 6px 62px;
-  box-sizing:border-box;
-  pointer-events:auto;
+/* ══ GARDEN ZONES ══ */
+.gz-row{position:absolute;left:50%;top:32%;transform:translate(-50%,-50%);
+  display:flex;gap:6px;z-index:5;pointer-events:none;}
+.gz-area{
+  width:70px;height:68px;flex-shrink:0;position:relative;
+  border-radius:10px;overflow:hidden;
+  border:2px solid rgba(100,190,55,.55);
+  box-shadow:0 5px 18px rgba(0,0,0,.6),inset 0 1px 0 rgba(200,255,150,.07);
+  transition:filter .4s,opacity .4s,border-color .3s,box-shadow .3s;
+  pointer-events:auto;touch-action:manipulation;
 }
-.hub-crop-zone{
-  flex:0 0 calc(25% - 10px);
-  min-width:76px;
-  max-width:100px;
-  background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.06));
-  border:1px solid rgba(110,160,70,.5);
-  border-radius:12px;
-  padding:6px 6px 7px;
-  box-shadow:0 3px 10px rgba(0,48,12,.15),inset 0 1px 0 rgba(255,255,255,.2);
-  backdrop-filter:blur(6px);
+.gz-area.locked{
+  filter:grayscale(.88) brightness(.45);opacity:.38;
+  border-color:rgba(55,75,45,.28);cursor:pointer;
 }
+.gz-area:not(.locked){cursor:pointer;}
+.gz-area:not(.locked):hover{
+  border-color:rgba(160,240,80,.9);
+  box-shadow:0 7px 24px rgba(0,0,0,.7),0 0 0 1px rgba(140,220,70,.45);
+  filter:brightness(1.08);
+}
+@keyframes gz-pop{
+  0%{transform:scale(.35);opacity:0}55%{transform:scale(1.12)}82%{transform:scale(.97)}100%{transform:scale(1);opacity:1}
+}
+.gz-area.fresh{animation:gz-pop .65s cubic-bezier(.2,1.4,.5,1);}
+.gz-area-bg{position:absolute;inset:0;background-repeat:repeat;}
+.gz-area-decors{position:absolute;inset:0;pointer-events:none;}
+.gz-deco-img{position:absolute;image-rendering:pixelated;image-rendering:crisp-edges;pointer-events:none;}
+.gz-area-overlay{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:3px 4px 5px;
+  background:linear-gradient(0deg,rgba(0,16,0,.82) 0%,rgba(0,10,0,.25) 50%,transparent 100%);
+  pointer-events:none;
+}
+.gz-area-name{
+  font-size:.41em;font-weight:900;color:#ceff90;
+  text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 10px rgba(0,0,0,.7);
+  letter-spacing:.04em;text-align:center;line-height:1.2;
+}
+.gz-area-info{
+  font-size:.35em;color:#ffe866;font-weight:700;
+  margin-top:1px;line-height:1.2;text-align:center;
+  text-shadow:0 1px 4px rgba(0,0,0,.9);
+}
+.gz-lock-panel{
+  position:absolute;inset:0;z-index:3;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.25);
+}
+.gz-lock-ico{font-size:1.6em;filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));}
+.gz-lock-req{font-size:.35em;color:#7aaa50;margin-top:3px;text-align:center;line-height:1.3;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+/* ══ ZONE ANIMATED MODAL ══ */
+@keyframes gz-grow{0%{transform:scale(0);opacity:0}65%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes gz-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes gz-ripple{0%{transform:translate(-50%,-50%) scale(.05);opacity:.8}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@keyframes gz-bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-7px)}}
+@keyframes gz-walk-r{0%{left:-14%}100%{left:96%}}
+@keyframes gz-walk-l{0%{left:96%}100%{left:-14%}}
+@keyframes gz-sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.gz-mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:510;justify-content:center;align-items:center;}
+.gz-mbg.show{display:flex;}
+.gz-md{background:linear-gradient(135deg,#0c1a06,#162808);border:3px solid var(--pri);
+  border-radius:18px;padding:16px 14px;max-width:300px;width:92%;animation:mpop .35s ease;text-align:center;}
+.gz-md-hdr{font-size:1.15em;font-weight:900;color:var(--gold);margin-bottom:10px;}
+.gz-md-stage{position:relative;width:100%;height:148px;overflow:hidden;
+  border-radius:12px;border:2px solid rgba(100,190,55,.3);background:#0a180a;margin-bottom:8px;}
+.gz-md-info{color:var(--txt2);font-size:.78em;line-height:1.5;min-height:2em;margin-bottom:10px;white-space:pre-line;}
+.gz-md-btn{background:linear-gradient(135deg,#2a6010,#5aaa20);border:none;color:#fff;
+  padding:11px 28px;border-radius:10px;cursor:pointer;font-size:.88em;font-weight:900;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-width:100px;}
+/* 울타리 테두리 */
+.gz-fence{position:absolute;inset:8px;border:5px solid #7a5530;border-radius:6px;pointer-events:none;z-index:2;
+  box-shadow:inset 0 0 0 2px rgba(180,120,60,.3),inset 0 2px 8px rgba(0,0,0,.2);
+  background:repeating-linear-gradient(90deg,rgba(122,85,48,.12) 0px,rgba(122,85,48,.12) 1px,transparent 1px,transparent 14px),
+             repeating-linear-gradient(0deg,rgba(122,85,48,.12) 0px,rgba(122,85,48,.12) 1px,transparent 1px,transparent 22px);}
+/* 울타리 기둥 */
+.gz-fence-post{position:absolute;width:7px;background:linear-gradient(180deg,#9a6a30,#6a4520);border-radius:2px 2px 0 0;z-index:3;pointer-events:none;}
+.gz-coop-an{position:absolute;image-rendering:pixelated;image-rendering:crisp-edges;z-index:4;}
 @media(max-width:900px){
   /* 모바일/태블릿 폭에서도 정원/오브젝트들이 너무 크게 보이지 않게 */
   .wrap{max-width:720px}
@@ -347,17 +398,9 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   .cell{border-radius:12px}
   .ibub{width:60%}
   .hub-corner-tree{font-size:clamp(1.4rem,6.2vw,2.4rem)}
-  .hub-crop-zones{
-    width:min(94%,330px);
-    top:34px;bottom:8px;
-    gap:9px 10px;
-    padding:7px 6px 56px;
-  }
-  .hub-crop-zone{
-    min-width:68px;
-    max-width:96px;
-    padding:5px 5px 6px;
-  }
+  .gz-area{border-radius:8px;}
+  .gz-area-name{font-size:.38em;}
+  .gz-area-info{font-size:.32em;}
   .hub-char-wrap{width:40px;height:66px}
   .hub-charSprite{transform:scale(.62);margin-left:0;margin-bottom:-6px;width:48px;height:96px}
   .hub-bub{min-width:min(150px,55vw);max-width:min(220px,78vw);font-size:.60em}
@@ -399,8 +442,9 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   /* mobile에서 스프라이트가 밀려 화면 밖으로 나가는 문제 방지 */
   .hub-charSprite{transform:scale(.58);margin:0;width:48px;height:96px;transform-origin:center bottom}
   .hub-bub{min-width:min(140px,52vw);max-width:min(200px,75vw);font-size:.58em}
-  .hub-crop-zones{width:min(96%,320px);top:30px;bottom:8px;gap:8px;padding:6px 6px 56px}
-  .hub-crop-zone{flex:0 0 calc(33.33% - 8px);min-width:70px;max-width:110px}
+  .gz-area{border-radius:7px;}
+  .gz-area-name{font-size:.36em;}
+  .gz-deco-img{transform:scale(.85);transform-origin:bottom center;}
   /* translate 제거: PC 창이 좁아져도 화면 밖으로 밀리지 않게 */
   .hub-tavern-wrap{right:8px;bottom:12px;max-width:80px;transform:scale(.72)}
   .hub-tavern-img{max-height:min(14vh,76px);mix-blend-mode:normal}
@@ -411,7 +455,8 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   .hub-freezer.hub-fridge::after{width:22px;height:8px}
 }
 @media(max-width:360px){
-  .hub-crop-zone{flex:0 0 calc(33.33% - 9px);min-width:64px;max-width:92px}
+  .gz-area{border-radius:6px;}
+  .gz-deco-img{transform:scale(.75);transform-origin:bottom center;}
   /* 초소형 화면에서 5x6 보드 더 타이트하게 */
   .grid{
     gap:2.6px;
@@ -432,28 +477,6 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   .hub-freezer-img{width:16px;height:16px}
   .hub-freezer.hub-fridge::after{width:20px;height:6px}
 }
-.hub-zone-head{
-  font-size:.52em;font-weight:900;color:#f0ffe8;letter-spacing:.04em;margin-bottom:5px;
-  text-shadow:0 1px 3px rgba(0,0,0,.35);
-  text-align:center;
-  line-height:1.2;
-  border-bottom:1px solid rgba(120,170,90,.28);
-  padding-bottom:4px;
-}
-.hub-zone-bed{
-  border-radius:9px;
-  min-height:26px;
-  background:linear-gradient(175deg,#654028 0%,#3d2415 55%,#2a180c 100%);
-  border:1px solid rgba(90,55,30,.35);
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.38),inset 0 -1px 0 rgba(255,235,200,.06);
-  padding:4px 4px;
-}
-.hub-zone-pile{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 3px;
-  min-height:20px;line-height:1;
-}
-.hub-zone-plant{font-size:clamp(.58rem,2.6vw,.75rem);filter:drop-shadow(0 1px 1px rgba(0,0,0,.42))}
-.hub-zone-more{font-size:.48em;font-weight:900;color:#ffe866;padding:0 2px}
 /* 캐릭터: 스프라이트 축소 + 말풍선 가로형 */
 .hub-char-wrap{
   position:absolute;top:55%;left:50%;
@@ -702,7 +725,6 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
                 aria-label="음식점으로 들어가기"></button>
             </div>
           </div>
-          <div class="hub-crop-zones" id="hub-crop-zones" aria-label="채소별 텃밭" onclick="event.stopPropagation()"></div>
           <div class="hub-char-wrap" id="hub-char-box" onclick="event.stopPropagation();hubCharTap()">
             <div class="hub-bub" id="hub-bubble">…</div>
             <div class="hub-charSprite" id="hub-char" role="img" aria-label="farmer"></div>
@@ -758,6 +780,15 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
   </div>
 </div>
 
+<div class="gz-mbg" id="gz-mbg" onclick="closeGzModal()">
+  <div class="gz-md" onclick="event.stopPropagation()">
+    <div class="gz-md-hdr" id="gz-md-hdr">🌾 텃밭</div>
+    <div class="gz-md-stage" id="gz-md-stage"></div>
+    <div class="gz-md-info" id="gz-md-info"></div>
+    <button class="gz-md-btn" id="gz-md-btn" onclick="closeGzModal()">닫기</button>
+  </div>
+</div>
+
 <div class="fs-mbg" id="fs-mbg" onclick="if(event.target.id==='fs-mbg')closeColdModal()">
   <div class="fs-md" onclick="event.stopPropagation()">
     <div class="fs-mt" id="fs-mt">❄️ 냉동 창고</div>
@@ -774,62 +805,71 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic','Segoe UI',sans-serif;
 <script>
 'use strict';
 
-// ── BOARD / CHAIN (5×6, 12 tiers) ────────────────────────────────
-const BOARD_W=5,BOARD_H=6,BOARD_SIZE=BOARD_W*BOARD_H,MAX_T=12;
-const VALID_TABS=['garden','board','story','rest','up'];
-// ── ITEMS (채소 7 → 요리 5) ───────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════
+// 상수 — 보드 크기, 티어, 탭 목록
+// ══════════════════════════════════════════════════════════════════════
+const BOARD_W = 5, BOARD_H = 6, BOARD_SIZE = BOARD_W * BOARD_H, MAX_T = 12;
+const VALID_TABS = ['garden', 'board', 'story', 'rest', 'up'];
+
+// ── 아이템 체인 (채소 7단계 → 요리 5단계) ──────────────────────────
 const ITEMS = [
-  {id:1,e:'🌱',ko:'씨앗',      en:'Seed'},
-  {id:2,e:'🌿',ko:'새싹',      en:'Sprout'},
-  {id:3,e:'🥕',ko:'당근',      en:'Carrot'},
-  {id:4,e:'🍅',ko:'토마토',    en:'Tomato'},
-  {id:5,e:'🌽',ko:'옥수수',    en:'Corn'},
-  {id:6,e:'🥬',ko:'상추',      en:'Lettuce'},
-  {id:7,e:'🥔',ko:'감자',      en:'Potato'},
-  {id:8,e:'🥗',ko:'샐러드',    en:'Salad'},
-  {id:9,e:'🍲',ko:'채소 스튜', en:'Veggie Stew'},
-  {id:10,e:'🍛',ko:'황금 카레',en:'Golden Curry'},
-  {id:11,e:'🍝',ko:'정원 파스타',en:'Garden Pasta'},
-  {id:12,e:'👑',ko:'셰프의 걸작',en:"Chef's Masterpiece"},
+  {id:1,  e:'🌱', ko:'씨앗',        en:'Seed'},
+  {id:2,  e:'🌿', ko:'새싹',        en:'Sprout'},
+  {id:3,  e:'🥕', ko:'당근',        en:'Carrot'},
+  {id:4,  e:'🍅', ko:'토마토',      en:'Tomato'},
+  {id:5,  e:'🌽', ko:'옥수수',      en:'Corn'},
+  {id:6,  e:'🥬', ko:'상추',        en:'Lettuce'},
+  {id:7,  e:'🥔', ko:'감자',        en:'Potato'},
+  {id:8,  e:'🥗', ko:'샐러드',      en:'Salad'},
+  {id:9,  e:'🍲', ko:'채소 스튜',   en:'Veggie Stew'},
+  {id:10, e:'🍛', ko:'황금 카레',   en:'Golden Curry'},
+  {id:11, e:'🍝', ko:'정원 파스타', en:'Garden Pasta'},
+  {id:12, e:'👑', ko:'셰프의 걸작', en:"Chef's Masterpiece"},
 ];
-const MRW=[null,null,
-  {xp:4,c:2},{xp:8,c:4},{xp:16,c:8},{xp:28,c:14},{xp:44,c:22},
-  {xp:62,c:32},{xp:78,c:40},
-  {xp:100,c:50},{xp:135,c:68},{xp:185,c:95},{xp:260,c:135},{xp:380,c:200},
+
+// 합성 보상: 인덱스 = 완성된 티어 (0, 1은 null)
+const MRW = [null, null,
+  {xp:4,  c:2},  {xp:8,   c:4},  {xp:16,  c:8},  {xp:28,  c:14}, {xp:44,  c:22},
+  {xp:62, c:32}, {xp:78,  c:40},
+  {xp:100,c:50}, {xp:135, c:68}, {xp:185, c:95},  {xp:260, c:135},{xp:380, c:200},
 ];
-const DOUBLE12={xp:1200,c:700};
-// ── MEAT / SEAFOOD CHAIN (same board rules, 12 tiers) ───────────────
-const MEAT_ITEMS=[
-  {id:1,e:'📦',ko:'입고 박스',en:'Inbound'},
-  {id:2,e:'🥩',ko:'원료 컷',en:'Raw cut'},
-  {id:3,e:'🔪',ko:'손질 고기',en:'Trimmed'},
-  {id:4,e:'🧂',ko:'숙성',en:'Cured'},
-  {id:5,e:'🍖',ko:'큐브 컷',en:'Cube cut'},
-  {id:6,e:'🥓',ko:'프리미엄 컷',en:'Prime cut'},
-  {id:7,e:'🐟',ko:'해산 필레',en:'Sea fillet'},
-  {id:8,e:'🍳',ko:'팬 구이',en:'Pan fry'},
-  {id:9,e:'♨️',ko:'스모크',en:'Smoked'},
-  {id:10,e:'🍲',ko:'미트 스튜',en:'Meat stew'},
-  {id:11,e:'🦞',ko:'랍스터 플래터',en:'Sea platter'},
-  {id:12,e:'🏅',ko:'정육 셰프 걸작',en:"Butcher's Masterpiece"},
+const DOUBLE12 = {xp: 1200, c: 700}; // 최고 티어 ×2 보너스
+
+// ── 정육·수산 체인 (같은 보드 규칙, 12티어) ────────────────────────
+const MEAT_ITEMS = [
+  {id:1,  e:'📦', ko:'입고 박스',      en:'Inbound'},
+  {id:2,  e:'🥩', ko:'원료 컷',        en:'Raw cut'},
+  {id:3,  e:'🔪', ko:'손질 고기',      en:'Trimmed'},
+  {id:4,  e:'🧂', ko:'숙성',           en:'Cured'},
+  {id:5,  e:'🍖', ko:'큐브 컷',        en:'Cube cut'},
+  {id:6,  e:'🥓', ko:'프리미엄 컷',    en:'Prime cut'},
+  {id:7,  e:'🐟', ko:'해산 필레',      en:'Sea fillet'},
+  {id:8,  e:'🍳', ko:'팬 구이',        en:'Pan fry'},
+  {id:9,  e:'♨️', ko:'스모크',         en:'Smoked'},
+  {id:10, e:'🍲', ko:'미트 스튜',      en:'Meat stew'},
+  {id:11, e:'🦞', ko:'랍스터 플래터',  en:'Sea platter'},
+  {id:12, e:'🏅', ko:'정육 셰프 걸작', en:"Butcher's Masterpiece"},
 ];
-const MRW_MEAT=MRW;
-const DOUBLE_M12={xp:1200,c:700};
-const LV_XP=[0,300,800,1800,3500,6000,10000]; // 7 levels
-const LV_NM={
-  ko:['텃밭 초보','새싹 농부','텃밭 농부','요리 견습생','요리사','수석 셰프','마스터 셰프'],
-  en:['Garden Novice','Sprout Farmer','Garden Farmer','Cook Apprentice','Cook','Head Chef','Master Chef']
+const MRW_MEAT   = MRW; // 채소·정육 보상 동일
+const DOUBLE_M12 = {xp: 1200, c: 700};
+
+// 레벨 XP 임계값 (10레벨) — 인덱스 N = Lv.N+1 도달에 필요한 누적 XP
+const LV_XP = [0, 800, 2500, 6000, 10000, 16000, 22000, 32000, 45000, 65000];
+const LV_NM = {
+  ko: ['텃밭 초보','새싹 농부','텃밭 농부','요리 견습생','주니어 셰프','요리사','수석 셰프','그랑 셰프','미슐랭 셰프','마스터 셰프'],
+  en: ['Garden Novice','Sprout Farmer','Garden Farmer','Cook Apprentice','Junior Chef','Cook','Head Chef','Grand Chef','Michelin Chef','Master Chef'],
 };
-const EN_MAX=20, EN_SEC=45;
+const EN_MAX = 20, EN_SEC = 45; // 에너지 최대치, 회복 간격(초)
 
-// ── GARDEN SPAWN TABLE ─────────────────────────────────────────────
-// garden upgrade level → [T1 weight, T2 weight, T3 weight, T4 weight]
-const G_SPAWN=[[100,0,0,0],[70,25,5,0],[55,30,12,3],[40,35,18,7],[30,35,22,13]];
-const K_SPAWN=G_SPAWN;
+// ── 스폰 가중치 테이블 — [T1, T2, T3, T4 가중치] (인덱스 = 업그레이드 레벨) ──
+const G_SPAWN = [[100,0,0,0],[70,25,5,0],[55,30,12,3],[40,35,18,7],[30,35,22,13]];
+const K_SPAWN = G_SPAWN; // 주방 업그레이드도 동일 테이블 사용
 
-// ── EPISODES (30 chapters) ─────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════
+// 에피소드 데이터 (30화)
+// ══════════════════════════════════════════════════════════════════════
 const EPS=[
-  // ─ Ch.1~10: 봄의 씨앗, 동네 식당 개업 ─
+  // ─ Ch.1~3: 봄의 씨앗, 텃밭 개업 (채소 보드만) ─
   {char:'👩‍🌾',title:{ko:'제1화: 봄의 시작',en:'Ch.1: Spring Begins'},
    quote:{ko:'"올봄엔 직접 텃밭을 가꿔볼 거야! 씨앗을 심고 새싹을 키워봐요."',en:'"This spring, I\'ll grow my own garden! Let\'s plant seeds and raise sprouts."'},
    objs:[{i:'🌿',ko:'새싹 5개 만들기',en:'Make 5 Sprouts',type:'merge',item:2,need:5},{i:'🥕',ko:'당근 3개 만들기',en:'Make 3 Carrots',type:'merge',item:3,need:3}],
@@ -841,121 +881,123 @@ const EPS=[
   {char:'👩‍🍳',title:{ko:'제3화: 주방을 열다',en:'Ch.3: Open the Kitchen'},
    quote:{ko:'"텃밭 채소로 직접 요리할 거야! 첫 메뉴는 신선한 샐러드!"',en:'"I\'ll cook with my own veggies! First menu: fresh garden salad!"'},
    objs:[{i:'🥗',ko:'샐러드 3개 만들기',en:'Make 3 Salads',type:'merge',item:8,need:3},{i:'🪑',ko:'테이블 업그레이드',en:'Upgrade Table',type:'upgrade',key:'table',need:1}],
-   rwd:{c:350,xp:250},rt:{ko:'🪙350 + 250XP + 주방 해금',en:'🪙350 + 250XP + Kitchen unlock'}},
+   rwd:{c:350,xp:250},rt:{ko:'🪙350 + 250XP + 주방·정육 보드 해금',en:'🪙350 + 250XP + Kitchen & Meat board unlock'}},
+  // ─ Ch.4~10: 첫 손님, 채소+정육 혼합 시작 ─
   {char:'👵',title:{ko:'제4화: 첫 손님',en:'Ch.4: First Customers'},
-   quote:{ko:'"이 동네 텃밭 요리 맛집이라고요? 스튜 한 그릇 주세요!"',en:'"Is this the garden-to-table place? One bowl of stew, please!"'},
-   objs:[{i:'🍲',ko:'채소 스튜 2개 만들기',en:'Make 2 Veggie Stews',type:'merge',item:9,need:2},{i:'⭐',ko:'레벨 3 달성',en:'Reach Level 3',type:'level',need:3}],
+   quote:{ko:'"당근 요리는 뭐가 있어요? 아, 냉장고에 고기도 들어왔군요!"',en:'"What\'s the carrot dish? Oh, and fresh meat just arrived too!"'},
+   objs:[{i:'🥕',ko:'당근 5개 만들기(누적)',en:'Make 5 Carrots (total)',type:'merge',item:3,need:5},{i:'🥩',ko:'원료 컷 3개 만들기',en:'Make 3 Raw Cuts (meat)',type:'mergeM',item:2,need:3}],
    rwd:{c:500,xp:320},rt:{ko:'🪙500 + 320XP',en:'🪙500 + 320XP'}},
   {char:'📱',title:{ko:'제5화: SNS 화제',en:'Ch.5: Going Viral'},
-   quote:{ko:'"팔로워 300만! 텃밭 카레가 대박났어요~ 간판 좀 바꿔봐요!"',en:'"3M followers! Your garden curry is blowing up~ Update the sign!"'},
-   objs:[{i:'🍛',ko:'황금 카레 2개 만들기',en:'Make 2 Golden Curries',type:'merge',item:10,need:2},{i:'🪧',ko:'간판 업그레이드',en:'Upgrade Sign',type:'upgrade',key:'sign',need:1}],
-   rwd:{c:650,xp:420},rt:{ko:'🪙650 + 420XP + 인테리어 해금',en:'🪙650 + 420XP + Interior unlock'}},
+   quote:{ko:'"채소 스튜에 손질 고기 토핑—이게 대박이에요!"',en:'"Veggie stew topped with trimmed meat—this is the hit!"'},
+   objs:[{i:'🍲',ko:'채소 스튜 2개 만들기',en:'Make 2 Veggie Stews',type:'merge',item:9,need:2},{i:'🔪',ko:'손질 고기 2개 만들기',en:'Make 2 Trimmed cuts (meat)',type:'mergeM',item:3,need:2}],
+   rwd:{c:650,xp:420},rt:{ko:'🪙650 + 420XP',en:'🪙650 + 420XP'}},
   {char:'👨‍👩‍👧',title:{ko:'제6화: 가족 방문',en:'Ch.6: Family Visit'},
-   quote:{ko:'"온 가족이 왔어요! 셰프의 걸작을 선보일 절호의 기회!"',en:'"The whole family came! This is the perfect chance to show your masterpiece!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 1개 만들기',en:"Make 1 Chef's Masterpiece",type:'merge',item:12,need:1},{i:'👨‍🍳',ko:'주방 업그레이드',en:'Upgrade Kitchen',type:'upgrade',key:'kitchen',need:1}],
-   rwd:{c:850,xp:550},rt:{ko:'🪙850 + 550XP',en:'🪙850 + 550XP'}},
+   quote:{ko:'"온 가족이 왔어요! 카레에 숙성 고기 곁들이면 완벽해요."',en:'"The whole family came! Golden curry with cured meat—perfection."'},
+   objs:[{i:'🍛',ko:'황금 카레 1개 만들기',en:'Make 1 Golden Curry',type:'merge',item:10,need:1},{i:'🧂',ko:'숙성 고기 2개 만들기',en:'Make 2 Cured cuts (meat)',type:'mergeM',item:4,need:2}],
+   rwd:{c:800,xp:520},rt:{ko:'🪙800 + 520XP',en:'🪙800 + 520XP'}},
   {char:'🎭',title:{ko:'제7화: 전국 요리 경연',en:'Ch.7: National Contest'},
-   quote:{ko:'"전국 텃밭 요리 대회! 걸작 3개로 우승을 노려봐요!"',en:'"National Garden Cooking Contest! Aim for gold with 3 masterpieces!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 3개(누적)',en:'3 Masterpieces (total)',type:'merge',item:12,need:3},{i:'⭐',ko:'레벨 5 달성',en:'Reach Level 5',type:'level',need:5}],
-   rwd:{c:1100,xp:700},rt:{ko:'🪙1100 + 700XP',en:'🪙1100 + 700XP'}},
+   quote:{ko:'"샐러드 부문과 큐브컷 부문, 두 마리 토끼를 잡아봐요!"',en:'"Salad class and cube cut class—let\'s win them both!"'},
+   objs:[{i:'🥗',ko:'샐러드 5개(누적)',en:'5 Salads (total)',type:'merge',item:8,need:5},{i:'🍖',ko:'큐브 컷 2개 만들기',en:'Make 2 Cube Cuts (meat)',type:'mergeM',item:5,need:2}],
+   rwd:{c:1000,xp:650},rt:{ko:'🪙1000 + 650XP',en:'🪙1000 + 650XP'}},
   {char:'📺',title:{ko:'제8화: TV 출연',en:'Ch.8: TV Appearance'},
-   quote:{ko:'"유명 요리 프로그램 출연 제의! 텃밭 스토리로 전국을 감동시켜봐요."',en:'"Invited to a famous cooking show! Touch the nation with your garden story."'},
-   objs:[{i:'🪙',ko:'코인 5000 모으기(누적)',en:'Earn 5000 coins (total)',type:'coins',need:5000},{i:'🎨',ko:'인테리어 업그레이드',en:'Upgrade Interior',type:'upgrade',key:'interior',need:1}],
-   rwd:{c:1300,xp:850},rt:{ko:'🪙1300 + 850XP',en:'🪙1300 + 850XP'}},
+   quote:{ko:'"방송에서 정원 파스타와 프리미엄 컷을 동시에 선보여요!"',en:'"On live TV—garden pasta meets prime cut. Let\'s shine!"'},
+   objs:[{i:'🍝',ko:'정원 파스타 1개 만들기',en:'Make 1 Garden Pasta',type:'merge',item:11,need:1},{i:'🥓',ko:'프리미엄 컷 1개 만들기',en:'Make 1 Prime Cut (meat)',type:'mergeM',item:6,need:1},{i:'🪙',ko:'코인 3000 모으기(누적)',en:'Earn 3000 coins (total)',type:'coins',need:3000}],
+   rwd:{c:1200,xp:780},rt:{ko:'🪙1200 + 780XP',en:'🪙1200 + 780XP'}},
   {char:'🎩',title:{ko:'제9화: 미식 평론가',en:'Ch.9: The Food Critic'},
-   quote:{ko:'"소문의 텃밭 셰프를 만나러 왔소. 걸작 5개를 보여주시오."',en:'"I\'ve come to meet the famous garden chef. Show me 5 masterpieces."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 5개(누적)',en:'5 Masterpieces (total)',type:'merge',item:12,need:5},{i:'⭐',ko:'레벨 6 달성',en:'Reach Level 6',type:'level',need:6}],
-   rwd:{c:1600,xp:1100},rt:{ko:'🪙1600 + 1100XP',en:'🪙1600 + 1100XP'}},
+   quote:{ko:'"카레 3번 먹어봤소. 이번엔 해산물 필레도 내보시오."',en:'"Three curries tried. Now show me that sea fillet."'},
+   objs:[{i:'🍛',ko:'황금 카레 3개(누적)',en:'3 Golden Curries (total)',type:'merge',item:10,need:3},{i:'🐟',ko:'해산 필레 2개 만들기',en:'Make 2 Sea Fillets (meat)',type:'mergeM',item:7,need:2},{i:'🪧',ko:'간판 업그레이드',en:'Upgrade Sign',type:'upgrade',key:'sign',need:1}],
+   rwd:{c:1400,xp:900},rt:{ko:'🪙1400 + 900XP',en:'🪙1400 + 900XP'}},
   {char:'⭐',title:{ko:'제10화: 별이 빛나는 밤',en:'Ch.10: Starry Night'},
-   quote:{ko:'"텃밭이 넓어졌어요! 상추와 감자로 메뉴판을 채워볼까요?"',en:'"The patch grew! Let\'s fill the menu with lettuce and potatoes!"'},
-   objs:[{i:'🥬',ko:'상추 8개 만들기(누적)',en:'Make 8 Lettuces (total)',type:'merge',item:6,need:8},{i:'🥔',ko:'감자 5개 만들기(누적)',en:'Make 5 Potatoes (total)',type:'merge',item:7,need:5}],
-   rwd:{c:900,xp:600},rt:{ko:'🪙900 + 600XP',en:'🪙900 + 600XP'}},
-  // ─ Ch.11~18: 성장기, 전국 무대 ─
-  {char:'🌙',title:{ko:'제11화: 야식 메뉴 개발',en:'Ch.11: Late-Night Menu'},
-   quote:{ko:'"샐러드랑 스튜로 야식 코스를 짜볼까?"',en:'"Salads and stew for a late-night course?"'},
-   objs:[{i:'🥗',ko:'샐러드 5개(누적)',en:'5 Salads (total)',type:'merge',item:8,need:5},{i:'🍲',ko:'스튜 3개(누적)',en:'3 Stews (total)',type:'merge',item:9,need:3}],
+   quote:{ko:'"텃밭 상추·감자는 기본, 손질 고기까지 채우면 메뉴판이 빛나요."',en:'"Lettuce, potatoes, and trimmed meat—the menu finally shines."'},
+   objs:[{i:'🥬',ko:'상추 8개(누적)',en:'8 Lettuces (total)',type:'merge',item:6,need:8},{i:'🥔',ko:'감자 5개(누적)',en:'5 Potatoes (total)',type:'merge',item:7,need:5},{i:'🔪',ko:'손질 고기 3개(누적)',en:'3 Trimmed cuts (total)',type:'mergeM',item:3,need:3}],
    rwd:{c:1000,xp:680},rt:{ko:'🪙1000 + 680XP',en:'🪙1000 + 680XP'}},
-  {char:'🚌',title:{ko:'제12화: 시장 통닭 버스',en:'Ch.12: Market Day'},
-   quote:{ko:'"시장에서 들은 소문—여기 파스타가 일품이래요!"',en:'"Word from the market — your pasta is legendary!"'},
-   objs:[{i:'🍛',ko:'황금 카레 4개(누적)',en:'4 Golden Curries (total)',type:'merge',item:10,need:4},{i:'⭐',ko:'레벨 4 달성',en:'Reach Level 4',type:'level',need:4}],
-   rwd:{c:1200,xp:750},rt:{ko:'🪙1200 + 750XP',en:'🪙1200 + 750XP'}},
+  // ─ Ch.11~18: 성장기, 두 보드 모두 균형 있게 ─
+  {char:'🌙',title:{ko:'제11화: 야식 메뉴 개발',en:'Ch.11: Late-Night Menu'},
+   quote:{ko:'"야식엔 스튜에 팬 구이 한 점이 딱이죠!"',en:'"Late-night special: stew plus a sizzling pan fry—perfect."'},
+   objs:[{i:'🍲',ko:'채소 스튜 3개(누적)',en:'3 Veggie Stews (total)',type:'merge',item:9,need:3},{i:'🍳',ko:'팬 구이 2개 만들기',en:'Make 2 Pan Fries (meat)',type:'mergeM',item:8,need:2}],
+   rwd:{c:1200,xp:780},rt:{ko:'🪙1200 + 780XP',en:'🪙1200 + 780XP'}},
+  {char:'🚌',title:{ko:'제12화: 시장의 소문',en:'Ch.12: Market Buzz'},
+   quote:{ko:'"시장에서 난리났어요—텃밭 셰프 걸작에 스모크까지 나온대요!"',en:'"The market is buzzing—garden masterpiece and smoked cuts are on the menu!"'},
+   objs:[{i:'👑',ko:'셰프의 걸작 1개 만들기',en:"Make 1 Chef's Masterpiece",type:'merge',item:12,need:1},{i:'♨️',ko:'스모크 2개 만들기',en:'Make 2 Smoked cuts (meat)',type:'mergeM',item:9,need:2},{i:'⭐',ko:'레벨 4 달성',en:'Reach Level 4',type:'level',need:4}],
+   rwd:{c:1500,xp:950},rt:{ko:'🪙1500 + 950XP',en:'🪙1500 + 950XP'}},
   {char:'🍝',title:{ko:'제13화: 파스타의 마법',en:'Ch.13: Pasta Magic'},
-   quote:{ko:'"정원 파스타 한 접시면 충분해요."',en:'"One plate of garden pasta is enough…"'},
-   objs:[{i:'🍝',ko:'정원 파스타 2개 만들기',en:'Make 2 Garden Pastas',type:'merge',item:11,need:2},{i:'🪙',ko:'코인 8000 모으기(누적)',en:'Earn 8000 coins (total)',type:'coins',need:8000}],
-   rwd:{c:1400,xp:820},rt:{ko:'🪙1400 + 820XP',en:'🪙1400 + 820XP'}},
+   quote:{ko:'"파스타 향기에 미트 스튜까지 코인이 절로 모여요."',en:'"Pasta aroma, meat stew on the side—coins just pile up."'},
+   objs:[{i:'🍛',ko:'황금 카레 4개(누적)',en:'4 Golden Curries (total)',type:'merge',item:10,need:4},{i:'🍲',ko:'미트 스튜 1개 만들기',en:'Make 1 Meat Stew (meat)',type:'mergeM',item:10,need:1},{i:'🪙',ko:'코인 5000 모으기(누적)',en:'Earn 5000 coins (total)',type:'coins',need:5000}],
+   rwd:{c:1700,xp:1050},rt:{ko:'🪙1700 + 1050XP',en:'🪙1700 + 1050XP'}},
   {char:'🎪',title:{ko:'제14화: 축제 주간',en:'Ch.14: Festival Week'},
-   quote:{ko:'"축제 기간엔 걸작이 메인이죠!"',en:'"Festival week calls for masterpieces!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 4개(누적)',en:'4 Masterpieces (total)',type:'merge',item:12,need:4},{i:'🪧',ko:'간판 업그레이드 2단계',en:'Sign upgrade Lv.2',type:'upgrade',key:'sign',need:2}],
-   rwd:{c:1700,xp:950},rt:{ko:'🪙1700 + 950XP',en:'🪙1700 + 950XP'}},
+   quote:{ko:'"축제엔 파스타와 스모크 조합이 최고예요!"',en:'"Festival calls for pasta and smoked cuts—the dream combo."'},
+   objs:[{i:'🍝',ko:'정원 파스타 2개(누적)',en:'2 Garden Pastas (total)',type:'merge',item:11,need:2},{i:'♨️',ko:'스모크 3개(누적)',en:'3 Smoked cuts (total)',type:'mergeM',item:9,need:3},{i:'🪧',ko:'간판 업그레이드 2단계',en:'Sign upgrade Lv.2',type:'upgrade',key:'sign',need:2}],
+   rwd:{c:2000,xp:1200},rt:{ko:'🪙2000 + 1200XP',en:'🪙2000 + 1200XP'}},
   {char:'🦄',title:{ko:'제15화: 동화 같은 저녁',en:'Ch.15: Fairytale Dinner'},
-   quote:{ko:'"동화에 나올 법한 한 상 차려주세요!"',en:'"Serve a dinner straight out of a fairytale!"'},
-   objs:[{i:'🍝',ko:'정원 파스타 5개(누적)',en:'5 Garden Pastas (total)',type:'merge',item:11,need:5},{i:'🍲',ko:'스튜 6개(누적)',en:'6 Stews (total)',type:'merge',item:9,need:6}],
-   rwd:{c:1900,xp:1050},rt:{ko:'🪙1900 + 1050XP',en:'🪙1900 + 1050XP'}},
+   quote:{ko:'"동화 속 식탁엔 걸작과 랍스터가 있어야죠!"',en:'"A fairytale table deserves a masterpiece and a lobster platter."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 2개(누적)',en:'2 Masterpieces (total)',type:'merge',item:12,need:2},{i:'🦞',ko:'랍스터 플래터 1개 만들기',en:'Make 1 Sea Platter (meat)',type:'mergeM',item:11,need:1},{i:'🎨',ko:'인테리어 업그레이드',en:'Upgrade Interior',type:'upgrade',key:'interior',need:1}],
+   rwd:{c:2300,xp:1400},rt:{ko:'🪙2300 + 1400XP',en:'🪙2300 + 1400XP'}},
   {char:'🏅',title:{ko:'제16화: 금메달 도전',en:'Ch.16: Gold Medal Run'},
-   quote:{ko:'"금메달은 걸작으로만 증명돼요!"',en:'"Gold medals are won with masterpieces!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 8개(누적)',en:'8 Masterpieces (total)',type:'merge',item:12,need:8},{i:'⭐',ko:'레벨 6 달성',en:'Reach Level 6',type:'level',need:6}],
-   rwd:{c:2200,xp:1200},rt:{ko:'🪙2200 + 1200XP',en:'🪙2200 + 1200XP'}},
+   quote:{ko:'"걸작 세 개, 미트 스튜 두 냄비—금메달은 이미 내 손안에!"',en:'"Three masterpieces, two meat stews—the gold medal is already mine."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 3개(누적)',en:'3 Masterpieces (total)',type:'merge',item:12,need:3},{i:'🍲',ko:'미트 스튜 2개(누적)',en:'2 Meat Stews (total)',type:'mergeM',item:10,need:2},{i:'⭐',ko:'레벨 5 달성',en:'Reach Level 5',type:'level',need:5}],
+   rwd:{c:2700,xp:1600},rt:{ko:'🪙2700 + 1600XP',en:'🪙2700 + 1600XP'}},
   {char:'🌈',title:{ko:'제17화: 무지개 디너',en:'Ch.17: Rainbow Dinner'},
-   quote:{ko:'"채소 무지개를 한 그릇에!"',en:'"A rainbow of veggies in one bowl!"'},
-   objs:[{i:'🥗',ko:'샐러드 12개(누적)',en:'12 Salads (total)',type:'merge',item:8,need:12},{i:'🍛',ko:'황금 카레 6개(누적)',en:'6 Golden Curries (total)',type:'merge',item:10,need:6}],
-   rwd:{c:2600,xp:1500},rt:{ko:'🪙2600 + 1500XP',en:'🪙2600 + 1500XP'}},
+   quote:{ko:'"채소 파스타와 정육 걸작—무지개 메뉴가 완성됐어요!"',en:'"Garden pasta and butcher\'s masterpiece—the rainbow menu is complete!"'},
+   objs:[{i:'🍝',ko:'정원 파스타 4개(누적)',en:'4 Garden Pastas (total)',type:'merge',item:11,need:4},{i:'🏅',ko:'정육 셰프 걸작 1개 만들기',en:"Make 1 Butcher's Masterpiece",type:'mergeM',item:12,need:1},{i:'👨‍🍳',ko:'주방 업그레이드 2단계',en:'Kitchen upgrade Lv.2',type:'upgrade',key:'kitchen',need:2}],
+   rwd:{c:3200,xp:1900},rt:{ko:'🪙3200 + 1900XP',en:'🪙3200 + 1900XP'}},
   {char:'🏆',title:{ko:'제18화: 미슐랭 스타!',en:'Ch.18: Michelin Star!'},
-   quote:{ko:'"이 텃밭에서 시작한 요리가 미슐랭 스타를 받는 날이 왔습니다!"',en:'"The day has come when cooking from this garden earns a Michelin Star!"'},
-   objs:[{i:'👑',ko:'셰프의 걸작 15개(누적)',en:'15 Masterpieces (total)',type:'merge',item:12,need:15},{i:'🏡',ko:'모든 업그레이드 3단계+',en:'All upgrades level 3+',type:'allup',need:3},{i:'⭐',ko:'레벨 7 달성',en:'Reach Level 7',type:'level',need:7}],
-   rwd:{c:3500,xp:2400},rt:{ko:'🏆 미슐랭 스타 엔딩!',en:'🏆 Michelin Star Ending!'}},
-  // ─ Ch.19~20: 정육·수산 확장 ─
-  {char:'🥘',title:{ko:'제19화: 풍성한 저녁 준비',en:'Ch.19: Surf & Turf Prep'},
-   quote:{ko:'"텃밭 샐러드에 스모크 한 점이면 완벽해요!"',en:'"Garden salad plus a smoked cut—perfect pairing!"'},
-   objs:[{i:'♨️',ko:'정육 스모크 3개(누적)',en:'3 Smoked cuts (meat)',type:'mergeM',item:9,need:3},{i:'🥗',ko:'샐러드 6개(누적)',en:'6 Salads (total)',type:'merge',item:8,need:6}],
-   rwd:{c:2800,xp:1600},rt:{ko:'🪙2800 + 1600XP · 정육 스토리!',en:'🪙2800 + 1600XP · meat story!'}},
-  {char:'🍽️',title:{ko:'제20화: 레전드 셰프의 밤',en:'Ch.20: Legend Chef Night'},
-   quote:{ko:'"정육 걸작과 텃밭 걸작—오늘 밤 메인은 두 개예요!"',en:'"Two masterpieces—land and sea—for one legendary night!"'},
-   objs:[{i:'🍲',ko:'미트 스튜 2개(누적)',en:'2 Meat stews (total)',type:'mergeM',item:10,need:2},{i:'👑',ko:'셰프의 걸작 2개(누적)',en:'2 Garden masterpieces',type:'merge',item:12,need:2},{i:'🏅',ko:'정육 셰프 걸작 1개(누적)',en:'1 Butcher masterpiece',type:'mergeM',item:12,need:1}],
-   rwd:{c:4200,xp:2600},rt:{ko:'🎊 레전드 엔딩 보너스!',en:'🎊 Legend ending bonus!'}},
-  // ─ Ch.21~30: 스타 이후, 두 번째 별을 향해 ─
-  {char:'🌅',title:{ko:'제21화: 별 이후의 아침',en:'Ch.21: Morning After the Star'},
-   quote:{ko:'"미슐랭 다음 날 아침, 가장 먼저 텃밭부터 돌아봤어요."',en:'"The morning after, I walked to the garden before checking my phone."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 20개(누적)',en:'20 Masterpieces (total)',type:'merge',item:12,need:20},{i:'🪙',ko:'코인 15000 모으기(누적)',en:'Earn 15000 coins (total)',type:'coins',need:15000}],
+   quote:{ko:'"텃밭 걸작 6개에 랍스터까지—오늘 밤 별 하나가 내려앉아요."',en:'"Six garden masterpieces, a lobster platter—tonight a star descends."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 6개(누적)',en:'6 Masterpieces (total)',type:'merge',item:12,need:6},{i:'🦞',ko:'랍스터 플래터 2개(누적)',en:'2 Sea Platters (total)',type:'mergeM',item:11,need:2},{i:'⭐',ko:'레벨 6 달성',en:'Reach Level 6',type:'level',need:6}],
+   rwd:{c:4000,xp:2400},rt:{ko:'🏆 미슐랭 스타 획득!',en:'🏆 Michelin Star Earned!'}},
+  // ─ Ch.19~30: 스타 이후, 두 번째 별을 향해 ─
+  {char:'🌅',title:{ko:'제19화: 별 이후의 아침',en:'Ch.19: Morning After the Star'},
+   quote:{ko:'"별을 받은 다음 날, 카레 솥과 정육 걸작이 기다리고 있었어요."',en:'"The morning after the star, the curry pot and butcher\'s work were waiting."'},
+   objs:[{i:'🍛',ko:'황금 카레 7개(누적)',en:'7 Golden Curries (total)',type:'merge',item:10,need:7},{i:'🏅',ko:'정육 셰프 걸작 2개(누적)',en:"2 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:2},{i:'🪙',ko:'코인 10000 모으기(누적)',en:'Earn 10000 coins (total)',type:'coins',need:10000}],
    rwd:{c:3000,xp:1800},rt:{ko:'🪙3000 + 1800XP',en:'🪙3000 + 1800XP'}},
-  {char:'📰',title:{ko:'제22화: 미식 잡지 화보',en:'Ch.22: Magazine Feature'},
-   quote:{ko:'"텃밭 배경으로 사진 한 장만요! 커버 스토리가 될 거예요."',en:'"Just one shot with the garden behind you—it\'ll be our cover story."'},
-   objs:[{i:'🍝',ko:'정원 파스타 8개(누적)',en:'8 Garden Pastas (total)',type:'merge',item:11,need:8},{i:'🥗',ko:'샐러드 15개(누적)',en:'15 Salads (total)',type:'merge',item:8,need:15}],
-   rwd:{c:3200,xp:2000},rt:{ko:'🪙3200 + 2000XP',en:'🪙3200 + 2000XP'}},
-  {char:'✈️',title:{ko:'제23화: 해외 손님의 방문',en:'Ch.23: International Guests'},
-   quote:{ko:'"도쿄에서 왔어요! 잡지에서 텃밭 카레 보고 비행기 탔어요."',en:'"We flew in from Tokyo just for your garden curry—it was in the magazine!"'},
-   objs:[{i:'🍛',ko:'황금 카레 10개(누적)',en:'10 Golden Curries (total)',type:'merge',item:10,need:10},{i:'🏅',ko:'정육 셰프 걸작 3개(누적)',en:'3 Butcher masterpieces (total)',type:'mergeM',item:12,need:3}],
-   rwd:{c:3600,xp:2200},rt:{ko:'🪙3600 + 2200XP',en:'🪙3600 + 2200XP'}},
-  {char:'🌿',title:{ko:'제24화: 텃밭 확장 프로젝트',en:'Ch.24: Garden Expansion'},
-   quote:{ko:'"이웃 밭까지 빌렸어요. 텃밭이 두 배로 넓어졌어요!"',en:'"I borrowed the neighbor\'s lot—the garden just doubled in size!"'},
-   objs:[{i:'👨‍🍳',ko:'주방 업그레이드 최대(4단계)',en:'Kitchen upgrade maxed (Lv.4)',type:'upgrade',key:'kitchen',need:4},{i:'🍲',ko:'채소 스튜 10개(누적)',en:'10 Veggie Stews (total)',type:'merge',item:9,need:10}],
+  {char:'🍽️',title:{ko:'제20화: 레전드 셰프의 밤',en:'Ch.20: Legend Chef Night'},
+   quote:{ko:'"걸작 10개와 스모크 6점—전설이 시작되는 밤이에요."',en:'"Ten masterpieces, six smoked cuts—this is the night legends begin."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 10개(누적)',en:'10 Masterpieces (total)',type:'merge',item:12,need:10},{i:'♨️',ko:'스모크 6개(누적)',en:'6 Smoked cuts (total)',type:'mergeM',item:9,need:6}],
+   rwd:{c:3500,xp:2100},rt:{ko:'🪙3500 + 2100XP',en:'🪙3500 + 2100XP'}},
+  {char:'📰',title:{ko:'제21화: 미식 잡지 화보',en:'Ch.21: Magazine Feature'},
+   quote:{ko:'"커버 사진엔 파스타와 정육 걸작이 나란히 놓였어요."',en:'"On the cover: garden pasta and butcher\'s masterpiece, side by side."'},
+   objs:[{i:'🍝',ko:'정원 파스타 6개(누적)',en:'6 Garden Pastas (total)',type:'merge',item:11,need:6},{i:'🏅',ko:'정육 셰프 걸작 3개(누적)',en:"3 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:3},{i:'⭐',ko:'레벨 7 달성',en:'Reach Level 7',type:'level',need:7}],
    rwd:{c:4000,xp:2400},rt:{ko:'🪙4000 + 2400XP',en:'🪙4000 + 2400XP'}},
-  {char:'👨‍🏫',title:{ko:'제25화: 셰프 클래스',en:'Ch.25: Chef\'s Class'},
-   quote:{ko:'"셰프님, 가르쳐주세요! 텃밭 요리의 모든 걸 배우고 싶어요."',en:'"Teach me everything, chef—I want to master this garden-to-table way."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 25개(누적)',en:'25 Masterpieces (total)',type:'merge',item:12,need:25},{i:'🎨',ko:'인테리어 최대(4단계)',en:'Interior maxed (Lv.4)',type:'upgrade',key:'interior',need:4}],
+  {char:'✈️',title:{ko:'제22화: 해외 손님의 방문',en:'Ch.22: International Guests'},
+   quote:{ko:'"도쿄에서 왔어요! 걸작 12개 소문 듣고 비행기 탔어요."',en:'"Flew in from Tokyo—heard about 12 masterpieces and had to come."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 12개(누적)',en:'12 Masterpieces (total)',type:'merge',item:12,need:12},{i:'🍲',ko:'미트 스튜 4개(누적)',en:'4 Meat Stews (total)',type:'mergeM',item:10,need:4},{i:'🪙',ko:'코인 12000 모으기(누적)',en:'Earn 12000 coins (total)',type:'coins',need:12000}],
    rwd:{c:4500,xp:2700},rt:{ko:'🪙4500 + 2700XP',en:'🪙4500 + 2700XP'}},
-  {char:'🍂',title:{ko:'제26화: 계절의 맛',en:'Ch.26: Taste of Seasons'},
-   quote:{ko:'"가을 텃밭은 또 달라요. 감자와 옥수수가 계절을 말해줘요."',en:'"The autumn garden is different. Potatoes and corn tell you the season."'},
-   objs:[{i:'🥔',ko:'감자 10개(누적)',en:'10 Potatoes (total)',type:'merge',item:7,need:10},{i:'🌽',ko:'옥수수 8개(누적)',en:'8 Corn (total)',type:'merge',item:5,need:8}],
-   rwd:{c:4800,xp:2900},rt:{ko:'🪙4800 + 2900XP',en:'🪙4800 + 2900XP'}},
-  {char:'🥂',title:{ko:'제27화: 두 번째 별을 향해',en:'Ch.27: Chasing the Second Star'},
-   quote:{ko:'"첫 번째 별은 실력이었고, 두 번째는 꾸준함이에요."',en:'"The first star was talent. The second is earned with consistency."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 30개(누적)',en:'30 Masterpieces (total)',type:'merge',item:12,need:30},{i:'🍲',ko:'미트 스튜 5개(누적)',en:'5 Meat stews (total)',type:'mergeM',item:10,need:5}],
-   rwd:{c:5500,xp:3200},rt:{ko:'🪙5500 + 3200XP',en:'🪙5500 + 3200XP'}},
-  {char:'🌍',title:{ko:'제28화: 세계 요리 페스티벌',en:'Ch.28: World Culinary Festival'},
-   quote:{ko:'"파리, 도쿄, 뉴욕에서도 텃밭 키친을 알아봐요!"',en:'"Paris, Tokyo, New York—Garden Kitchen is now a name the world knows!"'},
-   objs:[{i:'🏅',ko:'정육 셰프 걸작 5개(누적)',en:'5 Butcher masterpieces (total)',type:'mergeM',item:12,need:5},{i:'🪙',ko:'코인 30000 모으기(누적)',en:'Earn 30000 coins (total)',type:'coins',need:30000}],
+  {char:'🌿',title:{ko:'제23화: 텃밭 확장 프로젝트',en:'Ch.23: Garden Expansion'},
+   quote:{ko:'"카레 10그릇과 랍스터 4접시—텃밭이 두 배로 넓어져도 모자라요!"',en:'"Ten curries and four lobster platters—even a doubled garden can\'t keep up!"'},
+   objs:[{i:'🍛',ko:'황금 카레 10개(누적)',en:'10 Golden Curries (total)',type:'merge',item:10,need:10},{i:'🦞',ko:'랍스터 플래터 4개(누적)',en:'4 Sea Platters (total)',type:'mergeM',item:11,need:4},{i:'👨‍🍳',ko:'주방 최대(4단계)',en:'Kitchen maxed (Lv.4)',type:'upgrade',key:'kitchen',need:4}],
+   rwd:{c:5000,xp:3000},rt:{ko:'🪙5000 + 3000XP',en:'🪙5000 + 3000XP'}},
+  {char:'👨‍🏫',title:{ko:'제24화: 셰프 클래스',en:'Ch.24: Chef\'s Class'},
+   quote:{ko:'"걸작 18개로 가르치는 셰프—정육 걸작도 5개나 나왔어요."',en:'"Teaching with 18 masterpieces—five butcher\'s masterpieces too."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 18개(누적)',en:'18 Masterpieces (total)',type:'merge',item:12,need:18},{i:'🏅',ko:'정육 셰프 걸작 5개(누적)',en:"5 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:5},{i:'⭐',ko:'레벨 8 달성',en:'Reach Level 8',type:'level',need:8}],
+   rwd:{c:5500,xp:3300},rt:{ko:'🪙5500 + 3300XP',en:'🪙5500 + 3300XP'}},
+  {char:'🍂',title:{ko:'제25화: 계절의 맛',en:'Ch.25: Taste of Seasons'},
+   quote:{ko:'"가을 파스타와 스모크 8점—계절이 접시 위에 내려앉았어요."',en:'"Autumn pasta and eight smoked cuts—the season lands on the plate."'},
+   objs:[{i:'🍝',ko:'정원 파스타 8개(누적)',en:'8 Garden Pastas (total)',type:'merge',item:11,need:8},{i:'♨️',ko:'스모크 8개(누적)',en:'8 Smoked cuts (total)',type:'mergeM',item:9,need:8},{i:'🎨',ko:'인테리어 최대(4단계)',en:'Interior maxed (Lv.4)',type:'upgrade',key:'interior',need:4}],
    rwd:{c:6000,xp:3600},rt:{ko:'🪙6000 + 3600XP',en:'🪙6000 + 3600XP'}},
-  {char:'🏡',title:{ko:'제29화: 고향의 레시피',en:'Ch.29: Hometown Recipe'},
-   quote:{ko:'"할머니 레시피를 다시 꺼냈어요. 처음과 지금을 연결하는 맛."',en:'"I pulled out grandma\'s recipe again—the taste that bridges then and now."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 38개(누적)',en:'38 Masterpieces (total)',type:'merge',item:12,need:38},{i:'🥗',ko:'샐러드 20개(누적)',en:'20 Salads (total)',type:'merge',item:8,need:20}],
-   rwd:{c:6500,xp:4000},rt:{ko:'🪙6500 + 4000XP',en:'🪙6500 + 4000XP'}},
+  {char:'🥂',title:{ko:'제26화: 두 번째 별을 향해',en:'Ch.26: Chasing the Second Star'},
+   quote:{ko:'"걸작 25개, 정육 걸작 8개—두 번째 별이 손에 잡힐 것 같아요."',en:'"25 masterpieces, 8 butcher\'s—the second star feels within reach."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 25개(누적)',en:'25 Masterpieces (total)',type:'merge',item:12,need:25},{i:'🏅',ko:'정육 셰프 걸작 8개(누적)',en:"8 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:8},{i:'🪙',ko:'코인 20000 모으기(누적)',en:'Earn 20000 coins (total)',type:'coins',need:20000}],
+   rwd:{c:7000,xp:4200},rt:{ko:'🪙7000 + 4200XP',en:'🪙7000 + 4200XP'}},
+  {char:'🌍',title:{ko:'제27화: 세계 요리 페스티벌',en:'Ch.27: World Culinary Festival'},
+   quote:{ko:'"파리, 도쿄, 뉴욕—텃밭 키친이 세계 무대에 올라섰어요."',en:'"Paris, Tokyo, New York—Garden Kitchen takes the world stage."'},
+   objs:[{i:'🍛',ko:'황금 카레 12개(누적)',en:'12 Golden Curries (total)',type:'merge',item:10,need:12},{i:'🍲',ko:'미트 스튜 6개(누적)',en:'6 Meat Stews (total)',type:'mergeM',item:10,need:6},{i:'🏡',ko:'모든 업그레이드 3단계+',en:'All upgrades Lv.3+',type:'allup',need:3}],
+   rwd:{c:7500,xp:4500},rt:{ko:'🪙7500 + 4500XP',en:'🪙7500 + 4500XP'}},
+  {char:'🏡',title:{ko:'제28화: 고향의 레시피',en:'Ch.28: Hometown Recipe'},
+   quote:{ko:'"걸작 32개와 정육 걸작 10개—할머니도 놀라실 메뉴예요."',en:'"32 masterpieces, 10 butcher\'s—grandma would be proud."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 32개(누적)',en:'32 Masterpieces (total)',type:'merge',item:12,need:32},{i:'🏅',ko:'정육 셰프 걸작 10개(누적)',en:"10 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:10},{i:'🪙',ko:'코인 30000 모으기(누적)',en:'Earn 30000 coins (total)',type:'coins',need:30000}],
+   rwd:{c:8000,xp:5000},rt:{ko:'🪙8000 + 5000XP',en:'🪙8000 + 5000XP'}},
+  {char:'🌠',title:{ko:'제29화: 두 번째 별 직전',en:'Ch.29: One Star Away'},
+   quote:{ko:'"파스타 10접시, 랍스터 6개—이제 마지막 한 걸음이에요."',en:'"Ten pastas, six lobster platters—just one last step remains."'},
+   objs:[{i:'🍝',ko:'정원 파스타 10개(누적)',en:'10 Garden Pastas (total)',type:'merge',item:11,need:10},{i:'🦞',ko:'랍스터 플래터 6개(누적)',en:'6 Sea Platters (total)',type:'mergeM',item:11,need:6},{i:'⭐',ko:'레벨 9 달성',en:'Reach Level 9',type:'level',need:9}],
+   rwd:{c:8500,xp:5500},rt:{ko:'🪙8500 + 5500XP',en:'🪙8500 + 5500XP'}},
   {char:'👑',title:{ko:'제30화: 텃밭 키친의 전설',en:'Ch.30: Legend of Garden Kitchen'},
-   quote:{ko:'"씨앗 하나에서 시작해 두 개의 별까지. 이 텃밭이 전부였어요."',en:'"From a single seed to two stars. This garden was the whole story."'},
-   objs:[{i:'👑',ko:'셰프의 걸작 45개(누적)',en:'45 Masterpieces (total)',type:'merge',item:12,need:45},{i:'🏅',ko:'정육 셰프 걸작 8개(누적)',en:'8 Butcher masterpieces (total)',type:'mergeM',item:12,need:8},{i:'🪙',ko:'코인 50000 모으기(누적)',en:'Earn 50000 coins (total)',type:'coins',need:50000}],
+   quote:{ko:'"씨앗 하나에서 시작해 두 개의 별까지. 텃밭과 정육, 이 둘이 전부였어요."',en:'"From a single seed to two stars. The garden and the butcher\'s block—that was the whole story."'},
+   objs:[{i:'👑',ko:'셰프의 걸작 45개(누적)',en:'45 Masterpieces (total)',type:'merge',item:12,need:45},{i:'🏅',ko:'정육 셰프 걸작 15개(누적)',en:"15 Butcher's Masterpieces (total)",type:'mergeM',item:12,need:15},{i:'🪙',ko:'코인 50000 모으기(누적)',en:'Earn 50000 coins (total)',type:'coins',need:50000}],
    rwd:{c:9999,xp:6000},rt:{ko:'🏆🌟 텃밭 키친 전설 엔딩!',en:'🏆🌟 Garden Kitchen Legend Ending!'}},
 ];
 
-// ── UPGRADES (5 categories, 4 levels) ──────────────────────────────
+// ══════════════════════════════════════════════════════════════════════
+// 업그레이드 데이터 (6 카테고리, 4 단계)
+// ══════════════════════════════════════════════════════════════════════
 const UP_TAB_STORY={
   ko:{
     title:'손님에게 보여줄 꿈을 조금씩 쌓아요',
@@ -1052,390 +1094,949 @@ const UPS=[
      'Before any star, this room is already tonight\'s stage.',
    ]}},
 ];
-// ep needed to unlock (0 = always)
-const UP_UNLOCK={sign:0,lighting:1,table:2,kitchen:3,floor:5,interior:7};
+// 업그레이드 해금에 필요한 완료 에피소드 수 (0 = 항상 해금)
+const UP_UNLOCK = {sign:0, lighting:1, table:2, kitchen:3, floor:5, interior:7};
 
-// ── STATE ──────────────────────────────────────────────────────────
-let S={
-  board:Array(BOARD_SIZE).fill(null),boardMeat:Array(BOARD_SIZE).fill(null),
-  coins:0,xp:0,level:1,
-  sel:null,selMeat:null,subBoard:'veg',
-  ups:{sign:0,lighting:0,table:0,kitchen:0,floor:0,interior:0},
-  ep:0,epDone:[],
-  mt:new Array(MAX_T+1).fill(0),mtMeat:new Array(MAX_T+1).fill(0),
-  tc:0,
-  energy:EN_MAX,lastEn:Date.now(),
-  lang:'ko',tab:'garden',
-  gCharX:50,gCharY:52,gCharDir:'d',
+// ══════════════════════════════════════════════════════════════════════
+// 게임 상태 (S) — localStorage 'gk3' 키에 저장
+// ══════════════════════════════════════════════════════════════════════
+let S = {
+  board:     Array(BOARD_SIZE).fill(null), // 채소 보드 (티어 1~12 또는 null)
+  boardMeat: Array(BOARD_SIZE).fill(null), // 정육 보드
+  coins: 0, xp: 0, level: 1,
+  sel: null, selMeat: null,  // 현재 선택된 셀 인덱스
+  subBoard: 'veg',           // 'veg' | 'meat'
+  ups: {sign:0, lighting:0, table:0, kitchen:0, floor:0, interior:0},
+  ep: 0, epDone: [],         // 현재 에피소드 인덱스, 완료된 인덱스 목록
+  mt:     new Array(MAX_T + 1).fill(0), // 채소 누적 합성 횟수 (인덱스 = 티어)
+  mtMeat: new Array(MAX_T + 1).fill(0), // 정육 누적 합성 횟수
+  tc: 0,                     // 누적 획득 코인 (에피소드 목표 추적용)
+  energy: EN_MAX, lastEn: Date.now(),
+  lang: 'ko', tab: 'garden',
+  gCharX: 50, gCharY: 52, gCharDir: 'd', // 농부 캐릭터 위치·방향
 };
-const save=()=>{try{localStorage.setItem('gk3',JSON.stringify(S));}catch(e){}};
-function remapOldTier(v){
-  if(v==null)return null;
-  if(v<=5)return v;
-  if(v===6)return 8;
-  if(v===7)return 9;
-  if(v===8)return 10;
-  if(v===9)return 12;
-  return Math.min(MAX_T,Math.max(1,v));
-}
-function migrateSave(){
-  const b=S.board;
-  if(Array.isArray(b)&&b.length===20&&BOARD_SIZE===36){
-    const nb=Array(BOARD_SIZE).fill(null);
-    for(let i=0;i<b.length;i++)nb[i]=remapOldTier(b[i]);
-    S.board=nb;
-  }else if(!Array.isArray(b)||b.length!==BOARD_SIZE){
-    const nb=Array(BOARD_SIZE).fill(null);
-    if(Array.isArray(b))for(let i=0;i<Math.min(b.length,BOARD_SIZE);i++)nb[i]=b[i];
-    S.board=nb;
-  }
-  const m=S.mt;
-  if(Array.isArray(m)&&m.length===10){
-    const nm=new Array(MAX_T+1).fill(0);
-    for(let t=1;t<=5;t++)nm[t]=m[t]||0;
-    nm[8]=m[6]||0; nm[9]=m[7]||0; nm[10]=m[8]||0; nm[12]=m[9]||0;
-    S.mt=nm;
-  }else if(!Array.isArray(m)||m.length<MAX_T+1){
-    const nm=new Array(MAX_T+1).fill(0);
-    if(Array.isArray(m))for(let t=0;t<m.length&&t<=MAX_T;t++)nm[t]=m[t]|0;
-    S.mt=nm;
-  }
-  const bm=S.boardMeat;
-  if(!Array.isArray(bm)||bm.length!==BOARD_SIZE){
-    const nb=Array(BOARD_SIZE).fill(null);
-    if(Array.isArray(bm))for(let i=0;i<Math.min(bm.length,BOARD_SIZE);i++)nb[i]=bm[i];
-    S.boardMeat=nb;
-  }
-  const mm=S.mtMeat;
-  if(!Array.isArray(mm)||mm.length<MAX_T+1){
-    const nm=new Array(MAX_T+1).fill(0);
-    if(Array.isArray(mm))for(let t=0;t<mm.length&&t<=MAX_T;t++)nm[t]=mm[t]|0;
-    S.mtMeat=nm;
-  }
-  if(S.subBoard!=='veg'&&S.subBoard!=='meat')S.subBoard='veg';
-  const _epd=new Set(S.epDone||[]);
-  if(S.subBoard==='meat'&&!_epd.has(2))S.subBoard='veg';
-  if(typeof S.gCharX!=='number'||S.gCharX<12||S.gCharX>88)S.gCharX=50;
-  if(typeof S.gCharY!=='number'||S.gCharY<22||S.gCharY>78)S.gCharY=52;
-  if(!{u:1,d:1,l:1,r:1}[S.gCharDir])S.gCharDir='d';
-  if(!VALID_TABS.includes(S.tab))S.tab='garden';
-  // ensure all upgrade keys exist (handles old saves missing new categories)
-  const _defUps={sign:0,lighting:0,table:0,kitchen:0,floor:0,interior:0};
-  if(!S.ups||typeof S.ups!=='object')S.ups={};
-  Object.keys(_defUps).forEach(k=>{if(typeof S.ups[k]!=='number')S.ups[k]=0;});
-}
-const load=()=>{try{const r=localStorage.getItem('gk3');if(r){Object.assign(S,JSON.parse(r));migrateSave();save();}}catch(e){}};
 
-function applyTabToDom(){
-  if(!VALID_TABS.includes(S.tab))S.tab='garden';
-  const tab=S.tab;
-  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('pane-'+tab)?.classList.add('on');
-  VALID_TABS.forEach((n,i)=>{if(n===tab)document.querySelectorAll('.tabs .tab')[i]?.classList.add('on');});
+// ── 저장 / 불러오기 ────────────────────────────────────────────────
+const save = () => {
+  try { localStorage.setItem('gk3', JSON.stringify(S)); } catch (e) {}
+};
+
+/** 구버전 세이브에서 티어 번호 재매핑 (보드 크기가 달랐던 시절 대응) */
+function remapOldTier(tier) {
+  if (tier == null) return null;
+  if (tier <= 5) return tier;
+  if (tier === 6) return 8;
+  if (tier === 7) return 9;
+  if (tier === 8) return 10;
+  if (tier === 9) return 12;
+  return Math.min(MAX_T, Math.max(1, tier));
 }
 
-// ── HELPERS ────────────────────────────────────────────────────────
-const T=(ko,en)=>S.lang==='ko'?ko:en;
-let _tt=null;
-function toast(msg,type='',dur=2300){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.className='toast show '+(type||'');
-  if(_tt)clearTimeout(_tt);_tt=setTimeout(()=>el.className='toast',dur);
+/** 구버전 세이브 데이터를 현재 포맷으로 마이그레이션 */
+function migrateSave() {
+  // 채소 보드 크기 조정
+  const currentBoard = S.board;
+  if (Array.isArray(currentBoard) && currentBoard.length === 20 && BOARD_SIZE === 36) {
+    const resizedBoard = Array(BOARD_SIZE).fill(null);
+    for (let i = 0; i < currentBoard.length; i++) resizedBoard[i] = remapOldTier(currentBoard[i]);
+    S.board = resizedBoard;
+  } else if (!Array.isArray(currentBoard) || currentBoard.length !== BOARD_SIZE) {
+    const resizedBoard = Array(BOARD_SIZE).fill(null);
+    if (Array.isArray(currentBoard))
+      for (let i = 0; i < Math.min(currentBoard.length, BOARD_SIZE); i++) resizedBoard[i] = currentBoard[i];
+    S.board = resizedBoard;
+  }
+
+  // 채소 합성 카운트 배열 크기 조정
+  const currentMt = S.mt;
+  if (Array.isArray(currentMt) && currentMt.length === 10) {
+    const resizedMt = new Array(MAX_T + 1).fill(0);
+    for (let t = 1; t <= 5; t++) resizedMt[t] = currentMt[t] || 0;
+    resizedMt[8] = currentMt[6] || 0; resizedMt[9] = currentMt[7] || 0;
+    resizedMt[10] = currentMt[8] || 0; resizedMt[12] = currentMt[9] || 0;
+    S.mt = resizedMt;
+  } else if (!Array.isArray(currentMt) || currentMt.length < MAX_T + 1) {
+    const resizedMt = new Array(MAX_T + 1).fill(0);
+    if (Array.isArray(currentMt))
+      for (let t = 0; t < currentMt.length && t <= MAX_T; t++) resizedMt[t] = currentMt[t] | 0;
+    S.mt = resizedMt;
+  }
+
+  // 정육 보드 크기 조정
+  const currentMeatBoard = S.boardMeat;
+  if (!Array.isArray(currentMeatBoard) || currentMeatBoard.length !== BOARD_SIZE) {
+    const resizedBoard = Array(BOARD_SIZE).fill(null);
+    if (Array.isArray(currentMeatBoard))
+      for (let i = 0; i < Math.min(currentMeatBoard.length, BOARD_SIZE); i++) resizedBoard[i] = currentMeatBoard[i];
+    S.boardMeat = resizedBoard;
+  }
+
+  // 정육 합성 카운트 배열 크기 조정
+  const currentMeatMt = S.mtMeat;
+  if (!Array.isArray(currentMeatMt) || currentMeatMt.length < MAX_T + 1) {
+    const resizedMt = new Array(MAX_T + 1).fill(0);
+    if (Array.isArray(currentMeatMt))
+      for (let t = 0; t < currentMeatMt.length && t <= MAX_T; t++) resizedMt[t] = currentMeatMt[t] | 0;
+    S.mtMeat = resizedMt;
+  }
+
+  // 기타 필드 유효성 검사
+  if (S.subBoard !== 'veg' && S.subBoard !== 'meat') S.subBoard = 'veg';
+  const epDoneSet = new Set(S.epDone || []);
+  if (S.subBoard === 'meat' && !epDoneSet.has(2)) S.subBoard = 'veg';
+  if (typeof S.gCharX !== 'number' || S.gCharX < 12 || S.gCharX > 88) S.gCharX = 50;
+  if (typeof S.gCharY !== 'number' || S.gCharY < 22 || S.gCharY > 78) S.gCharY = 52;
+  if (!{u:1,d:1,l:1,r:1}[S.gCharDir]) S.gCharDir = 'd';
+  if (!VALID_TABS.includes(S.tab)) S.tab = 'garden';
+
+  // 구버전 세이브에 없는 업그레이드 키 보정
+  const defaultUps = {sign:0, lighting:0, table:0, kitchen:0, floor:0, interior:0};
+  if (!S.ups || typeof S.ups !== 'object') S.ups = {};
+  Object.keys(defaultUps).forEach(k => { if (typeof S.ups[k] !== 'number') S.ups[k] = 0; });
 }
-function showModal(ico,title,sub){
-  document.getElementById('mi').textContent=ico;
-  document.getElementById('mt').textContent=title;
-  document.getElementById('ms').textContent=sub;
-  document.getElementById('mb').textContent=T('계속하기','Continue');
+
+const load = () => {
+  try {
+    const savedJson = localStorage.getItem('gk3');
+    if (savedJson) { Object.assign(S, JSON.parse(savedJson)); migrateSave(); save(); }
+  } catch (e) {}
+};
+
+/** 현재 S.tab에 맞게 .pane / .tab 요소의 활성 클래스를 갱신 */
+function applyTabToDom() {
+  if (!VALID_TABS.includes(S.tab)) S.tab = 'garden';
+  const activeTab = S.tab;
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('on'));
+  document.getElementById('pane-' + activeTab)?.classList.add('on');
+  VALID_TABS.forEach((tabName, i) => {
+    if (tabName === activeTab) document.querySelectorAll('.tabs .tab')[i]?.classList.add('on');
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// UI 헬퍼
+// ══════════════════════════════════════════════════════════════════════
+
+/** 현재 언어에 맞는 문자열 반환 */
+const T = (ko, en) => S.lang === 'ko' ? ko : en;
+
+let _toastTimer = null;
+function toast(message, type = '', duration = 2300) {
+  const toastEl = document.getElementById('toast');
+  toastEl.textContent = message;
+  toastEl.className = 'toast show ' + (type || '');
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => toastEl.className = 'toast', duration);
+}
+
+function showModal(icon, title, subtitle) {
+  document.getElementById('mi').textContent = icon;
+  document.getElementById('mt').textContent = title;
+  document.getElementById('ms').textContent = subtitle;
+  document.getElementById('mb').textContent = T('계속하기', 'Continue');
   document.getElementById('mbg').classList.add('show');
 }
-function closeModal(){document.getElementById('mbg').classList.remove('show');}
+function closeModal() { document.getElementById('mbg').classList.remove('show'); }
 
-// ── ENERGY ─────────────────────────────────────────────────────────
-function regenEn(){
-  if(S.energy>=EN_MAX)return;
-  const g=Math.floor((Date.now()-S.lastEn)/1000/EN_SEC);
-  if(g>0){S.energy=Math.min(EN_MAX,S.energy+g);S.lastEn+=g*EN_SEC*1000;save();}
-}
-function renderEn(){
-  document.getElementById('enval').textContent=S.energy;
-  const rem=S.energy>=EN_MAX?0:Math.max(0,EN_SEC-Math.floor((Date.now()-S.lastEn)/1000)%EN_SEC);
-  document.getElementById('etm').textContent=S.energy<EN_MAX?` ${Math.floor(rem/60)}:${String(rem%60).padStart(2,'0')}`:'';
-  document.getElementById('sbtn').disabled=S.energy<=0;
-}
-setInterval(()=>{regenEn();renderEn();},1000);
+// ══════════════════════════════════════════════════════════════════════
+// 에너지 시스템
+// ══════════════════════════════════════════════════════════════════════
 
-// ── COINS / XP ─────────────────────────────────────────────────────
-function addC(n){S.coins+=n;S.tc+=n;document.getElementById('hcoin').textContent=S.coins;checkEp();}
-function spendC(n){if(S.coins<n)return false;S.coins-=n;document.getElementById('hcoin').textContent=S.coins;return true;}
-function addXP(n){
-  if(S.level>=7)return;S.xp+=n;
-  while(S.level<7&&S.xp>=LV_XP[S.level]){
+/** 경과 시간만큼 에너지 자동 회복 */
+function regenEn() {
+  if (S.energy >= EN_MAX) return;
+  const gained = Math.floor((Date.now() - S.lastEn) / 1000 / EN_SEC);
+  if (gained > 0) {
+    S.energy = Math.min(EN_MAX, S.energy + gained);
+    S.lastEn += gained * EN_SEC * 1000;
+    save();
+  }
+}
+
+/** 에너지 UI(숫자, 타이머, 스폰 버튼 활성) 갱신 */
+function renderEn() {
+  document.getElementById('enval').textContent = S.energy;
+  const secsUntilRegen = S.energy >= EN_MAX
+    ? 0
+    : Math.max(0, EN_SEC - Math.floor((Date.now() - S.lastEn) / 1000) % EN_SEC);
+  document.getElementById('etm').textContent = S.energy < EN_MAX
+    ? ` ${Math.floor(secsUntilRegen / 60)}:${String(secsUntilRegen % 60).padStart(2, '0')}`
+    : '';
+  document.getElementById('sbtn').disabled = S.energy <= 0;
+}
+setInterval(() => { regenEn(); renderEn(); }, 1000);
+
+// ══════════════════════════════════════════════════════════════════════
+// 코인 / XP
+// ══════════════════════════════════════════════════════════════════════
+function addC(amount) {
+  S.coins += amount; S.tc += amount;
+  document.getElementById('hcoin').textContent = S.coins;
+  checkEp();
+}
+function spendC(amount) {
+  if (S.coins < amount) return false;
+  S.coins -= amount;
+  document.getElementById('hcoin').textContent = S.coins;
+  return true;
+}
+function addXP(amount) {
+  if (S.level >= 10) return;
+  S.xp += amount;
+  while (S.level < 10 && S.xp >= LV_XP[S.level]) {
     S.level++;
-    showModal('🎉',T('레벨 업!','Level Up!'),
-      T(`Lv.${S.level} 달성!\n${LV_NM.ko[S.level-1]}`,`Reached Lv.${S.level}!\n${LV_NM.en[S.level-1]}`));
-    save();if(S.tab==='up')renderUps();if(S.tab==='rest')drawRest();
+    showModal('🎉', T('레벨 업!', 'Level Up!'),
+      T(`Lv.${S.level} 달성!\n${LV_NM.ko[S.level-1]}`, `Reached Lv.${S.level}!\n${LV_NM.en[S.level-1]}`));
+    save();
+    if (S.tab === 'up') renderUps();
+    if (S.tab === 'rest') drawRest();
   }
-  renderXP();checkEp();
-}
-function renderXP(){
-  const lv=S.level;
-  if(lv>=7){
-    document.getElementById('xpf').style.width='100%';
-    document.getElementById('xpt').textContent='MAX';
-    document.getElementById('lvc').textContent='Lv.7 ✨';return;
-  }
-  const prev=lv>1?LV_XP[lv-1]:0,next=LV_XP[lv];
-  document.getElementById('xpf').style.width=Math.min(100,((S.xp-prev)/(next-prev))*100)+'%';
-  document.getElementById('xpt').textContent=`${S.xp}/${next}`;
-  document.getElementById('lvc').textContent=`Lv.${lv}`;
+  renderXP(); checkEp();
 }
 
-// ── EPISODE LOGIC ──────────────────────────────────────────────────
-function objProg(ep,oi){
-  const o=ep.objs[oi];
-  if(o.type==='merge') return S.mt[o.item]||0;
-  if(o.type==='mergeM') return S.mtMeat[o.item]||0;
-  if(o.type==='coins') return S.tc;
-  if(o.type==='upgrade') return S.ups[o.key]||0;
-  if(o.type==='level')  return S.level;
-  if(o.type==='allup')  return Math.min(...Object.values(S.ups));
+function renderXP() {
+  const currentLevel = S.level;
+  if (currentLevel >= 10) {
+    document.getElementById('xpf').style.width = '100%';
+    document.getElementById('xpt').textContent = 'MAX';
+    document.getElementById('lvc').textContent = 'Lv.10 ✨';
+    return;
+  }
+  const prevLevelXp = currentLevel > 1 ? LV_XP[currentLevel - 1] : 0;
+  const nextLevelXp = LV_XP[currentLevel];
+  document.getElementById('xpf').style.width =
+    Math.min(100, ((S.xp - prevLevelXp) / (nextLevelXp - prevLevelXp)) * 100) + '%';
+  document.getElementById('xpt').textContent = `${S.xp}/${nextLevelXp}`;
+  document.getElementById('lvc').textContent = `Lv.${currentLevel}`;
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// 에피소드 로직
+// ══════════════════════════════════════════════════════════════════════
+
+/** 특정 에피소드의 목표 하나에 대한 현재 진행 수치 반환 */
+function objProg(episode, objIndex) {
+  const obj = episode.objs[objIndex];
+  if (obj.type === 'merge')   return S.mt[obj.item] || 0;
+  if (obj.type === 'mergeM')  return S.mtMeat[obj.item] || 0;
+  if (obj.type === 'coins')   return S.tc;
+  if (obj.type === 'upgrade') return S.ups[obj.key] || 0;
+  if (obj.type === 'level')   return S.level;
+  if (obj.type === 'allup')   return Math.min(...Object.values(S.ups));
   return 0;
 }
-function epAllDone(ei){return EPS[ei].objs.every((_,i)=>objProg(EPS[ei],i)>=EPS[ei].objs[i].need);}
-function checkEp(){
-  if(S.tab==='board')renderBanner();
-  if(S.tab==='story')renderStory();
-  if(S.tab==='garden'){renderFreezerMini();renderGardenCropZones();}
+
+/** 해당 에피소드의 모든 목표가 완료됐는지 확인 */
+function epAllDone(episodeIndex) {
+  return EPS[episodeIndex].objs.every((_, i) => objProg(EPS[episodeIndex], i) >= EPS[episodeIndex].objs[i].need);
 }
 
-function meatUnlocked(){return S.epDone.includes(2);}
-function seedMeatIfEligible(){
-  if(!meatUnlocked())return;
-  if(S.boardMeat.some(x=>x!=null))return;
-  [0,1,2,3,4,5,6].forEach(i=>{S.boardMeat[i]=1;});
+/** 에피소드 진행 상태 변경 시 관련 UI 갱신 */
+function checkEp() {
+  if (S.tab === 'board')  renderBanner();
+  if (S.tab === 'story')  renderStory();
+  if (S.tab === 'garden') { renderFreezerMini(); renderGardenZones(); }
+}
+
+/** 제3화 완료 여부 (정육 보드 해금 조건) */
+function meatUnlocked() { return S.epDone.includes(2); }
+
+/** 정육 보드가 해금됐고 비어 있으면 초기 아이템을 채워줌 */
+function seedMeatIfEligible() {
+  if (!meatUnlocked()) return;
+  if (S.boardMeat.some(x => x != null)) return;
+  [0, 1, 2, 3, 4, 5, 6].forEach(i => { S.boardMeat[i] = 1; });
   save();
-  if(S.tab==='board'&&S.subBoard==='meat')buildGridMeat();
+  if (S.tab === 'board' && S.subBoard === 'meat') buildGridMeat();
   hubBoardChanged();
 }
 
-// ── PARTICLES ──────────────────────────────────────────────────────
-function particles(el){
-  const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
-  const cols=['#ffd700','#ff9900','#ff5500','#fff','#00ff88','#88ddff','#ff88cc'];
-  for(let i=0;i<12;i++){
-    const p=document.createElement('div'),a=Math.random()*Math.PI*2,d=28+Math.random()*48;
-    p.className='pt';
-    p.style.cssText=`left:${cx}px;top:${cy}px;width:${5+Math.random()*6}px;height:${5+Math.random()*6}px;background:${cols[Math.floor(Math.random()*cols.length)]};margin-left:-3px;margin-top:-3px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d}px`;
-    document.body.appendChild(p);setTimeout(()=>p.remove(),650);
+// ══════════════════════════════════════════════════════════════════════
+// 파티클 이펙트
+// ══════════════════════════════════════════════════════════════════════
+
+/** 합성 성공 시 셀 위치에서 파티클 버스트 표시 */
+function particles(sourceEl) {
+  const sourceRect = sourceEl.getBoundingClientRect();
+  const centerX = sourceRect.left + sourceRect.width / 2;
+  const centerY = sourceRect.top  + sourceRect.height / 2;
+  const colors = ['#ffd700','#ff9900','#ff5500','#fff','#00ff88','#88ddff','#ff88cc'];
+  for (let i = 0; i < 12; i++) {
+    const particle = document.createElement('div');
+    const angle    = Math.random() * Math.PI * 2;
+    const distance = 28 + Math.random() * 48;
+    particle.className = 'pt';
+    particle.style.cssText =
+      `left:${centerX}px;top:${centerY}px;` +
+      `width:${5 + Math.random() * 6}px;height:${5 + Math.random() * 6}px;` +
+      `background:${colors[Math.floor(Math.random() * colors.length)]};` +
+      `margin-left:-3px;margin-top:-3px;` +
+      `--dx:${Math.cos(angle) * distance}px;--dy:${Math.sin(angle) * distance}px`;
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), 650);
   }
 }
 
-// ── SPAWN ──────────────────────────────────────────────────────────
-function spawnTier(){
-  const gLv=Math.min(4,S.level-1);
-  const w=G_SPAWN[gLv];
-  const total=w.reduce((a,b)=>a+b,0);
-  let r=Math.random()*total;
-  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i+1;}
+// ══════════════════════════════════════════════════════════════════════
+// 스폰 시스템
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * 가중치 배열로 랜덤 티어 선택 (인덱스+1 반환)
+ * 예) [70,25,5,0] → 70% T1, 25% T2, 5% T3
+ */
+function weightedRandom(weights) {
+  const total = weights.reduce((sum, w) => sum + w, 0);
+  let roll = Math.random() * total;
+  for (let i = 0; i < weights.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return i + 1;
+  }
   return 1;
-}
-function spawnTierMeat(){
-  const kLv=Math.min(4,S.ups.kitchen);
-  const w=K_SPAWN[kLv];
-  const total=w.reduce((a,b)=>a+b,0);
-  let r=Math.random()*total;
-  for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i+1;}
-  return 1;
-}
-function doSpawn(){
-  regenEn();
-  if(S.energy<=0){toast(T('에너지 부족! 잠시 기다려주세요.','No energy! Wait a moment.'),'err');return;}
-  const emp=S.board.map((v,i)=>v==null?i:-1).filter(i=>i>=0);
-  if(!emp.length){toast(T('보드가 가득 찼어요! 합쳐서 공간을 만드세요.','Board full! Merge to free space.'),'err');return;}
-  S.energy--;S.lastEn=Date.now();
-  const idx=emp[Math.floor(Math.random()*emp.length)];
-  S.board[idx]=spawnTier();
-  renderCell(idx,'ap');save();renderEn();hubBoardChanged();
-}
-function doSpawnMeat(){
-  if(!meatUnlocked()){toast(T('제3화를 완료하면 정육 코너가 열려요.','Finish Ch.3 to unlock the butcher corner.'),'err');return;}
-  regenEn();
-  if(S.energy<=0){toast(T('에너지 부족! 잠시 기다려주세요.','No energy! Wait a moment.'),'err');return;}
-  const emp=S.boardMeat.map((v,i)=>v==null?i:-1).filter(i=>i>=0);
-  if(!emp.length){toast(T('정육 보드가 가득 찼어요!','Meat board full!'),'err');return;}
-  S.energy--;S.lastEn=Date.now();
-  const idx=emp[Math.floor(Math.random()*emp.length)];
-  S.boardMeat[idx]=spawnTierMeat();
-  renderCellMeat(idx,'ap');save();renderEn();hubBoardChanged();
 }
 
-// ── BOARD ──────────────────────────────────────────────────────────
-function clickCell(idx){
-  const item=S.board[idx];
-  if(S.sel===null){if(item==null)return;S.sel=idx;applyHL();return;}
-  if(S.sel===idx){S.sel=null;applyHL();return;}
-  const si=S.board[S.sel];
-  if(item==null){
-    S.board[idx]=si;S.board[S.sel]=null;
-    renderCell(S.sel,'');renderCell(idx,'ap');
-    S.sel=null;applyHL();save();hubBoardChanged();return;
+/** 정원 레벨 기반으로 채소 스폰 티어 결정 */
+function spawnTier() {
+  const gardenLevel = Math.min(4, S.level - 1);
+  return weightedRandom(G_SPAWN[gardenLevel]);
+}
+
+/** 주방 업그레이드 레벨 기반으로 정육 스폰 티어 결정 */
+function spawnTierMeat() {
+  const kitchenLevel = Math.min(4, S.ups.kitchen);
+  return weightedRandom(K_SPAWN[kitchenLevel]);
+}
+
+function doSpawn() {
+  regenEn();
+  if (S.energy <= 0) { toast(T('에너지 부족! 잠시 기다려주세요.', 'No energy! Wait a moment.'), 'err'); return; }
+  const emptyCells = S.board.map((v, i) => v == null ? i : -1).filter(i => i >= 0);
+  if (!emptyCells.length) { toast(T('보드가 가득 찼어요! 합쳐서 공간을 만드세요.', 'Board full! Merge to free space.'), 'err'); return; }
+  S.energy--; S.lastEn = Date.now();
+  const idx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  S.board[idx] = spawnTier();
+  renderCell(idx, 'ap'); save(); renderEn(); hubBoardChanged();
+}
+
+function doSpawnMeat() {
+  if (!meatUnlocked()) { toast(T('제3화를 완료하면 정육 코너가 열려요.', 'Finish Ch.3 to unlock the butcher corner.'), 'err'); return; }
+  regenEn();
+  if (S.energy <= 0) { toast(T('에너지 부족! 잠시 기다려주세요.', 'No energy! Wait a moment.'), 'err'); return; }
+  const emptyCells = S.boardMeat.map((v, i) => v == null ? i : -1).filter(i => i >= 0);
+  if (!emptyCells.length) { toast(T('정육 보드가 가득 찼어요!', 'Meat board full!'), 'err'); return; }
+  S.energy--; S.lastEn = Date.now();
+  const idx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  S.boardMeat[idx] = spawnTierMeat();
+  renderCellMeat(idx, 'ap'); save(); renderEn(); hubBoardChanged();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// 합성 보드
+// ══════════════════════════════════════════════════════════════════════
+
+/** 셀의 티어 도트(진행 표시) HTML 생성 */
+function buildTierDots(tier) {
+  return [...Array(MAX_T)].map((_, d) => `<div class="td${d < tier ? ' lit' : ''}"></div>`).join('');
+}
+
+/** 셀 내부 HTML 생성 (공통 로직) — 아이템이 없으면 null 반환 */
+function cellInnerHTML(tier, items, lang) {
+  const itemDef = items[tier - 1];
+  if (!itemDef) return null;
+  const dots = buildTierDots(tier);
+  const name  = lang === 'ko' ? itemDef.ko : itemDef.en;
+  return `<div class="ibub"><div class="ico">${itemDef.e}</div></div><div class="iname">${name}</div><div class="tdots">${dots}</div>`;
+}
+
+// ── 채소 보드 ──────────────────────────────────────────────────────
+
+function clickCell(idx) {
+  const targetTier = S.board[idx];
+  // 선택 없음: 빈 셀 무시, 아이템 있으면 선택
+  if (S.sel === null) { if (targetTier == null) return; S.sel = idx; applyHL(); return; }
+  // 같은 셀 재클릭: 선택 해제
+  if (S.sel === idx) { S.sel = null; applyHL(); return; }
+
+  const selectedTier = S.board[S.sel];
+  if (targetTier == null) {
+    // 빈 셀로 이동
+    S.board[idx] = selectedTier; S.board[S.sel] = null;
+    renderCell(S.sel, ''); renderCell(idx, 'ap');
+    S.sel = null; applyHL(); save(); hubBoardChanged(); return;
   }
-  if(item===si){
-    const nxt=si+1,src=S.sel;
-    S.board[src]=null;S.sel=null;
-    if(nxt>MAX_T){
-      S.board[idx]=null;renderCell(src,'');renderCell(idx,'');applyHL();
-      addC(DOUBLE12.c);addXP(DOUBLE12.xp);
-      toast(T(`👑×2 합치기! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`,`👑×2 Merged! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`),'gd',3000);
+  if (targetTier === selectedTier) {
+    // 같은 티어 합성
+    const nextTier = selectedTier + 1;
+    const sourceIdx = S.sel;
+    S.board[sourceIdx] = null; S.sel = null;
+    if (nextTier > MAX_T) {
+      // 최고 티어 ×2 보너스
+      S.board[idx] = null;
+      renderCell(sourceIdx, ''); renderCell(idx, ''); applyHL();
+      addC(DOUBLE12.c); addXP(DOUBLE12.xp);
+      toast(T(`👑×2 합치기! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`, `👑×2 Merged! +${DOUBLE12.c}🪙 +${DOUBLE12.xp}XP`), 'gd', 3000);
     } else {
-      S.board[idx]=nxt;S.mt[nxt]=(S.mt[nxt]||0)+1;
-      renderCell(src,'');
-      const cel=renderCell(idx,'am');if(cel)particles(cel);
+      S.board[idx] = nextTier; S.mt[nextTier] = (S.mt[nextTier] || 0) + 1;
+      renderCell(sourceIdx, '');
+      const mergedCellEl = renderCell(idx, 'am');
+      if (mergedCellEl) particles(mergedCellEl);
       applyHL();
-      const rw=MRW[nxt];
-      if(rw){addC(rw.c);addXP(rw.xp);}
-      const show=ITEMS[nxt-1];
-      toast(show?T(`${show.e} ${show.ko} 완성! +${rw?.c||0}🪙`,`${show.e} ${show.en} made! +${rw?.c||0}🪙`):T('합치기 완료!','Merged!'),'ok');
+      const reward = MRW[nextTier];
+      if (reward) { addC(reward.c); addXP(reward.xp); }
+      const mergedItem = ITEMS[nextTier - 1];
+      toast(mergedItem
+        ? T(`${mergedItem.e} ${mergedItem.ko} 완성! +${reward?.c || 0}🪙`, `${mergedItem.e} ${mergedItem.en} made! +${reward?.c || 0}🪙`)
+        : T('합치기 완료!', 'Merged!'), 'ok');
       checkEp();
     }
-    save();hubBoardChanged();return;
+    save(); hubBoardChanged(); return;
   }
-  S.sel=idx;applyHL();
+  // 다른 티어: 대상 셀로 선택 이동
+  S.sel = idx; applyHL();
 }
-function applyHL(){
-  document.querySelectorAll('#grid .cell').forEach((el,i)=>el.classList.toggle('sel',i===S.sel));
+
+function applyHL() {
+  document.querySelectorAll('#grid .cell').forEach((cellEl, i) => cellEl.classList.toggle('sel', i === S.sel));
 }
-function applyHLMeat(){
-  document.querySelectorAll('#grid-meat .cell').forEach((el,i)=>el.classList.toggle('sel',i===S.selMeat));
-}
-function renderCell(idx,anim){
-  const cells=document.querySelectorAll('#grid .cell');
-  if(!cells[idx])return null;
-  const el=cells[idx],item=S.board[idx];
-  if(item==null){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');}
-  else{
-    const it=ITEMS[item-1];
-    if(!it){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');S.board[idx]=null;return null;}
-    const dots=[...Array(MAX_T)].map((_,d)=>`<div class="td${d<item?' lit':''}"></div>`).join('');
-    el.setAttribute('data-t',item);el.classList.add('has-item');
-    el.innerHTML=`<div class="ibub"><div class="ico">${it.e}</div></div><div class="iname">${S.lang==='ko'?it.ko:it.en}</div><div class="tdots">${dots}</div>`;
-    if(anim){el.classList.add(anim);setTimeout(()=>el.classList.remove(anim),500);}
-    if(idx===S.sel)el.classList.add('sel');else el.classList.remove('sel');
-  }
-  return el;
-}
-function buildGrid(){
-  const g=document.getElementById('grid');g.innerHTML='';
-  for(let i=0;i<BOARD_SIZE;i++){
-    const c=document.createElement('div');c.className='cell';c.onclick=()=>clickCell(i);
-    g.appendChild(c);renderCell(i,'');
-  }
-}
-function clickCellMeat(idx){
-  const item=S.boardMeat[idx];
-  if(S.selMeat===null){if(item==null)return;S.selMeat=idx;applyHLMeat();return;}
-  if(S.selMeat===idx){S.selMeat=null;applyHLMeat();return;}
-  const si=S.boardMeat[S.selMeat];
-  if(item==null){
-    S.boardMeat[idx]=si;S.boardMeat[S.selMeat]=null;
-    renderCellMeat(S.selMeat,'');renderCellMeat(idx,'ap');
-    S.selMeat=null;applyHLMeat();save();hubBoardChanged();return;
-  }
-  if(item===si){
-    const nxt=si+1,src=S.selMeat;
-    S.boardMeat[src]=null;S.selMeat=null;
-    if(nxt>MAX_T){
-      S.boardMeat[idx]=null;renderCellMeat(src,'');renderCellMeat(idx,'');applyHLMeat();
-      addC(DOUBLE_M12.c);addXP(DOUBLE_M12.xp);
-      toast(T(`🏅×2 정육 합치기! +${DOUBLE_M12.c}🪙`,`🏅×2 Meat merge! +${DOUBLE_M12.c}🪙`),'gd',3000);
-    } else {
-      S.boardMeat[idx]=nxt;S.mtMeat[nxt]=(S.mtMeat[nxt]||0)+1;
-      renderCellMeat(src,'');
-      const cel=renderCellMeat(idx,'am');if(cel)particles(cel);
-      applyHLMeat();
-      const rw=MRW_MEAT[nxt];
-      if(rw){addC(rw.c);addXP(rw.xp);}
-      const show=MEAT_ITEMS[nxt-1];
-      toast(show?T(`${show.e} ${show.ko} 완성! +${rw?.c||0}🪙`,`${show.e} ${show.en} made! +${rw?.c||0}🪙`):T('합치기!','Merged!'),'ok');
-      checkEp();
+
+function renderCell(idx, anim) {
+  const cellEls = document.querySelectorAll('#grid .cell');
+  if (!cellEls[idx]) return null;
+  const cellEl = cellEls[idx];
+  const tier = S.board[idx];
+  if (tier == null) {
+    cellEl.innerHTML = ''; cellEl.removeAttribute('data-t'); cellEl.classList.remove('has-item', 'sel');
+  } else {
+    const html = cellInnerHTML(tier, ITEMS, S.lang);
+    if (!html) {
+      cellEl.innerHTML = ''; cellEl.removeAttribute('data-t'); cellEl.classList.remove('has-item', 'sel');
+      S.board[idx] = null; return null;
     }
-    save();hubBoardChanged();return;
+    cellEl.setAttribute('data-t', tier); cellEl.classList.add('has-item');
+    cellEl.innerHTML = html;
+    if (anim) { cellEl.classList.add(anim); setTimeout(() => cellEl.classList.remove(anim), 500); }
+    cellEl.classList.toggle('sel', idx === S.sel);
   }
-  S.selMeat=idx;applyHLMeat();
+  return cellEl;
 }
-function renderCellMeat(idx,anim){
-  const cells=document.querySelectorAll('#grid-meat .cell');
-  if(!cells[idx])return null;
-  const el=cells[idx],item=S.boardMeat[idx];
-  if(item==null){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');}
-  else{
-    const it=MEAT_ITEMS[item-1];
-    if(!it){el.innerHTML='';el.removeAttribute('data-t');el.classList.remove('has-item','sel');S.boardMeat[idx]=null;return null;}
-    const dots=[...Array(MAX_T)].map((_,d)=>`<div class="td${d<item?' lit':''}"></div>`).join('');
-    el.setAttribute('data-t',item);el.classList.add('has-item');
-    el.innerHTML=`<div class="ibub"><div class="ico">${it.e}</div></div><div class="iname">${S.lang==='ko'?it.ko:it.en}</div><div class="tdots">${dots}</div>`;
-    if(anim){el.classList.add(anim);setTimeout(()=>el.classList.remove(anim),500);}
-    if(idx===S.selMeat)el.classList.add('sel');else el.classList.remove('sel');
-  }
-  return el;
-}
-function buildGridMeat(){
-  const g=document.getElementById('grid-meat');g.innerHTML='';
-  for(let i=0;i<BOARD_SIZE;i++){
-    const c=document.createElement('div');c.className='cell';c.onclick=()=>clickCellMeat(i);
-    g.appendChild(c);renderCellMeat(i,'');
+
+function buildGrid() {
+  const gridEl = document.getElementById('grid'); gridEl.innerHTML = '';
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    const cellEl = document.createElement('div'); cellEl.className = 'cell'; cellEl.onclick = () => clickCell(i);
+    gridEl.appendChild(cellEl); renderCell(i, '');
   }
 }
 
-function hubBoardChanged(){
-  if(S.tab!=='garden')return;
-  renderFreezerMini();renderGardenCropZones();
-}
-function vegTierBoardCount(tier){
-  let n=0;
-  for(let i=0;i<BOARD_SIZE;i++)if(S.board[i]===tier)n++;
-  return n;
-}
-function renderGardenCropZones(){
-  const root=document.getElementById('hub-crop-zones');
-  if(!root)return;
-  root.innerHTML='';
-  const ko=S.lang==='ko';
-  for(let ti=1;ti<=7;ti++){
-    const it=ITEMS[ti-1];
-    const onB=vegTierBoardCount(ti);
-    const zone=document.createElement('article');
-    zone.className='hub-crop-zone';
-    const head=document.createElement('div');
-    head.className='hub-zone-head';
-    head.textContent=ko?`${it.ko} 정원`:`${it.en} garden`;
-    const bed=document.createElement('div');
-    bed.className='hub-zone-bed';
-    const pile=document.createElement('div');
-    pile.className='hub-zone-pile';
-    if(onB>0){
-      const show=Math.min(onB,12);
-      for(let i=0;i<show;i++){
-        const s=document.createElement('span');
-        s.className='hub-zone-plant';
-        s.textContent=it.e;
-        pile.appendChild(s);
-      }
-      if(onB>show){
-        const m=document.createElement('span');
-        m.className='hub-zone-more';
-        m.textContent='+'+(onB-show);
-        pile.appendChild(m);
-      }
+// ── 정육 보드 ──────────────────────────────────────────────────────
+
+function clickCellMeat(idx) {
+  const targetTier = S.boardMeat[idx];
+  if (S.selMeat === null) { if (targetTier == null) return; S.selMeat = idx; applyHLMeat(); return; }
+  if (S.selMeat === idx)  { S.selMeat = null; applyHLMeat(); return; }
+
+  const selectedTier = S.boardMeat[S.selMeat];
+  if (targetTier == null) {
+    S.boardMeat[idx] = selectedTier; S.boardMeat[S.selMeat] = null;
+    renderCellMeat(S.selMeat, ''); renderCellMeat(idx, 'ap');
+    S.selMeat = null; applyHLMeat(); save(); hubBoardChanged(); return;
+  }
+  if (targetTier === selectedTier) {
+    const nextTier  = selectedTier + 1;
+    const sourceIdx = S.selMeat;
+    S.boardMeat[sourceIdx] = null; S.selMeat = null;
+    if (nextTier > MAX_T) {
+      S.boardMeat[idx] = null;
+      renderCellMeat(sourceIdx, ''); renderCellMeat(idx, ''); applyHLMeat();
+      addC(DOUBLE_M12.c); addXP(DOUBLE_M12.xp);
+      toast(T(`🏅×2 정육 합치기! +${DOUBLE_M12.c}🪙`, `🏅×2 Meat merge! +${DOUBLE_M12.c}🪙`), 'gd', 3000);
+    } else {
+      S.boardMeat[idx] = nextTier; S.mtMeat[nextTier] = (S.mtMeat[nextTier] || 0) + 1;
+      renderCellMeat(sourceIdx, '');
+      const mergedCellEl = renderCellMeat(idx, 'am');
+      if (mergedCellEl) particles(mergedCellEl);
+      applyHLMeat();
+      const reward = MRW_MEAT[nextTier];
+      if (reward) { addC(reward.c); addXP(reward.xp); }
+      const mergedItem = MEAT_ITEMS[nextTier - 1];
+      toast(mergedItem
+        ? T(`${mergedItem.e} ${mergedItem.ko} 완성! +${reward?.c || 0}🪙`, `${mergedItem.e} ${mergedItem.en} made! +${reward?.c || 0}🪙`)
+        : T('합치기!', 'Merged!'), 'ok');
+      checkEp();
     }
-    bed.appendChild(pile);
-    zone.appendChild(head);
-    zone.appendChild(bed);
-    root.appendChild(zone);
+    save(); hubBoardChanged(); return;
+  }
+  S.selMeat = idx; applyHLMeat();
+}
+
+function applyHLMeat() {
+  document.querySelectorAll('#grid-meat .cell').forEach((cellEl, i) => cellEl.classList.toggle('sel', i === S.selMeat));
+}
+
+function renderCellMeat(idx, anim) {
+  const cellEls = document.querySelectorAll('#grid-meat .cell');
+  if (!cellEls[idx]) return null;
+  const cellEl = cellEls[idx];
+  const tier = S.boardMeat[idx];
+  if (tier == null) {
+    cellEl.innerHTML = ''; cellEl.removeAttribute('data-t'); cellEl.classList.remove('has-item', 'sel');
+  } else {
+    const html = cellInnerHTML(tier, MEAT_ITEMS, S.lang);
+    if (!html) {
+      cellEl.innerHTML = ''; cellEl.removeAttribute('data-t'); cellEl.classList.remove('has-item', 'sel');
+      S.boardMeat[idx] = null; return null;
+    }
+    cellEl.setAttribute('data-t', tier); cellEl.classList.add('has-item');
+    cellEl.innerHTML = html;
+    if (anim) { cellEl.classList.add(anim); setTimeout(() => cellEl.classList.remove(anim), 500); }
+    cellEl.classList.toggle('sel', idx === S.selMeat);
+  }
+  return cellEl;
+}
+
+function buildGridMeat() {
+  const gridEl = document.getElementById('grid-meat'); gridEl.innerHTML = '';
+  for (let i = 0; i < BOARD_SIZE; i++) {
+    const cellEl = document.createElement('div'); cellEl.className = 'cell'; cellEl.onclick = () => clickCellMeat(i);
+    gridEl.appendChild(cellEl); renderCellMeat(i, '');
   }
 }
+
+function hubBoardChanged() {
+  if (S.tab !== 'garden') return;
+  renderFreezerMini(); renderGardenZones();
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// 정원 구역 데이터 — 에피소드 완료 수에 따라 해금
+// pos: 정원 필드 내 위치(%), w/h: 구역 크기(px)
+// ══════════════════════════════════════════════════════════════════════
+const GARDEN_ZONES = [
+  {id:'crops',      ep:0,  icon:'🌾', ko:'텃밭',   en:'Crop Patch'},
+  {id:'well',       ep:3,  icon:'🪣', ko:'우물',   en:'Garden Well'},
+  {id:'coop',       ep:6,  icon:'🐾', ko:'동물농장', en:'Animal Farm'},
+  {id:'greenhouse', ep:10, icon:'🌿', ko:'온실',   en:'Greenhouse'},
+];
+
+/** 구역에 이미지 데코레이션 추가 헬퍼 */
+function _gzImg(parent, src, css) {
+  const img = document.createElement('img');
+  img.src = src; img.alt = ''; img.className = 'gz-deco-img';
+  Object.assign(img.style, css);
+  parent.appendChild(img);
+}
+
+/** 구역에 이모지 스팟 추가 헬퍼 */
+function _gzEmoji(parent, em, css) {
+  const sp = document.createElement('span');
+  sp.textContent = em;
+  Object.assign(sp.style, {position:'absolute', pointerEvents:'none', lineHeight:'1',
+    filter:'drop-shadow(0 1px 3px rgba(0,0,0,.7))', ...css});
+  parent.appendChild(sp);
+}
+
+/** 구역별 배경·데코레이션 빌드 */
+function _buildZoneVisuals(id, bgEl, decorEl, unlocked) {
+  const CF = 'assets/Cute_Fantasy_Free/';
+  switch (id) {
+    case 'crops':
+      // 텃밭 — FarmLand 타일 반복 배경 + 채소 이모지 산포
+      bgEl.style.cssText = `background-image:url(${CF}Tiles/FarmLand_Tile.png);background-size:24px 24px;`;
+      if (unlocked) {
+        const counts = {};
+        for (let i = 0; i < BOARD_SIZE; i++) { const t = S.board[i]; if (t) counts[t] = (counts[t]||0)+1; }
+        const top = Object.entries(counts).sort((a,b)=>+b[0]-+a[0]).slice(0,6);
+        const spots = [{l:'8%',t:'12%'},{l:'38%',t:'8%'},{l:'62%',t:'18%'},{l:'14%',t:'48%'},{l:'50%',t:'52%'},{l:'74%',t:'42%'}];
+        top.forEach(([tier,], i) => { if(spots[i]) _gzEmoji(decorEl, ITEMS[+tier-1].e, {left:spots[i].l,top:spots[i].t,fontSize:'1.1em'}); });
+        if (!top.length) _gzEmoji(decorEl, '🌱', {left:'38%',top:'30%',fontSize:'1.4em',opacity:'.6'});
+      }
+      break;
+
+    case 'well':
+      // 우물 — 물 타일 배경 + CSS로 우물 모양 그리기
+      bgEl.style.cssText = `background-image:url(${CF}Tiles/Water_Tile.png);background-size:22px 44px;opacity:.7;`;
+      // 우물 몸체
+      _gzEmoji(decorEl, '🪣', {left:'50%',top:'24%',transform:'translateX(-50%)',fontSize:'2em'});
+      // 돌 테두리 CSS 원
+      const well = document.createElement('div');
+      well.style.cssText = 'position:absolute;left:50%;top:30%;transform:translate(-50%,0);width:34px;height:18px;border:3px solid #8a7050;border-top:none;border-radius:0 0 17px 17px;background:rgba(30,60,120,.55);box-shadow:inset 0 4px 8px rgba(0,80,180,.35);';
+      decorEl.appendChild(well);
+      break;
+
+    case 'coop':
+      // 동물농장 — 연두 잔디 + 울타리 + 동물 이미지
+      bgEl.style.cssText = 'background:linear-gradient(180deg,#8bc86a 0%,#62a848 60%,#4a8a36 100%);';
+      _gzImg(decorEl, CF+'Outdoor decoration/Fences.png', {bottom:'14px',left:'50%',transform:'translateX(-50%)',width:'48px',height:'48px'});
+      _gzImg(decorEl, CF+'Animals/Chicken/Chicken.png',   {bottom:'10px',right:'8px', width:'28px',height:'28px'});
+      _gzImg(decorEl, CF+'Animals/Sheep/Sheep.png',       {bottom:'10px',left:'10px', width:'28px',height:'28px'});
+      break;
+
+    case 'greenhouse':
+      // 온실 — 밝은 초록 + 유리 패널 줄무늬 + 집 이미지
+      bgEl.style.cssText = 'background:linear-gradient(160deg,#a8d878 0%,#78c050 50%,#58a038 100%);';
+      const glass = document.createElement('div');
+      glass.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(-50deg,rgba(255,255,255,.10),rgba(255,255,255,.10) 3px,transparent 3px,transparent 11px);';
+      decorEl.appendChild(glass);
+      _gzImg(decorEl, CF+'Outdoor decoration/House_1_Wood_Base_Blue.png', {bottom:'8px',left:'50%',transform:'translateX(-50%)',width:'44px',height:'58px',opacity:'.9'});
+      break;
+
+    case 'orchard':
+      // 과수원 — 풀밭 + 오크 나무 2-3그루
+      bgEl.style.cssText = 'background:linear-gradient(180deg,#7ac060 0%,#5aaa44 55%,#489038 100%);';
+      _gzImg(decorEl, CF+'Outdoor decoration/Oak_Tree.png',       {bottom:'8px',left:'6px',  width:'38px',height:'48px'});
+      _gzImg(decorEl, CF+'Outdoor decoration/Oak_Tree.png',       {bottom:'8px',right:'6px', width:'34px',height:'42px',opacity:'.9'});
+      _gzImg(decorEl, CF+'Outdoor decoration/Oak_Tree_Small.png', {bottom:'10px',left:'50%', transform:'translateX(-50%)',width:'28px',height:'36px'});
+      _gzEmoji(decorEl, '🍎', {bottom:'10%',left:'14%',fontSize:'.8em'});
+      _gzEmoji(decorEl, '🍎', {bottom:'12%',right:'14%',fontSize:'.7em'});
+      break;
+
+  }
+}
+
+/** 정원 구역 영역을 필드 안에 렌더링 */
+function renderGardenZones() {
+  const field = document.getElementById('g-walk-hit');
+  if (!field) return;
+  field.querySelectorAll('.gz-row').forEach(el => el.remove());
+
+  const done = S.epDone.length;
+  const isKo = S.lang === 'ko';
+
+  const row = document.createElement('div');
+  row.className = 'gz-row';
+  // 모바일: walk-field의 터치 이벤트가 구역 탭을 삼키지 않도록
+  row.addEventListener('touchstart', e => e.stopPropagation(), {passive:false});
+
+  for (const zone of GARDEN_ZONES) {
+    const unlocked = done >= zone.ep;
+    const area = document.createElement('div');
+    area.className = 'gz-area' + (unlocked ? '' : ' locked');
+    area.id = 'gz-' + zone.id;
+    const _doTap = () => {
+      if (unlocked) showZoneModal(zone.id);
+      else showModal('🔒', T('잠긴 구역', 'Locked Area'),
+        T(`에피소드 ${zone.ep}화를 완료해야\n열립니다.`, `Complete Episode ${zone.ep}\nto unlock this area.`));
+    };
+    area.addEventListener('click',    e => { e.stopPropagation(); _doTap(); });
+    area.addEventListener('touchend', e => { e.preventDefault(); e.stopPropagation(); _doTap(); }, {passive:false});
+
+    const bgEl = document.createElement('div');
+    bgEl.className = 'gz-area-bg';
+    area.appendChild(bgEl);
+
+    const decorEl = document.createElement('div');
+    decorEl.className = 'gz-area-decors';
+    area.appendChild(decorEl);
+
+    _buildZoneVisuals(zone.id, bgEl, decorEl, unlocked);
+
+    const overlayEl = document.createElement('div');
+    overlayEl.className = 'gz-area-overlay';
+    const nameEl = document.createElement('div');
+    nameEl.className = 'gz-area-name';
+    nameEl.textContent = isKo ? zone.ko : zone.en;
+    overlayEl.appendChild(nameEl);
+
+    if (unlocked) {
+      let brief = '';
+      if (zone.id === 'crops') {
+        const total = S.board.filter(x => x != null).length;
+        brief = `🌱${total}칸`;
+      } else if (zone.id === 'well') {
+        brief = `⚡${S.energy}/${EN_MAX}`;
+      } else if (zone.id === 'coop') {
+        const cnt = _coopAnimalCount();
+        brief = isKo ? `🐾${cnt}마리` : `🐾×${cnt}`;
+      }
+      if (brief) {
+        const infoEl = document.createElement('div');
+        infoEl.className = 'gz-area-info'; infoEl.textContent = brief;
+        overlayEl.appendChild(infoEl);
+      }
+    } else {
+      const lockPanel = document.createElement('div');
+      lockPanel.className = 'gz-lock-panel';
+      lockPanel.innerHTML = `<span class="gz-lock-ico">🔒</span><span class="gz-lock-req">Ch.${zone.ep}+</span>`;
+      area.appendChild(lockPanel);
+    }
+    area.appendChild(overlayEl);
+    row.appendChild(area);
+  }
+  field.appendChild(row);
+}
+
+/** 구역 애니메이션 팝업 */
+/** 에피소드 6 해금 후 업그레이드 합산에 따라 동물 마리 수 결정 */
+function _coopAnimalCount() {
+  if (S.epDone.length < 6) return 0;
+  const totalUps = Object.values(S.ups).reduce((s, v) => s + (v||0), 0);
+  return Math.min(6, 2 + Math.floor(totalUps / 3));
+}
+
+let _gzCoopTimer = null;
+
+/** 팝업 스테이지 안에서 동물들을 2D로 움직이는 루프 */
+function _startCoopAnim(stage, animals) {
+  if (_gzCoopTimer) { clearInterval(_gzCoopTimer); _gzCoopTimer = null; }
+  const SW = stage.offsetWidth  || 268;
+  const SH = stage.offsetHeight || 148;
+  const FENCE = 13;          // 울타리 안쪽 여백
+  const SW2 = ANIM_CW * ANIM_SCALE;
+  const SH2 = ANIM_CH * ANIM_SCALE;
+  const maxX = SW - FENCE - SW2;
+  const maxY = SH - FENCE - SH2;
+  let tick = 0;
+
+  _gzCoopTimer = setInterval(() => {
+    tick++;
+    const frame = Math.floor(tick / 2) % 3;   // 300ms 마다 프레임 전환
+    animals.forEach(a => {
+      // 이동
+      a.x += a.dx; a.y += a.dy;
+      // 벽 반사 + 방향 살짝 흔들기
+      if (a.x < FENCE)  { a.x = FENCE;  a.dx =  Math.abs(a.dx) * (0.85 + Math.random()*0.3); }
+      if (a.x > maxX)   { a.x = maxX;   a.dx = -Math.abs(a.dx) * (0.85 + Math.random()*0.3); }
+      if (a.y < FENCE)  { a.y = FENCE;  a.dy =  Math.abs(a.dy) * (0.85 + Math.random()*0.3); }
+      if (a.y > maxY)   { a.y = maxY;   a.dy = -Math.abs(a.dy) * (0.85 + Math.random()*0.3); }
+      // 가끔 방향 바꾸기 (~3초마다)
+      if (Math.random() < 0.03) {
+        const spd = 0.55 + Math.random() * 1.25;
+        const ang = Math.random() * Math.PI * 2;
+        a.dx = Math.cos(ang) * spd;
+        a.dy = Math.sin(ang) * spd * 0.7;
+      }
+      // 진행 방향 → 스프라이트 행(row) 결정
+      const absX = Math.abs(a.dx), absY = Math.abs(a.dy);
+      const dir  = absX > absY ? (a.dx > 0 ? 'r' : 'l') : (a.dy > 0 ? 'd' : 'u');
+      const row  = dir==='d'?0 : dir==='l'?1 : dir==='r'?2 : 3;
+      const bx   = -frame * SW2, by = -row * SH2;
+      a.el.style.left = a.x + 'px';
+      a.el.style.top  = a.y + 'px';
+      a.el.style.backgroundPosition = `${bx}px ${by}px`;
+    });
+  }, 150);
+}
+
+function showZoneModal(id) {
+  const zone = GARDEN_ZONES.find(z => z.id === id);
+  if (!zone) return;
+  const isKo = S.lang === 'ko';
+  document.getElementById('gz-md-hdr').textContent = zone.icon + ' ' + (isKo ? zone.ko : zone.en);
+  document.getElementById('gz-md-btn').textContent = isKo ? '닫기' : 'Close';
+  const stageEl = document.getElementById('gz-md-stage');
+  stageEl.innerHTML = '';
+  const infoEl = document.getElementById('gz-md-info');
+  infoEl.textContent = '';
+  _buildGzStage(id, stageEl, infoEl, isKo);
+  document.getElementById('gz-mbg').classList.add('show');
+}
+function closeGzModal() {
+  document.getElementById('gz-mbg').classList.remove('show');
+  if (_gzCoopTimer) { clearInterval(_gzCoopTimer); _gzCoopTimer = null; }
+}
+
+function _buildGzStage(id, stage, info, isKo) {
+  switch (id) {
+    case 'crops': {
+      stage.style.background = 'linear-gradient(180deg,#3a6820 0%,#2a5010 55%,#1e3a0e 100%)';
+      // 밭고랑 줄무늬
+      const furrow = document.createElement('div');
+      furrow.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(90,50,15,.2),rgba(90,50,15,.2) 18px,transparent 18px,transparent 36px);';
+      stage.appendChild(furrow);
+      // 현재 보드 작물 수집
+      const counts = {};
+      for (let i=0; i<BOARD_SIZE; i++) { const t=S.board[i]; if(t) counts[t]=(counts[t]||0)+1; }
+      const entries = Object.entries(counts).sort((a,b)=>+b[0]-+a[0]).slice(0,6);
+      if (!entries.length) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;';
+        const sp = document.createElement('span');
+        sp.style.cssText = 'font-size:2.2em;display:inline-block;animation:gz-float 2s ease-in-out infinite;';
+        sp.textContent = '🌱';
+        const lb = document.createElement('span');
+        lb.style.cssText = 'font-size:.72em;color:#8ab060;';
+        lb.textContent = isKo ? '씨앗을 심어보세요' : 'Plant some seeds';
+        empty.appendChild(sp); empty.appendChild(lb);
+        stage.appendChild(empty);
+      } else {
+        entries.forEach(([t,n], idx) => {
+          const col = idx%3, row = Math.floor(idx/3);
+          const item = ITEMS[+t-1];
+          // 외부 div: position+grow animation
+          const wrap = document.createElement('div');
+          wrap.style.cssText = `position:absolute;left:${8+col*30}%;top:${10+row*44}%;text-align:center;animation:gz-grow .38s ease ${idx*0.1}s both;`;
+          // 이모지 span: float animation (grow 끝난 후 시작)
+          const em = document.createElement('span');
+          em.style.cssText = `font-size:2em;display:inline-block;filter:drop-shadow(0 2px 5px rgba(0,0,0,.65));animation:gz-float ${1.6+idx*0.18}s ease-in-out ${0.38+idx*0.1}s infinite;`;
+          em.textContent = item.e;
+          const cnt = document.createElement('div');
+          cnt.style.cssText = 'font-size:.5em;color:#ceff90;font-weight:700;margin-top:1px;text-shadow:0 1px 3px rgba(0,0,0,.8);';
+          cnt.textContent = '×'+n;
+          wrap.appendChild(em); wrap.appendChild(cnt);
+          stage.appendChild(wrap);
+        });
+      }
+      const total = S.board.filter(x=>x!=null).length;
+      info.textContent = isKo
+        ? `보드: ${total}칸 재배중 · 빈칸 ${BOARD_SIZE-total}칸`
+        : `${total}/${BOARD_SIZE} slots in use`;
+      break;
+    }
+    case 'well': {
+      regenEn();
+      stage.style.background = 'radial-gradient(ellipse 90% 80% at 50% 65%,#0a2a50,#04101e)';
+      // 수면 물결 3겹 (gz-ripple: translate(-50%,-50%) scale 이미 포함)
+      [0, 0.7, 1.4].forEach(delay => {
+        const ring = document.createElement('div');
+        ring.style.cssText = `position:absolute;left:50%;top:62%;width:72px;height:34px;border:2px solid rgba(80,190,255,.55);border-radius:50%;animation:gz-ripple 2.2s ease-out ${delay}s infinite;`;
+        stage.appendChild(ring);
+      });
+      // 우물 아치 (두 기둥 + 윗가로대)
+      const arch = document.createElement('div');
+      arch.style.cssText = 'position:absolute;left:50%;top:42%;transform:translateX(-50%);width:52px;height:22px;border:3px solid #8a7050;border-top:none;border-radius:0 0 26px 26px;background:rgba(10,40,100,.65);box-shadow:inset 0 4px 12px rgba(0,120,220,.4);';
+      stage.appendChild(arch);
+      // 두레박 로프
+      const rope = document.createElement('div');
+      rope.style.cssText = 'position:absolute;left:calc(50% - 1px);top:26%;width:2px;height:18%;background:rgba(180,140,80,.55);';
+      stage.appendChild(rope);
+      // 두레박
+      const bkt = document.createElement('div');
+      bkt.style.cssText = 'position:absolute;left:50%;top:14%;font-size:2.3em;line-height:1;animation:gz-bob 1.9s ease-in-out infinite;filter:drop-shadow(0 3px 7px rgba(0,0,0,.75));';
+      bkt.textContent = '🪣';
+      stage.appendChild(bkt);
+      // 반짝이는 물 입자들
+      ['8%','18%','28%','42%','58%','72%','82%'].forEach((left,i) => {
+        const drop = document.createElement('div');
+        drop.style.cssText = `position:absolute;left:${left};top:${55+Math.sin(i)*8}%;font-size:.65em;opacity:.7;animation:gz-float ${1.3+i*0.2}s ease-in-out ${i*0.25}s infinite;`;
+        drop.textContent = '💧';
+        stage.appendChild(drop);
+      });
+      const secs = S.energy>=EN_MAX ? 0 : Math.max(0, EN_SEC - Math.floor((Date.now()-S.lastEn)/1000) % EN_SEC);
+      const mm=Math.floor(secs/60), ss=String(secs%60).padStart(2,'0');
+      info.textContent = isKo
+        ? `⚡ ${S.energy} / ${EN_MAX}\n${S.energy<EN_MAX ? '다음 충전까지 '+mm+':'+ss : '에너지 가득 ✅'}`
+        : `⚡ ${S.energy} / ${EN_MAX}\n${S.energy<EN_MAX ? 'Next regen: '+mm+':'+ss : 'Energy full ✅'}`;
+      break;
+    }
+    case 'coop': {
+      // 잔디 배경
+      stage.style.background = 'linear-gradient(180deg,#72c858 0%,#52a840 55%,#3a8030 100%)';
+      const grassTex = document.createElement('div');
+      grassTex.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 18px),repeating-linear-gradient(0deg,rgba(0,0,0,.04) 0,rgba(0,0,0,.04) 1px,transparent 1px,transparent 18px);';
+      stage.appendChild(grassTex);
+
+      // 울타리 테두리 (CSS div)
+      const fenceDiv = document.createElement('div');
+      fenceDiv.className = 'gz-fence';
+      stage.appendChild(fenceDiv);
+      // 울타리 기둥 — 상단/하단에 균등 배치
+      [10,30,50,70,90].forEach(pct => {
+        ['top','bottom'].forEach(side => {
+          const post = document.createElement('div');
+          post.className = 'gz-fence-post';
+          post.style.cssText = `left:${pct}%;${side}:8px;height:${side==='top'?10:12}px;`;
+          stage.appendChild(post);
+        });
+      });
+      // 좌/우 기둥
+      [20,45,70].forEach(pct => {
+        ['left','right'].forEach(side => {
+          const post = document.createElement('div');
+          post.style.cssText = `position:absolute;${side}:8px;top:${pct}%;width:7px;height:9px;background:linear-gradient(180deg,#9a6a30,#6a4520);border-radius:2px;z-index:3;pointer-events:none;`;
+          stage.appendChild(post);
+        });
+      });
+
+      const count = _coopAnimalCount();
+      if (count === 0) {
+        // 잠금 상태 안내
+        const empty = document.createElement('div');
+        empty.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;z-index:5;';
+        const sp = document.createElement('span');
+        sp.style.cssText = 'font-size:2em;opacity:.55;animation:gz-float 2s ease-in-out infinite;';
+        sp.textContent = '🐾';
+        const lb = document.createElement('span');
+        lb.style.cssText = 'font-size:.68em;color:#8ab060;text-align:center;';
+        lb.textContent = isKo ? '에피소드 6화 완료 후\n동물이 나타나요' : 'Complete Ep.6\nto get animals';
+        empty.appendChild(sp); empty.appendChild(lb);
+        stage.appendChild(empty);
+        info.textContent = isKo ? '업그레이드할수록 동물이 늘어나요' : 'More animals as you upgrade';
+      } else {
+        // 동물 스프라이트 생성
+        const SW2 = ANIM_CW * ANIM_SCALE;
+        const SH2 = ANIM_CH * ANIM_SCALE;
+        const bgSz = `${ANIM_CW*3*ANIM_SCALE}px ${ANIM_CH*4*ANIM_SCALE}px`;
+        const animalObjs = [];
+        for (let i = 0; i < count; i++) {
+          const typeIdx = i % ANIMAL_TYPES.length;
+          const src = ANIMAL_TYPES[typeIdx].src;
+          const el = document.createElement('div');
+          el.className = 'gz-coop-an';
+          el.style.cssText = `width:${SW2}px;height:${SW2}px;background:url(${src}) no-repeat 0 0;background-size:${bgSz};`;
+          stage.appendChild(el);
+          const spd = 0.55 + Math.random() * 1.1;
+          const ang = Math.random() * Math.PI * 2;
+          animalObjs.push({
+            el, src,
+            x: 20 + Math.random() * 180,
+            y: 15 + Math.random() * 80,
+            dx: Math.cos(ang) * spd,
+            dy: Math.sin(ang) * spd * 0.65,
+          });
+        }
+        // DOM에 붙은 뒤 실제 크기로 루프 시작
+        requestAnimationFrame(() => _startCoopAnim(stage, animalObjs));
+        const totalUps = Object.values(S.ups).reduce((s,v)=>s+(v||0),0);
+        info.textContent = isKo
+          ? `동물 ${count}마리 · 업그레이드 총 ${totalUps}단계 (최대 6마리)`
+          : `${count} animals · ${totalUps} upgrade levels (max 6)`;
+      }
+      break;
+    }
+    case 'greenhouse': {
+      stage.style.background = 'linear-gradient(160deg,#aae87c 0%,#7cc052 50%,#58a038 100%)';
+      // 유리 패널 줄무늬
+      const glass = document.createElement('div');
+      glass.style.cssText = 'position:absolute;inset:0;background:repeating-linear-gradient(-50deg,rgba(255,255,255,.13),rgba(255,255,255,.13) 3px,transparent 3px,transparent 13px);';
+      stage.appendChild(glass);
+      // 집 이미지 (우측 하단)
+      const house = document.createElement('img');
+      house.src = 'assets/Cute_Fantasy_Free/Outdoor decoration/House_1_Wood_Base_Blue.png';
+      house.style.cssText = 'position:absolute;bottom:4px;right:6px;width:42px;height:56px;image-rendering:pixelated;opacity:.88;';
+      stage.appendChild(house);
+      // 합성된 작물 기록에서 흔들리는 식물들
+      const plantTiers = [];
+      for (let t=2; t<=MAX_T; t++) { if (S.mt[t]>0) plantTiers.push(t); }
+      const show = plantTiers.slice(-5);
+      if (!show.length) {
+        const sp = document.createElement('div');
+        sp.style.cssText = 'position:absolute;left:22%;top:22%;font-size:2.4em;transform-origin:bottom center;animation:gz-sway 2.4s ease-in-out infinite;filter:drop-shadow(0 2px 5px rgba(0,0,0,.4));';
+        sp.textContent = '🌱';
+        stage.appendChild(sp);
+      } else {
+        show.forEach((t, idx) => {
+          const item = ITEMS[t-1];
+          const left = 6 + idx * 18;
+          const sz = 1.4 + Math.min(idx,3)*0.22;
+          const dur = 2.1 + idx*0.28;
+          const del = idx*0.32;
+          const el = document.createElement('div');
+          el.style.cssText = `position:absolute;left:${left}%;bottom:20%;font-size:${sz}em;transform-origin:bottom center;animation:gz-sway ${dur}s ease-in-out ${del}s infinite;filter:drop-shadow(0 2px 5px rgba(0,0,0,.4));`;
+          el.textContent = item.e;
+          stage.appendChild(el);
+        });
+      }
+      let totalMerges=0;
+      for(let t=2;t<=MAX_T;t++) totalMerges+=(S.mt[t]||0);
+      info.textContent = isKo
+        ? `누적 합성 ${totalMerges}회 · ${plantTiers.length}종류 달성`
+        : `${totalMerges} total merges · ${plantTiers.length} types`;
+      break;
+    }
+  }
+}
+
 const FARMER_SHEET={cellW:48,cellH:96,cols:3,rows:4,src:'assets/farmer.png'};
 
 // ── RESTAURANT IMAGE CACHE ─────────────────────────────────────────
@@ -1570,6 +2171,15 @@ function initGardenAnimals(){
   }
   _animalLastT=performance.now();
   _animalRaf=requestAnimationFrame(_animalLoop);
+  // 동물 타일 brief 갱신 (마리 수가 이제 확정됨)
+  const coopEl = document.getElementById('gz-coop');
+  if (coopEl) {
+    const infoEl = coopEl.querySelector('.gz-area-info');
+    if (infoEl) {
+      const cnt = _coopAnimalCount();
+      infoEl.textContent = S.lang==='ko' ? `🐾${cnt}마리` : `🐾×${cnt}`;
+    }
+  }
 }
 let _farmerWalkTimer=null;
 function farmerFacingRow(){
@@ -1732,11 +2342,11 @@ function renderHubUi(){
   const lbl=document.getElementById('hub-scene-lbl');
   if(lbl)lbl.textContent=T('🌱 내 텃밭 · 오늘의 정원','🌱 My garden patch');
   document.getElementById('hub-enter-t').textContent=T('🍳 머지 쿠킹으로','🍳 Enter merge cooking');
-  document.getElementById('hub-hint').textContent=T('각 정원 이모지는 머지 텃밭 개수와 같아요 · 잔디 탭 이동 · 오른쪽 집 문→음식점 · 왼쪽 ❄️','Garden emoji = veg board · tap to walk · house door → restaurant · ❄️ fridge');
+  document.getElementById('hub-hint').textContent=T('구역 타일을 완료하면 새 구역이 열려요 · 잔디 탭→이동 · 집 문→음식점 · ❄️→냉동 창고','Complete episodes to unlock new zones · tap to walk · house door → restaurant · ❄️ cold storage');
   document.getElementById('fz-lab').textContent=T('❄️ 냉동','❄️ Cold');
   const tg=document.getElementById('hub-tavern-go');
   if(tg)tg.title=T('문을 눌러 음식점으로','Enter through the door');
-  renderGardenCropZones();renderFreezerMini();renderHubBubble();syncHubCharFull();
+  renderGardenZones();renderFreezerMini();renderHubBubble();syncHubCharFull();
 }
 function enterRestaurant(){goTab('rest');save();}
 function enterPlay(){
@@ -1791,592 +2401,655 @@ function openColdModal(){
 }
 function closeColdModal(){document.getElementById('fs-mbg').classList.remove('show');}
 function fromColdToMeat(){closeColdModal();goTab('board');goSubBoard('meat');save();}
-function renderBanner(){
-  const b=document.getElementById('mban');
-  if(S.ep>=EPS.length){b.style.display='none';return;}
-  b.style.display='flex';
-  const ep=EPS[S.ep];
-  const isDone=epAllDone(S.ep)&&!S.epDone.includes(S.ep);
-  const objs=ep.objs.map((o,i)=>{
-    const pr=Math.min(objProg(ep,i),o.need),pct=Math.min(100,pr/o.need*100),dk=pr>=o.need;
-    return `<div class="mo${dk?' dk':''}"><span>${o.i}</span><span style="flex:1;font-size:.73em">${S.lang==='ko'?o.ko:o.en}</span><div class="mobg"><div class="mof" style="width:${pct}%"></div></div><span class="mot">${pr}/${o.need}</span></div>`;
+function renderBanner() {
+  const bannerEl = document.getElementById('mban');
+  if (S.ep >= EPS.length) { bannerEl.style.display = 'none'; return; }
+  bannerEl.style.display = 'flex';
+  const currentEp    = EPS[S.ep];
+  const isReadyToClaim = epAllDone(S.ep) && !S.epDone.includes(S.ep);
+  const objectivesHTML = currentEp.objs.map((obj, i) => {
+    const progress    = Math.min(objProg(currentEp, i), obj.need);
+    const progressPct = Math.min(100, progress / obj.need * 100);
+    const isComplete  = progress >= obj.need;
+    return `<div class="mo${isComplete ? ' dk' : ''}"><span>${obj.i}</span><span style="flex:1;font-size:.73em">${S.lang === 'ko' ? obj.ko : obj.en}</span><div class="mobg"><div class="mof" style="width:${progressPct}%"></div></div><span class="mot">${progress}/${obj.need}</span></div>`;
   }).join('');
-  b.innerHTML=`<div class="mchar">${ep.char}</div><div class="mbody">
-    <div class="mep">${S.lang==='ko'?ep.title.ko:ep.title.en}</div>
-    <div class="mq">${S.lang==='ko'?ep.quote.ko:ep.quote.en}</div>
-    <div class="mos">${objs}</div>
-    ${isDone?`<button onclick="claimEp()" style="margin-top:7px;width:100%;background:linear-gradient(135deg,#1a5a10,#3a9920);border:none;color:#fff;padding:7px;border-radius:8px;cursor:pointer;font-size:.82em;font-weight:700">${T('보상 받기 🎁','Claim Reward 🎁')}</button>`:''}
+  bannerEl.innerHTML = `<div class="mchar">${currentEp.char}</div><div class="mbody">
+    <div class="mep">${S.lang === 'ko' ? currentEp.title.ko : currentEp.title.en}</div>
+    <div class="mq">${S.lang === 'ko' ? currentEp.quote.ko : currentEp.quote.en}</div>
+    <div class="mos">${objectivesHTML}</div>
+    ${isReadyToClaim ? `<button onclick="claimEp()" style="margin-top:7px;width:100%;background:linear-gradient(135deg,#1a5a10,#3a9920);border:none;color:#fff;padding:7px;border-radius:8px;cursor:pointer;font-size:.82em;font-weight:700">${T('보상 받기 🎁', 'Claim Reward 🎁')}</button>` : ''}
   </div>`;
 }
-function renderLeg(){
-  const r=document.getElementById('legr');r.innerHTML='';
-  const list=S.subBoard==='meat'?MEAT_ITEMS:ITEMS;
-  list.forEach((it,i)=>{
-    const s=document.createElement('span');s.className='legit';
-    s.textContent=it.e+' '+(S.lang==='ko'?it.ko:it.en);r.appendChild(s);
-    if(i<list.length-1){const a=document.createElement('span');a.className='legarr';a.textContent='→';r.appendChild(a);}
+
+function renderLeg() {
+  const legendEl = document.getElementById('legr'); legendEl.innerHTML = '';
+  const itemList  = S.subBoard === 'meat' ? MEAT_ITEMS : ITEMS;
+  itemList.forEach((itemDef, i) => {
+    const itemSpan = document.createElement('span'); itemSpan.className = 'legit';
+    itemSpan.textContent = itemDef.e + ' ' + (S.lang === 'ko' ? itemDef.ko : itemDef.en);
+    legendEl.appendChild(itemSpan);
+    if (i < itemList.length - 1) {
+      const arrowSpan = document.createElement('span'); arrowSpan.className = 'legarr'; arrowSpan.textContent = '→';
+      legendEl.appendChild(arrowSpan);
+    }
   });
-  document.getElementById('legt').textContent=S.subBoard==='meat'?T('정육·수산 체인','Meat & seafood chain'):T('머지 체인','Merge chain');
+  document.getElementById('legt').textContent =
+    S.subBoard === 'meat' ? T('정육·수산 체인', 'Meat & seafood chain') : T('머지 체인', 'Merge chain');
 }
 
-// ── STORY ──────────────────────────────────────────────────────────
-function claimEp(){
-  if(!epAllDone(S.ep)||S.epDone.includes(S.ep))return;
-  const ep=EPS[S.ep];
+// ══════════════════════════════════════════════════════════════════════
+// 스토리
+// ══════════════════════════════════════════════════════════════════════
+
+function claimEp() {
+  if (!epAllDone(S.ep) || S.epDone.includes(S.ep)) return;
+  const currentEp = EPS[S.ep];
   S.epDone.push(S.ep);
-  addC(ep.rwd.c);addXP(ep.rwd.xp);
-  showModal('🎊',T('에피소드 완료!','Episode Complete!'),
-    T(`${ep.title.ko}\n보상: ${ep.rwd.c}🪙 ${ep.rwd.xp}XP`,`${ep.title.en}\nReward: ${ep.rwd.c}🪙 ${ep.rwd.xp}XP`));
-  if(S.ep<EPS.length-1)S.ep++;else S.ep=EPS.length;
+  addC(currentEp.rwd.c); addXP(currentEp.rwd.xp);
+  showModal('🎊', T('에피소드 완료!', 'Episode Complete!'),
+    T(`${currentEp.title.ko}\n보상: ${currentEp.rwd.c}🪙 ${currentEp.rwd.xp}XP`,
+      `${currentEp.title.en}\nReward: ${currentEp.rwd.c}🪙 ${currentEp.rwd.xp}XP`));
+  if (S.ep < EPS.length - 1) S.ep++; else S.ep = EPS.length;
   seedMeatIfEligible();
-  save();renderBanner();renderStory();renderUps();
-  if(S.tab==='garden')renderHubUi();
+  save(); renderBanner(); renderStory(); renderUps();
+  if (S.tab === 'garden') renderHubUi();
+  // 새 구역이 해금됐으면 fresh 애니메이션 적용
+  const newDone = S.epDone.length;
+  GARDEN_ZONES.forEach(zone => {
+    if (zone.ep > 0 && zone.ep === newDone) {
+      const tileEl = document.getElementById('gz-' + zone.id);
+      if (tileEl) { tileEl.classList.add('fresh'); setTimeout(() => tileEl.classList.remove('fresh'), 700); }
+    }
+  });
 }
-function renderStory(){
-  const el=document.getElementById('epl');el.innerHTML='';
-  if(EPS.every((_,i)=>S.epDone.includes(i))){
-    el.innerHTML=`<div class="ending"><div class="endb">🏆🌟🌱</div>
-      <div class="endtt">${T('미슐랭 스타 달성!','Michelin Star Achieved!')}</div>
+
+function renderStory() {
+  const listEl = document.getElementById('epl'); listEl.innerHTML = '';
+  if (EPS.every((_, i) => S.epDone.includes(i))) {
+    listEl.innerHTML = `<div class="ending"><div class="endb">🏆🌟🌱</div>
+      <div class="endtt">${T('미슐랭 스타 달성!', 'Michelin Star Achieved!')}</div>
       <div class="endsb">${T('텃밭의 씨앗 하나가\n세계 최고의 음식점이 되었습니다.\n당신은 진정한 마스터 셰프입니다!',
-        'A single seed from the garden\nbecame the world\'s finest restaurant.\nYou are a true Master Chef!')}</div></div>`;
+        "A single seed from the garden\nbecame the world's finest restaurant.\nYou are a true Master Chef!")}</div></div>`;
   }
-  EPS.forEach((ep,ei)=>{
-    const done=S.epDone.includes(ei),curr=S.ep===ei&&!done,locked=ei>S.ep;
-    const cls=done?'done':curr?'curr':'lock';
-    const badge=done?`✅ ${T('완료','Done')}`:curr?`▶ ${T('진행중','In Progress')}`:`🔒 ${T('잠김','Locked')}`;
-    const bcls=done?'bd':curr?'bc':'bl';
-    const objs=ep.objs.map((o,oi)=>{
-      const pr=Math.min(objProg(ep,oi),o.need),pct=Math.min(100,pr/o.need*100),dk=pr>=o.need;
-      return `<div class="epo${dk?' dk':''}"><span class="epoi">${o.i}</span><span class="epod">${S.lang==='ko'?o.ko:o.en}</span><div class="epobb"><div class="epob" style="width:${pct}%"></div></div><span class="epoc">${pr}/${o.need}</span></div>`;
+  EPS.forEach((ep, ei) => {
+    const done     = S.epDone.includes(ei);
+    const curr     = S.ep === ei && !done;
+    const statusCls  = done ? 'done' : curr ? 'curr' : 'lock';
+    const badge    = done ? `✅ ${T('완료','Done')}` : curr ? `▶ ${T('진행중','In Progress')}` : `🔒 ${T('잠김','Locked')}`;
+    const badgeCls = done ? 'bd' : curr ? 'bc' : 'bl';
+    const objectivesHTML = ep.objs.map((obj, oi) => {
+      const progress    = Math.min(objProg(ep, oi), obj.need);
+      const progressPct = Math.min(100, progress / obj.need * 100);
+      const isComplete  = progress >= obj.need;
+      return `<div class="epo${isComplete ? ' dk' : ''}"><span class="epoi">${obj.i}</span><span class="epod">${S.lang === 'ko' ? obj.ko : obj.en}</span><div class="epobb"><div class="epob" style="width:${progressPct}%"></div></div><span class="epoc">${progress}/${obj.need}</span></div>`;
     }).join('');
-    const claimable=curr&&epAllDone(ei)&&!done;
-    el.innerHTML+=`<div class="epc ${cls}">
+    const claimable = curr && epAllDone(ei) && !done;
+    listEl.innerHTML += `<div class="epc ${statusCls}">
       <div class="eph"><div class="epch">${ep.char}</div><div class="eptb">
-        <div class="epn">${T(`에피소드 ${ei+1}/${EPS.length}`,`Episode ${ei+1}/${EPS.length}`)}</div>
-        <div class="ept">${S.lang==='ko'?ep.title.ko:ep.title.en}</div>
-        <div class="epbdg ${bcls}">${badge}</div>
+        <div class="epn">${T(`에피소드 ${ei+1}/${EPS.length}`, `Episode ${ei+1}/${EPS.length}`)}</div>
+        <div class="ept">${S.lang === 'ko' ? ep.title.ko : ep.title.en}</div>
+        <div class="epbdg ${badgeCls}">${badge}</div>
       </div></div>
-      <div class="epq">${S.lang==='ko'?ep.quote.ko:ep.quote.en}</div>
-      <div class="epos">${objs}</div>
-      <div class="eprw">${T('보상:','Reward:')} ${S.lang==='ko'?ep.rt.ko:ep.rt.en}</div>
-      ${claimable?`<button class="epcl" onclick="claimEp()">${T('보상 받기 🎁','Claim Reward 🎁')}</button>`:''}
-      ${done?`<div class="epcld">🏆 ${T('완료','Claimed')}</div>`:''}
+      <div class="epq">${S.lang === 'ko' ? ep.quote.ko : ep.quote.en}</div>
+      <div class="epos">${objectivesHTML}</div>
+      <div class="eprw">${T('보상:', 'Reward:')} ${S.lang === 'ko' ? ep.rt.ko : ep.rt.en}</div>
+      ${claimable ? `<button class="epcl" onclick="claimEp()">${T('보상 받기 🎁', 'Claim Reward 🎁')}</button>` : ''}
+      ${done ? `<div class="epcld">🏆 ${T('완료', 'Claimed')}</div>` : ''}
     </div>`;
   });
 }
 
-// ── UPGRADES ───────────────────────────────────────────────────────
-function buyUp(key){
-  const def=UPS.find(u=>u.key===key);
-  const cur=S.ups[key];if(cur>=4)return;
-  const cost=def.costs[cur];
-  if(!spendC(cost)){toast(T(`코인 부족! ${cost}🪙 필요`,`Need ${cost}🪙!`),'err');return;}
-  S.ups[key]++;save();renderUps();
-  if(S.tab==='rest')drawRest();
-  toast(T(`${def.ko} ${S.ups[key]}단계!`,`${def.en} Lv.${S.ups[key]}!`),'gd',2500);
+// ══════════════════════════════════════════════════════════════════════
+// 업그레이드
+// ══════════════════════════════════════════════════════════════════════
+
+function buyUp(key) {
+  const upgradeDef  = UPS.find(u => u.key === key);
+  const currentLevel = S.ups[key];
+  if (currentLevel >= 4) return;
+  const cost = upgradeDef.costs[currentLevel];
+  if (!spendC(cost)) { toast(T(`코인 부족! ${cost}🪙 필요`, `Need ${cost}🪙!`), 'err'); return; }
+  S.ups[key]++;
+  save(); renderUps();
+  if (S.tab === 'rest') drawRest();
+  toast(T(`${upgradeDef.ko} ${S.ups[key]}단계!`, `${upgradeDef.en} Lv.${S.ups[key]}!`), 'gd', 2500);
   checkEp();
 }
-function renderUps(){
-  const el=document.getElementById('upl');el.innerHTML='';
-  const st=S.lang==='ko'?UP_TAB_STORY.ko:UP_TAB_STORY.en;
-  el.innerHTML+=`<div class="up-banner"><div class="up-banner-t">${st.title}</div><p class="up-banner-p">${st.body}</p></div>`;
-  UPS.forEach(def=>{
-    const cur=S.ups[def.key],mx=cur>=4,unlocked=S.epDone.length>=UP_UNLOCK[def.key];
-    const cost=mx?null:def.costs[cur],canAfford=cost!==null&&S.coins>=cost;
-    const desc=mx?T('최고 등급 달성! 🏆','Max level reached! 🏆'):(S.lang==='ko'?def.desc.ko[cur]:def.desc.en[cur]);
-    let flavorText='';
-    if(!unlocked){
-      flavorText=T('이 항목의 이야기는 에피소드 해금 후 펼쳐져요.','This story unlocks when you clear the listed episode.');
-    }else if(def.narrative){
-      flavorText=mx
-        ?T('이 이야기는 여기까지예요. 손님 앞에서 계속 이어지길!','This chapter ends here—may it live on at the tables!')
-        :(S.lang==='ko'?def.narrative.ko[cur]:def.narrative.en[cur]);
+
+function renderUps() {
+  const listEl   = document.getElementById('upl'); listEl.innerHTML = '';
+  const storyText = S.lang === 'ko' ? UP_TAB_STORY.ko : UP_TAB_STORY.en;
+  listEl.innerHTML += `<div class="up-banner"><div class="up-banner-t">${storyText.title}</div><p class="up-banner-p">${storyText.body}</p></div>`;
+  UPS.forEach(upgradeDef => {
+    const currentLevel = S.ups[upgradeDef.key];
+    const isMaxed   = currentLevel >= 4;
+    const unlocked  = S.epDone.length >= UP_UNLOCK[upgradeDef.key];
+    const cost      = isMaxed ? null : upgradeDef.costs[currentLevel];
+    const canAfford = cost !== null && S.coins >= cost;
+    const nextDesc  = isMaxed
+      ? T('최고 등급 달성! 🏆', 'Max level reached! 🏆')
+      : (S.lang === 'ko' ? upgradeDef.desc.ko[currentLevel] : upgradeDef.desc.en[currentLevel]);
+    let flavorText = '';
+    if (!unlocked) {
+      flavorText = T('이 항목의 이야기는 에피소드 해금 후 펼쳐져요.', 'This story unlocks when you clear the listed episode.');
+    } else if (upgradeDef.narrative) {
+      flavorText = isMaxed
+        ? T('이 이야기는 여기까지예요. 손님 앞에서 계속 이어지길!', 'This chapter ends here—may it live on at the tables!')
+        : (S.lang === 'ko' ? upgradeDef.narrative.ko[currentLevel] : upgradeDef.narrative.en[currentLevel]);
     }
-    const flavor=flavorText?`<div class="up-flavor">${flavorText}</div>`:'';
-    const dots=[0,1,2,3].map(i=>`<div class="upd${i<cur?' lit':''}"></div>`).join('');
-    let btn;
-    if(!unlocked){const ne=UP_UNLOCK[def.key];btn=`<div class="uplk">🔒 ${T(`제${ne}화 완료 후 해금 · 스토리도 함께 열려요`,`Complete Ch.${ne} to unlock · story opens too`)}</div>`;}
-    else if(mx) btn=`<button class="upbtn mx" disabled>${T('최고 등급 ✨','Max Level ✨')}</button>`;
-    else btn=`<button class="upbtn" onclick="buyUp('${def.key}')" ${canAfford?'':'disabled'}>${T('업그레이드','Upgrade')} — ${cost}🪙</button>`;
-    const updeLine=mx
-      ?`<div class="upde">${desc}</div>`
-      :`<div class="upde">${T('다음:','Next:')} ${desc}</div>`;
-    el.innerHTML+=`<div class="upc"><div class="uph"><div class="upi">${def.e}</div><div class="upif"><div class="upn">${S.lang==='ko'?def.ko:def.en}</div><div class="upc2">${cur}/4</div></div></div>${flavor}<div class="upds">${dots}</div>${updeLine}${btn}</div>`;
+    const flavorHTML   = flavorText ? `<div class="up-flavor">${flavorText}</div>` : '';
+    const dots         = [0,1,2,3].map(i => `<div class="upd${i < currentLevel ? ' lit' : ''}"></div>`).join('');
+    const nextDescHTML = isMaxed
+      ? `<div class="upde">${nextDesc}</div>`
+      : `<div class="upde">${T('다음:', 'Next:')} ${nextDesc}</div>`;
+    let buttonHTML;
+    if (!unlocked) {
+      const epNeeded = UP_UNLOCK[upgradeDef.key];
+      buttonHTML = `<div class="uplk">🔒 ${T(`제${epNeeded}화 완료 후 해금 · 스토리도 함께 열려요`, `Complete Ch.${epNeeded} to unlock · story opens too`)}</div>`;
+    } else if (isMaxed) {
+      buttonHTML = `<button class="upbtn mx" disabled>${T('최고 등급 ✨', 'Max Level ✨')}</button>`;
+    } else {
+      buttonHTML = `<button class="upbtn" onclick="buyUp('${upgradeDef.key}')" ${canAfford ? '' : 'disabled'}>${T('업그레이드', 'Upgrade')} — ${cost}🪙</button>`;
+    }
+    listEl.innerHTML += `<div class="upc"><div class="uph"><div class="upi">${upgradeDef.e}</div><div class="upif"><div class="upn">${S.lang === 'ko' ? upgradeDef.ko : upgradeDef.en}</div><div class="upc2">${currentLevel}/4</div></div></div>${flavorHTML}<div class="upds">${dots}</div>${nextDescHTML}${buttonHTML}</div>`;
   });
 }
 
-// ── RESTAURANT CANVAS ──────────────────────────────────────────────
-function drawRest(){
-  const cv=document.getElementById('rc'),ctx=cv.getContext('2d');
-  ctx.imageSmoothingEnabled=false;
-  const W=cv.width,H=cv.height;
-  const sg=S.ups.sign||0,lt=S.ups.lighting||0,tb=S.ups.table||0,
-        kt=S.ups.kitchen||0,fl=S.ups.floor||0,it=S.ups.interior||0;
-  const wallH=Math.round(H*0.42);   // ~160: where wall ends
-  const ctrH=28;                     // kitchen counter thickness
-  const ctrY=wallH-ctrH;            // counter top y ~132
-  const floorY=wallH;               // floor starts ~160
+// ══════════════════════════════════════════════════════════════════════
+// 레스토랑 캔버스 렌더링
+// drawRest() 는 아래 헬퍼들을 순서대로 호출합니다.
+// ══════════════════════════════════════════════════════════════════════
 
-  // ── 1. BACK WALL ──────────────────────────────────────────────────
-  const wallC=['#3d2515','#472a18','#52301e','#5e3824','#6a402a'];
-  ctx.fillStyle=wallC[Math.min(it,4)];
-  ctx.fillRect(0,0,W,wallH);
-  // Vertical plank texture
-  ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=1;
-  for(let x=22;x<W;x+=22){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,ctrY);ctx.stroke();}
-  ctx.strokeStyle='rgba(255,255,255,0.04)';
-  for(let x=8;x<W;x+=22){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,ctrY);ctx.stroke();}
-  // Ceiling strip
-  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(0,0,W,5);
-  ctx.fillStyle='#7a5030';ctx.fillRect(0,3,W,4);
+function _drawRestBackWall(ctx, W, wallH, ctrY, it) {
+  const wallColors = ['#3d2515','#472a18','#52301e','#5e3824','#6a402a'];
+  ctx.fillStyle = wallColors[Math.min(it, 4)];
+  ctx.fillRect(0, 0, W, wallH);
+  // 수직 판자 텍스처
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)'; ctx.lineWidth = 1;
+  for (let x = 22; x < W; x += 22) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ctrY); ctx.stroke(); }
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  for (let x = 8; x < W; x += 22) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ctrY); ctx.stroke(); }
+  // 천장 몰딩
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 0, W, 5);
+  ctx.fillStyle = '#7a5030'; ctx.fillRect(0, 3, W, 4);
+}
 
-  // ── 2. WINDOWS (sign upgrade) ─────────────────────────────────────
-  const winW=44,winH=64,winY=12;
-  const winXs=[];
-  if(sg>=1){winXs.push(Math.round(W*0.09),Math.round(W*0.91-winW));}
-  if(sg>=2){winXs.push(Math.round(W/2-winW/2));}
-  winXs.forEach(wx=>{
-    ctx.fillStyle='#4a2808';ctx.fillRect(wx-5,winY-5,winW+10,winH+10);
-    ctx.fillStyle='#8ab8d8';ctx.fillRect(wx,winY,winW,winH);
-    ctx.fillStyle='rgba(255,255,255,0.35)';
-    ctx.fillRect(wx+2,winY+2,winW/2-4,winH/2-4);
-    ctx.fillRect(wx+winW/2+2,winY+2,winW/2-4,winH/2-4);
-    ctx.fillStyle='#4a2808';
-    ctx.fillRect(wx+winW/2-2,winY,4,winH);
-    ctx.fillRect(wx,winY+winH/2-2,winW,4);
-    if(lt>=1){
-      const beam=ctx.createLinearGradient(wx+winW/2,winY+winH,wx+winW/2,H);
-      beam.addColorStop(0,'rgba(255,245,210,0.14)');beam.addColorStop(1,'rgba(255,245,210,0)');
-      ctx.fillStyle=beam;ctx.fillRect(wx-10,winY+winH,winW+20,H-winY-winH);
+function _drawRestWindows(ctx, W, H, sg, lt, winW, winH, winY) {
+  const winXs = [];
+  if (sg >= 1) { winXs.push(Math.round(W * 0.09), Math.round(W * 0.91 - winW)); }
+  if (sg >= 2) { winXs.push(Math.round(W / 2 - winW / 2)); }
+  winXs.forEach(wx => {
+    ctx.fillStyle = '#4a2808'; ctx.fillRect(wx - 5, winY - 5, winW + 10, winH + 10);
+    ctx.fillStyle = '#8ab8d8'; ctx.fillRect(wx, winY, winW, winH);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillRect(wx + 2, winY + 2, winW / 2 - 4, winH / 2 - 4);
+    ctx.fillRect(wx + winW / 2 + 2, winY + 2, winW / 2 - 4, winH / 2 - 4);
+    ctx.fillStyle = '#4a2808';
+    ctx.fillRect(wx + winW / 2 - 2, winY, 4, winH);
+    ctx.fillRect(wx, winY + winH / 2 - 2, winW, 4);
+    if (lt >= 1) { // 조명이 있으면 창문 아래 빛 기둥
+      const beam = ctx.createLinearGradient(wx + winW / 2, winY + winH, wx + winW / 2, H);
+      beam.addColorStop(0, 'rgba(255,245,210,0.14)'); beam.addColorStop(1, 'rgba(255,245,210,0)');
+      ctx.fillStyle = beam; ctx.fillRect(wx - 10, winY + winH, winW + 20, H - winY - winH);
     }
   });
+}
 
-  // ── 3. WALL DECORATIONS ───────────────────────────────────────────
-  if(it>=2){
-    const bx=6,by=10,bw=38,bh=60;
-    ctx.fillStyle='#5a3010';ctx.fillRect(bx,by,bw,bh);
-    ctx.fillStyle='#7a4820';ctx.fillRect(bx+2,by+2,bw-4,bh-4);
-    const bkC=['#c04020','#2060c0','#20a040','#c0a020','#8020c0'];
-    for(let row=0;row<4;row++){
-      ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(bx+2,by+4+row*14,bw-4,1);
-      bkC.forEach((c,ci)=>{ctx.fillStyle=c;ctx.fillRect(bx+4+ci*7,by+5+row*14,5,8);});
+function _drawRestWallDecorations(ctx, W, it) {
+  if (it >= 2) { // 책장
+    const bx = 6, by = 10, bw = 38, bh = 60;
+    ctx.fillStyle = '#5a3010'; ctx.fillRect(bx, by, bw, bh);
+    ctx.fillStyle = '#7a4820'; ctx.fillRect(bx + 2, by + 2, bw - 4, bh - 4);
+    const bookColors = ['#c04020','#2060c0','#20a040','#c0a020','#8020c0'];
+    for (let row = 0; row < 4; row++) {
+      ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(bx + 2, by + 4 + row * 14, bw - 4, 1);
+      bookColors.forEach((c, ci) => { ctx.fillStyle = c; ctx.fillRect(bx + 4 + ci * 7, by + 5 + row * 14, 5, 8); });
     }
   }
-  if(it>=3){
-    const ax=Math.round(W*0.36),ay=14;
-    ctx.fillStyle='#7a5020';ctx.fillRect(ax-3,ay-3,56,44);
-    ctx.fillStyle='#ede0c0';ctx.fillRect(ax,ay,50,38);
-    const sky=ctx.createLinearGradient(ax,ay,ax,ay+22);
-    sky.addColorStop(0,'#3a6ea8');sky.addColorStop(1,'#e8a040');
-    ctx.fillStyle=sky;ctx.fillRect(ax,ay,50,22);
-    ctx.fillStyle='#2a5a20';ctx.fillRect(ax,ay+22,50,16);
-    ctx.fillStyle='#1a3810';
-    ctx.beginPath();ctx.arc(ax+18,ay+26,9,Math.PI,0);ctx.fill();
-    ctx.beginPath();ctx.arc(ax+35,ay+26,7,Math.PI,0);ctx.fill();
-    ctx.strokeStyle='#7a5020';ctx.lineWidth=3;ctx.strokeRect(ax-3,ay-3,56,44);
+  if (it >= 3) { // 풍경화
+    const ax = Math.round(W * 0.36), ay = 14;
+    ctx.fillStyle = '#7a5020'; ctx.fillRect(ax - 3, ay - 3, 56, 44);
+    ctx.fillStyle = '#ede0c0'; ctx.fillRect(ax, ay, 50, 38);
+    const sky = ctx.createLinearGradient(ax, ay, ax, ay + 22);
+    sky.addColorStop(0, '#3a6ea8'); sky.addColorStop(1, '#e8a040');
+    ctx.fillStyle = sky; ctx.fillRect(ax, ay, 50, 22);
+    ctx.fillStyle = '#2a5a20'; ctx.fillRect(ax, ay + 22, 50, 16);
+    ctx.fillStyle = '#1a3810';
+    ctx.beginPath(); ctx.arc(ax + 18, ay + 26, 9, Math.PI, 0); ctx.fill();
+    ctx.beginPath(); ctx.arc(ax + 35, ay + 26, 7, Math.PI, 0); ctx.fill();
+    ctx.strokeStyle = '#7a5020'; ctx.lineWidth = 3; ctx.strokeRect(ax - 3, ay - 3, 56, 44);
   }
+}
 
-  // ── 4. KITCHEN COUNTER (full-width bar) ───────────────────────────
-  // Counter face (dark)
-  ctx.fillStyle='#1e1008';ctx.fillRect(0,ctrY,W,ctrH);
-  ctx.fillStyle='#3a2010';ctx.fillRect(0,ctrY,W,3);
-  // Counter top surface
-  const ctrTopC=['#6a4020','#8a5828','#b09060','#d0b888','#e8d0a8'];
-  ctx.fillStyle=ctrTopC[Math.min(kt,4)];ctx.fillRect(0,ctrY,W,8);
-  ctx.fillStyle='rgba(255,255,255,0.12)';ctx.fillRect(0,ctrY,W,2);
-  ctx.fillStyle='rgba(0,0,0,0.40)';ctx.fillRect(0,ctrY+ctrH-4,W,4);
-  // Kitchen equipment behind/on counter
-  {
-    if(kt>=1){
-      ctx.fillStyle='#333';ctx.fillRect(70,ctrY-26,72,22);
-      ctx.fillStyle='#222';ctx.fillRect(72,ctrY-24,68,18);
-      [[88,ctrY-18],[104,ctrY-18],[88,ctrY-10],[104,ctrY-10]].forEach(([bx2,by2])=>{
-        ctx.strokeStyle=kt>=2?'#ff4400':'#552200';ctx.lineWidth=2.5;
-        ctx.beginPath();ctx.arc(bx2,by2,5.5,0,Math.PI*2);ctx.stroke();
-      });
-    }
-    if(kt>=2){
-      ctx.fillStyle='#909090';ctx.fillRect(W-72,ctrY-50,28,52);
-      ctx.fillStyle='rgba(0,0,0,0.18)';
-      ctx.fillRect(W-70,ctrY-48,24,22);ctx.fillRect(W-70,ctrY-24,24,20);
-      ctx.fillStyle='#c0c0c0';ctx.fillRect(W-58,ctrY-36,4,10);
-    }
-    if(kt>=3){
-      ctx.fillStyle='#666';
-      ctx.beginPath();ctx.moveTo(76,ctrY-40);ctx.lineTo(148,ctrY-40);
-      ctx.lineTo(140,ctrY-26);ctx.lineTo(84,ctrY-26);ctx.closePath();ctx.fill();
-    }
-    // Plates on counter
-    for(let pi=0;pi<Math.min(kt+1,5);pi++){
-      const px=W*0.52+pi*22;
-      ctx.fillStyle='#f0e8d8';ctx.beginPath();ctx.ellipse(px,ctrY-10,9,6,0,0,Math.PI*2);ctx.fill();
-    }
-  }
-
-  // ── 5. FLOOR ──────────────────────────────────────────────────────
-  {
-    const baseFlC=['#5e3a22','#7a4e30','#9a6440','#b07c50','#c89060'];
-    ctx.fillStyle=baseFlC[Math.min(fl,4)];
-    ctx.fillRect(0,floorY,W,H-floorY);
-    const flrImg=RST_IMGS.floor;
-    if(flrImg&&fl>=1){
-      const flTiles=[null,
-        {sx:96,sy:4,sw:44,sh:36},
-        {sx:48,sy:4,sw:44,sh:36},
-        {sx:96,sy:44,sw:44,sh:36},
-        {sx:144,sy:4,sw:44,sh:36},
-      ];
-      const t=flTiles[Math.min(fl,4)];
-      if(t){try{
-        const ofc=document.createElement('canvas');ofc.width=t.sw;ofc.height=t.sh;
-        const oc=ofc.getContext('2d');oc.imageSmoothingEnabled=false;
-        oc.drawImage(flrImg,t.sx,t.sy,t.sw,t.sh,0,0,t.sw,t.sh);
-        const pat=ctx.createPattern(ofc,'repeat');
-        if(pat){ctx.globalAlpha=fl>=3?0.72:0.58;ctx.fillStyle=pat;ctx.fillRect(0,floorY,W,H-floorY);ctx.globalAlpha=1;}
-      }catch(e){}}
-    }
-    ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(0,floorY,W,5);
-  }
-
-  // ── 6. OVERHEAD LIGHTS (lighting upgrade) ─────────────────────────
-  {
-    const numL=lt>=2?3:lt>=1?2:0;
-    const lxArr=numL===3?[W*0.22,W*0.5,W*0.78]:numL===2?[W*0.3,W*0.7]:[];
-    lxArr.forEach(lx=>{
-      const intensity=lt>=4?0.30:lt>=3?0.24:lt>=2?0.18:0.13;
-      const gcone=ctx.createRadialGradient(lx,floorY,0,lx,floorY+100,150);
-      gcone.addColorStop(0,`rgba(255,240,190,${intensity})`);
-      gcone.addColorStop(1,'rgba(255,240,190,0)');
-      ctx.fillStyle=gcone;
-      ctx.beginPath();ctx.ellipse(lx,floorY+90,145,105,0,0,Math.PI*2);ctx.fill();
-      ctx.strokeStyle='#2a1808';ctx.lineWidth=2;
-      ctx.beginPath();ctx.moveTo(lx,0);ctx.lineTo(lx,floorY-24);ctx.stroke();
-      if(lt>=3){
-        ctx.fillStyle='#c0901a';
-        ctx.save();ctx.shadowColor='#ffc840';ctx.shadowBlur=20;
-        ctx.beginPath();ctx.moveTo(lx-18,floorY-6);ctx.lineTo(lx+18,floorY-6);
-        ctx.lineTo(lx+12,floorY-26);ctx.lineTo(lx-12,floorY-26);ctx.closePath();ctx.fill();
-        ctx.restore();
-        ctx.fillStyle='rgba(255,240,150,0.95)';
-        ctx.beginPath();ctx.ellipse(lx,floorY-5,9,3.5,0,0,Math.PI*2);ctx.fill();
-      }else if(lt>=2){
-        ctx.fillStyle='#8a6020';
-        ctx.beginPath();ctx.moveTo(lx-12,floorY-4);ctx.lineTo(lx+12,floorY-4);
-        ctx.lineTo(lx+8,floorY-20);ctx.lineTo(lx-8,floorY-20);ctx.closePath();ctx.fill();
-        ctx.fillStyle='rgba(255,235,130,0.9)';
-        ctx.beginPath();ctx.ellipse(lx,floorY-3,6,2.5,0,0,Math.PI*2);ctx.fill();
-      }else{
-        ctx.fillStyle='#6a4818';
-        ctx.beginPath();ctx.arc(lx,floorY-8,7,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='rgba(255,240,140,0.9)';
-        ctx.beginPath();ctx.arc(lx,floorY-8,4,0,Math.PI*2);ctx.fill();
-      }
+function _drawRestCounter(ctx, W, kt, ctrY, ctrH) {
+  // 카운터 본체
+  ctx.fillStyle = '#1e1008'; ctx.fillRect(0, ctrY, W, ctrH);
+  ctx.fillStyle = '#3a2010'; ctx.fillRect(0, ctrY, W, 3);
+  // 카운터 상판 (주방 레벨에 따라 색상 변화)
+  const counterTopColors = ['#6a4020','#8a5828','#b09060','#d0b888','#e8d0a8'];
+  ctx.fillStyle = counterTopColors[Math.min(kt, 4)]; ctx.fillRect(0, ctrY, W, 8);
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fillRect(0, ctrY, W, 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.40)'; ctx.fillRect(0, ctrY + ctrH - 4, W, 4);
+  // 주방 장비
+  if (kt >= 1) { // 가스레인지
+    ctx.fillStyle = '#333'; ctx.fillRect(70, ctrY - 26, 72, 22);
+    ctx.fillStyle = '#222'; ctx.fillRect(72, ctrY - 24, 68, 18);
+    [[88, ctrY - 18],[104, ctrY - 18],[88, ctrY - 10],[104, ctrY - 10]].forEach(([bx, by]) => {
+      ctx.strokeStyle = kt >= 2 ? '#ff4400' : '#552200'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(bx, by, 5.5, 0, Math.PI * 2); ctx.stroke();
     });
   }
-
-  // ── 7. CORNER PLANTS (interior>=1) ────────────────────────────────
-  if(it>=1){
-    [[20,H-6],[W-20,H-6]].forEach(([px,py])=>{
-      ctx.fillStyle='#9a5530';
-      ctx.beginPath();ctx.moveTo(px-13,py-18);ctx.lineTo(px+13,py-18);
-      ctx.lineTo(px+11,py+4);ctx.lineTo(px-11,py+4);ctx.closePath();ctx.fill();
-      ctx.fillStyle='#7a3a18';ctx.fillRect(px-15,py-22,30,5);
-      ctx.fillStyle='#3a2010';ctx.fillRect(px-11,py-20,22,4);
-      ctx.fillStyle=it>=3?'#1a6824':'#22581c';
-      ctx.beginPath();ctx.arc(px,py-40,18,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle=it>=3?'#28a038':'#348026';
-      ctx.beginPath();ctx.arc(px-14,py-30,12,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(px+14,py-30,12,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(px,py-54,11,0,Math.PI*2);ctx.fill();
-      if(it>=2){
-        ctx.fillStyle='#ff5888';
-        ctx.beginPath();ctx.arc(px,py-60,5,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(px-12,py-52,4,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(px+12,py-52,4,0,Math.PI*2);ctx.fill();
-      }
-    });
+  if (kt >= 2) { // 냉장고
+    ctx.fillStyle = '#909090'; ctx.fillRect(W - 72, ctrY - 50, 28, 52);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(W - 70, ctrY - 48, 24, 22); ctx.fillRect(W - 70, ctrY - 24, 24, 20);
+    ctx.fillStyle = '#c0c0c0'; ctx.fillRect(W - 58, ctrY - 36, 4, 10);
   }
+  if (kt >= 3) { // 환풍기
+    ctx.fillStyle = '#666';
+    ctx.beginPath(); ctx.moveTo(76, ctrY - 40); ctx.lineTo(148, ctrY - 40);
+    ctx.lineTo(140, ctrY - 26); ctx.lineTo(84, ctrY - 26); ctx.closePath(); ctx.fill();
+  }
+  // 카운터 위 접시
+  for (let pi = 0; pi < Math.min(kt + 1, 5); pi++) {
+    const px = W * 0.52 + pi * 22;
+    ctx.fillStyle = '#f0e8d8'; ctx.beginPath(); ctx.ellipse(px, ctrY - 10, 9, 6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+}
 
-  // ── 8. SOFA LOUNGE CORNER (interior>=3) ───────────────────────────
-  if(it>=3){
-    const sx2=W-96,sy2=floorY+8,sw2=88;
-    ctx.fillStyle='#6a3010';ctx.beginPath();ctx.roundRect(sx2,sy2+10,sw2,40,6);ctx.fill();
-    ctx.fillStyle='#8a4018';
-    ctx.beginPath();ctx.roundRect(sx2,sy2,sw2,18,5);ctx.fill();
-    ctx.beginPath();ctx.roundRect(sx2,sy2+10,12,40,4);ctx.fill();
-    ctx.beginPath();ctx.roundRect(sx2+sw2-12,sy2+10,12,40,4);ctx.fill();
-    ctx.fillStyle='#a04820';
-    ctx.beginPath();ctx.roundRect(sx2+12,sy2+18,sw2-24,28,4);ctx.fill();
-    if(it>=4){
-      ctx.fillStyle='#8a5030';
-      ctx.beginPath();ctx.ellipse(W-52,sy2+70,22,8,0,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='#a06040';
-      ctx.beginPath();ctx.ellipse(W-52,sy2+68,20,7,0,0,Math.PI*2);ctx.fill();
+function _drawRestFloor(ctx, W, H, fl, floorY) {
+  const baseFloorColors = ['#5e3a22','#7a4e30','#9a6440','#b07c50','#c89060'];
+  ctx.fillStyle = baseFloorColors[Math.min(fl, 4)];
+  ctx.fillRect(0, floorY, W, H - floorY);
+  const flrImg = RST_IMGS.floor;
+  if (flrImg && fl >= 1) {
+    const flTiles = [null,
+      {sx:96,  sy:4,  sw:44, sh:36},
+      {sx:48,  sy:4,  sw:44, sh:36},
+      {sx:96,  sy:44, sw:44, sh:36},
+      {sx:144, sy:4,  sw:44, sh:36},
+    ];
+    const tile = flTiles[Math.min(fl, 4)];
+    if (tile) { try {
+      const ofc = document.createElement('canvas'); ofc.width = tile.sw; ofc.height = tile.sh;
+      const oc  = ofc.getContext('2d'); oc.imageSmoothingEnabled = false;
+      oc.drawImage(flrImg, tile.sx, tile.sy, tile.sw, tile.sh, 0, 0, tile.sw, tile.sh);
+      const pat = ctx.createPattern(ofc, 'repeat');
+      if (pat) { ctx.globalAlpha = fl >= 3 ? 0.72 : 0.58; ctx.fillStyle = pat; ctx.fillRect(0, floorY, W, H - floorY); ctx.globalAlpha = 1; }
+    } catch (e) {} }
+  }
+  ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(0, floorY, W, 5);
+}
+
+function _drawRestLights(ctx, W, H, lt, floorY) {
+  const numLights = lt >= 2 ? 3 : lt >= 1 ? 2 : 0;
+  const lightXs   = numLights === 3 ? [W * 0.22, W * 0.5, W * 0.78] : numLights === 2 ? [W * 0.3, W * 0.7] : [];
+  lightXs.forEach(lx => {
+    // 빛 원뿔
+    const intensity = lt >= 4 ? 0.30 : lt >= 3 ? 0.24 : lt >= 2 ? 0.18 : 0.13;
+    const gcone = ctx.createRadialGradient(lx, floorY, 0, lx, floorY + 100, 150);
+    gcone.addColorStop(0, `rgba(255,240,190,${intensity})`); gcone.addColorStop(1, 'rgba(255,240,190,0)');
+    ctx.fillStyle = gcone;
+    ctx.beginPath(); ctx.ellipse(lx, floorY + 90, 145, 105, 0, 0, Math.PI * 2); ctx.fill();
+    // 전선
+    ctx.strokeStyle = '#2a1808'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(lx, 0); ctx.lineTo(lx, floorY - 24); ctx.stroke();
+    // 조명 기구 (레벨별)
+    if (lt >= 3) {
+      ctx.fillStyle = '#c0901a';
+      ctx.save(); ctx.shadowColor = '#ffc840'; ctx.shadowBlur = 20;
+      ctx.beginPath(); ctx.moveTo(lx - 18, floorY - 6); ctx.lineTo(lx + 18, floorY - 6);
+      ctx.lineTo(lx + 12, floorY - 26); ctx.lineTo(lx - 12, floorY - 26); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      ctx.fillStyle = 'rgba(255,240,150,0.95)';
+      ctx.beginPath(); ctx.ellipse(lx, floorY - 5, 9, 3.5, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (lt >= 2) {
+      ctx.fillStyle = '#8a6020';
+      ctx.beginPath(); ctx.moveTo(lx - 12, floorY - 4); ctx.lineTo(lx + 12, floorY - 4);
+      ctx.lineTo(lx + 8, floorY - 20); ctx.lineTo(lx - 8, floorY - 20); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(255,235,130,0.9)';
+      ctx.beginPath(); ctx.ellipse(lx, floorY - 3, 6, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+    } else {
+      ctx.fillStyle = '#6a4818'; ctx.beginPath(); ctx.arc(lx, floorY - 8, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,240,140,0.9)'; ctx.beginPath(); ctx.arc(lx, floorY - 8, 4, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+}
+
+function _drawRestPlants(ctx, W, H, it) {
+  if (it < 1) return;
+  [[20, H - 6], [W - 20, H - 6]].forEach(([px, py]) => {
+    // 화분
+    ctx.fillStyle = '#9a5530';
+    ctx.beginPath(); ctx.moveTo(px - 13, py - 18); ctx.lineTo(px + 13, py - 18);
+    ctx.lineTo(px + 11, py + 4); ctx.lineTo(px - 11, py + 4); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#7a3a18'; ctx.fillRect(px - 15, py - 22, 30, 5);
+    ctx.fillStyle = '#3a2010'; ctx.fillRect(px - 11, py - 20, 22, 4);
+    // 식물
+    ctx.fillStyle = it >= 3 ? '#1a6824' : '#22581c';
+    ctx.beginPath(); ctx.arc(px, py - 40, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = it >= 3 ? '#28a038' : '#348026';
+    ctx.beginPath(); ctx.arc(px - 14, py - 30, 12, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px + 14, py - 30, 12, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(px, py - 54, 11, 0, Math.PI * 2); ctx.fill();
+    if (it >= 2) { // 꽃
+      ctx.fillStyle = '#ff5888';
+      ctx.beginPath(); ctx.arc(px, py - 60, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(px - 12, py - 52, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(px + 12, py - 52, 4, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+}
+
+function _drawRestSofa(ctx, W, it, floorY) {
+  if (it < 3) return;
+  const sx = W - 96, sy = floorY + 8, sw = 88;
+  ctx.fillStyle = '#6a3010'; ctx.beginPath(); ctx.roundRect(sx, sy + 10, sw, 40, 6); ctx.fill();
+  ctx.fillStyle = '#8a4018';
+  ctx.beginPath(); ctx.roundRect(sx, sy, sw, 18, 5); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(sx, sy + 10, 12, 40, 4); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(sx + sw - 12, sy + 10, 12, 40, 4); ctx.fill();
+  ctx.fillStyle = '#a04820'; ctx.beginPath(); ctx.roundRect(sx + 12, sy + 18, sw - 24, 28, 4); ctx.fill();
+  if (it >= 4) { // 러그
+    ctx.fillStyle = '#8a5030'; ctx.beginPath(); ctx.ellipse(W - 52, sy + 70, 22, 8, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#a06040'; ctx.beginPath(); ctx.ellipse(W - 52, sy + 68, 20, 7, 0, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+function _drawRestTables(ctx, W, H, tb, lt, it, floorY) {
+  const tableCount = [1, 2, 3, 4, 4][Math.min(tb, 4)];
+  const tableAreaW = it >= 3 ? (W - 106) : (W - 24);
+  const spacing    = tableAreaW / (tableCount + 1);
+  const tableY     = floorY + Math.round((H - floorY) * 0.30);
+  const woodColors  = ['#7a4828','#9a5c34','#ba7040','#d48a50','#e8a060'];
+  const clothColors = [null,'rgba(255,255,255,0.88)','rgba(255,248,235,0.92)','rgba(248,238,220,0.94)','rgba(240,230,210,0.96)'];
+  const dishKeys   = ['d_steak','d_sushi','d_sandwich','d_taco','d_waffle'];
+  for (let i = 0; i < tableCount; i++) {
+    const tx = Math.round(spacing * (i + 1)) + 12;
+    const ty = tableY;
+    // 그림자
+    ctx.fillStyle = 'rgba(0,0,0,0.22)';
+    ctx.beginPath(); ctx.ellipse(tx + 2, ty + 28, 36, 11, 0, 0, Math.PI * 2); ctx.fill();
+    // 의자 등받이
+    ctx.fillStyle = woodColors[Math.min(tb, 2)];
+    ctx.fillRect(tx - 14, ty - 44, 28, 16); ctx.fillRect(tx - 14, ty - 30, 28, 12);
+    ctx.fillStyle = '#201008'; ctx.fillRect(tx - 14, ty - 20, 5, 20); ctx.fillRect(tx + 9, ty - 20, 5, 20);
+    // 테이블보
+    if (tb >= 1 && clothColors[Math.min(tb, 4)]) {
+      ctx.fillStyle = clothColors[Math.min(tb, 4)]; ctx.globalAlpha = 0.95;
+      ctx.beginPath(); ctx.roundRect(tx - 32, ty - 4, 64, 24, 4); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = 'rgba(0,0,0,0.08)'; ctx.beginPath(); ctx.roundRect(tx - 32, ty + 18, 64, 4, 2); ctx.fill();
+    }
+    // 테이블 상판
+    ctx.fillStyle = woodColors[Math.min(tb, 4)];
+    ctx.beginPath(); ctx.roundRect(tx - 30, ty, 60, 20, 6); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.20)'; ctx.beginPath(); ctx.roundRect(tx - 28, ty + 1, 56, 6, 4); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.beginPath(); ctx.roundRect(tx - 30, ty + 14, 60, 6, 2); ctx.fill();
+    ctx.fillStyle = '#201008';
+    [[tx - 18, ty + 20],[tx + 14, ty + 20]].forEach(([lx, ly]) => { ctx.fillRect(lx, ly, 5, 26); });
+    // 의자 앞판
+    ctx.fillStyle = woodColors[Math.min(tb, 2)]; ctx.fillRect(tx - 14, ty + 28, 28, 14);
+    ctx.fillStyle = '#201008'; ctx.fillRect(tx - 14, ty + 40, 5, 14); ctx.fillRect(tx + 9, ty + 40, 5, 14);
+    // 촛불
+    if (tb >= 2) {
+      ctx.fillStyle = '#f2ece0'; ctx.fillRect(tx - 3, ty - 14, 6, 14);
+      const flameColor = lt >= 2 ? '#ffee44' : '#ffbb22';
+      ctx.fillStyle = flameColor; ctx.shadowColor = flameColor; ctx.shadowBlur = 15;
+      ctx.beginPath(); ctx.arc(tx, ty - 16, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+    }
+    // 와인잔
+    if (tb >= 3) {
+      const gx = tx + 23, gy = ty + 4;
+      ctx.strokeStyle = 'rgba(255,255,255,0.70)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(gx - 5, gy); ctx.lineTo(gx + 5, gy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy + 10); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(gx - 5, gy + 10); ctx.lineTo(gx + 5, gy + 10); ctx.stroke();
+      ctx.fillStyle = 'rgba(160,20,20,0.40)';
+      ctx.beginPath(); ctx.ellipse(gx, gy - 5, 4, 5, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    // 요리 이미지
+    const dishKey = dishKeys[(i + Math.max(0, S.epDone.length - 1)) % dishKeys.length];
+    const dishImg = RST_IMGS[dishKey];
+    const ds = 28;
+    if (dishImg) { ctx.drawImage(dishImg, tx - ds / 2, ty + 2 - ds / 2, ds, ds); }
+    else {
+      ctx.fillStyle = '#f5eee6'; ctx.beginPath(); ctx.ellipse(tx, ty + 10, 9, 6, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#d09050'; ctx.beginPath(); ctx.ellipse(tx, ty + 10, 5, 4, 0, 0, Math.PI * 2); ctx.fill();
+    }
+    // 손님 (완료한 에피소드 수만큼 채움)
+    if (i < S.epDone.length) {
+      const cuY = ty + 68;
+      ctx.fillStyle = 'rgba(255,210,160,0.92)'; ctx.beginPath(); ctx.arc(tx, cuY, 9, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `hsl(${(i * 65 + 200) % 360},42%,30%)`;
+      ctx.beginPath(); ctx.ellipse(tx, cuY + 21, 10, 13, 0, 0, Math.PI); ctx.fill();
     }
   }
+}
 
-  // ── 9. TABLES + CHAIRS + FOOD ─────────────────────────────────────
-  {
-    const tbCount=[1,2,3,4,4][Math.min(tb,4)];
-    const tableAreaW=it>=3?(W-106):(W-24);
-    const spacing=tableAreaW/(tbCount+1);
-    const tableY=floorY+Math.round((H-floorY)*0.30);
-    const woodC=['#7a4828','#9a5c34','#ba7040','#d48a50','#e8a060'];
-    const clothC=[null,'rgba(255,255,255,0.88)','rgba(255,248,235,0.92)','rgba(248,238,220,0.94)','rgba(240,230,210,0.96)'];
-    const dishKeys=['d_steak','d_sushi','d_sandwich','d_taco','d_waffle'];
-    for(let i=0;i<tbCount;i++){
-      const tx=Math.round(spacing*(i+1))+12;
-      const ty=tableY;
-      // shadow
-      ctx.fillStyle='rgba(0,0,0,0.22)';
-      ctx.beginPath();ctx.ellipse(tx+2,ty+28,36,11,0,0,Math.PI*2);ctx.fill();
-      // chair back
-      ctx.fillStyle=woodC[Math.min(tb,2)];
-      ctx.fillRect(tx-14,ty-44,28,16);ctx.fillRect(tx-14,ty-30,28,12);
-      ctx.fillStyle='#201008';ctx.fillRect(tx-14,ty-20,5,20);ctx.fillRect(tx+9,ty-20,5,20);
-      // tablecloth
-      if(tb>=1&&clothC[Math.min(tb,4)]){
-        ctx.fillStyle=clothC[Math.min(tb,4)];ctx.globalAlpha=0.95;
-        ctx.beginPath();ctx.roundRect(tx-32,ty-4,64,24,4);ctx.fill();ctx.globalAlpha=1;
-        ctx.fillStyle='rgba(0,0,0,0.08)';
-        ctx.beginPath();ctx.roundRect(tx-32,ty+18,64,4,2);ctx.fill();
-      }
-      // table top
-      ctx.fillStyle=woodC[Math.min(tb,4)];
-      ctx.beginPath();ctx.roundRect(tx-30,ty,60,20,6);ctx.fill();
-      ctx.fillStyle='rgba(255,255,255,0.20)';
-      ctx.beginPath();ctx.roundRect(tx-28,ty+1,56,6,4);ctx.fill();
-      ctx.fillStyle='rgba(0,0,0,0.18)';
-      ctx.beginPath();ctx.roundRect(tx-30,ty+14,60,6,2);ctx.fill();
-      ctx.fillStyle='#201008';
-      [[tx-18,ty+20],[tx+14,ty+20]].forEach(([lx2,ly2])=>{ctx.fillRect(lx2,ly2,5,26);});
-      // chair front
-      ctx.fillStyle=woodC[Math.min(tb,2)];ctx.fillRect(tx-14,ty+28,28,14);
-      ctx.fillStyle='#201008';ctx.fillRect(tx-14,ty+40,5,14);ctx.fillRect(tx+9,ty+40,5,14);
-      // candle
-      if(tb>=2){
-        ctx.fillStyle='#f2ece0';ctx.fillRect(tx-3,ty-14,6,14);
-        const flameC=lt>=2?'#ffee44':'#ffbb22';
-        ctx.fillStyle=flameC;ctx.shadowColor=flameC;ctx.shadowBlur=15;
-        ctx.beginPath();ctx.arc(tx,ty-16,4.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-      }
-      // wine glass
-      if(tb>=3){
-        const gx=tx+23,gy=ty+4;
-        ctx.strokeStyle='rgba(255,255,255,0.70)';ctx.lineWidth=1.5;
-        ctx.beginPath();ctx.moveTo(gx-5,gy);ctx.lineTo(gx+5,gy);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx,gy+10);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(gx-5,gy+10);ctx.lineTo(gx+5,gy+10);ctx.stroke();
-        ctx.fillStyle='rgba(160,20,20,0.40)';
-        ctx.beginPath();ctx.ellipse(gx,gy-5,4,5,0,0,Math.PI*2);ctx.fill();
-      }
-      // dish
-      const dKey=dishKeys[(i+Math.max(0,S.epDone.length-1))%dishKeys.length];
-      const dImg=RST_IMGS[dKey];
-      const ds=28;
-      if(dImg){ctx.drawImage(dImg,tx-ds/2,ty+2-ds/2,ds,ds);}
-      else{
-        ctx.fillStyle='#f5eee6';ctx.beginPath();ctx.ellipse(tx,ty+10,9,6,0,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#d09050';ctx.beginPath();ctx.ellipse(tx,ty+10,5,4,0,0,Math.PI*2);ctx.fill();
-      }
-      // customer
-      if(i<S.epDone.length){
-        const cuY=ty+68;
-        ctx.fillStyle='rgba(255,210,160,0.92)';ctx.beginPath();ctx.arc(tx,cuY,9,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle=`hsl(${(i*65+200)%360},42%,30%)`;
-        ctx.beginPath();ctx.ellipse(tx,cuY+21,10,13,0,0,Math.PI);ctx.fill();
-      }
-    }
-  }
-
-  // ── 10. SIGN ──────────────────────────────────────────────────────
+function _drawRestSign(ctx, W, sg) {
   ctx.save();
-  if(sg===0){ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillText('🌱 GARDEN KITCHEN',W/2,36);}
-  else if(sg===1){
-    ctx.fillStyle='#4a2a08';ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.fill();
-    ctx.strokeStyle='#8ac828';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-88,10,176,42,6);ctx.stroke();
-    ctx.fillStyle='#e8ffc0';ctx.font='bold 14px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 텃밭 키친',W/2,32);
-    ctx.fillStyle='#aad860';ctx.font='10px sans-serif';ctx.fillText('Garden Kitchen',W/2,46);}
-  else if(sg===2){
-    ctx.fillStyle='rgba(0,0,0,.55)';ctx.beginPath();ctx.roundRect(W/2-96,8,192,44,8);ctx.fill();
-    ctx.shadowColor='#44ff00';ctx.shadowBlur=14;ctx.strokeStyle='#44ff00';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(W/2-94,10,188,40,6);ctx.stroke();ctx.shadowBlur=0;
-    ctx.shadowColor='#88ff44';ctx.shadowBlur=10;ctx.fillStyle='#88ff44';ctx.font='bold 15px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.shadowBlur=5;ctx.fillStyle='#ccff88';ctx.font='10px sans-serif';ctx.fillText('텃밭 키친',W/2,45);ctx.shadowBlur=0;}
-  else if(sg===3){
-    const sg2=ctx.createLinearGradient(W/2-108,0,W/2+108,0);sg2.addColorStop(0,'#060e02');sg2.addColorStop(.5,'#0e2006');sg2.addColorStop(1,'#060e02');
-    ctx.fillStyle=sg2;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.fill();
-    ctx.strokeStyle='#aeff44';ctx.lineWidth=2.5;ctx.shadowColor='#88ff22';ctx.shadowBlur=10;ctx.beginPath();ctx.roundRect(W/2-108,5,216,52,8);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-98;bx<=W/2+98;bx+=17){ctx.fillStyle='#eeff88';ctx.shadowColor='#ccff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,9,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,53,3,0,Math.PI*2);ctx.fill();}
-    ctx.shadowBlur=0;ctx.fillStyle='#ccff66';ctx.font='bold 16px sans-serif';ctx.textAlign='center';ctx.fillText('🌱 GARDEN KITCHEN',W/2,31);ctx.fillStyle='#aedd44';ctx.font='11px sans-serif';ctx.fillText('텃밭 키친 · Michelin Starred',W/2,46);}
-  else{// sg 4 — Michelin star
-    const mg=ctx.createLinearGradient(W/2-110,0,W/2+110,0);mg.addColorStop(0,'#100808');mg.addColorStop(.5,'#201200');mg.addColorStop(1,'#100808');
-    ctx.fillStyle=mg;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.fill();
-    ctx.strokeStyle=S.gold||'#ffd700';ctx.lineWidth=3;ctx.shadowColor='#ffd700';ctx.shadowBlur=12;ctx.beginPath();ctx.roundRect(W/2-110,4,220,54,8);ctx.stroke();ctx.shadowBlur=0;
-    for(let bx=W/2-100;bx<=W/2+100;bx+=16){ctx.fillStyle='#ffff88';ctx.shadowColor='#ffff00';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(bx,8,3,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(bx,54,3,0,Math.PI*2);ctx.fill();}
-    ctx.shadowBlur=0;ctx.fillStyle='#ffd700';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
-    ctx.fillText('⭐ 텃밭 키친 ⭐',W/2,30);ctx.fillStyle='#ffcc88';ctx.font='11px sans-serif';ctx.fillText('Garden Kitchen · Michelin ★★★',W/2,46);}
+  if (sg === 0) {
+    ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,255,255,.3)'; ctx.fillText('🌱 GARDEN KITCHEN', W / 2, 36);
+  } else if (sg === 1) {
+    ctx.fillStyle = '#4a2a08'; ctx.beginPath(); ctx.roundRect(W/2-88, 10, 176, 42, 6); ctx.fill();
+    ctx.strokeStyle = '#8ac828'; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(W/2-88, 10, 176, 42, 6); ctx.stroke();
+    ctx.fillStyle = '#e8ffc0'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('🌱 텃밭 키친', W/2, 32);
+    ctx.fillStyle = '#aad860'; ctx.font = '10px sans-serif'; ctx.fillText('Garden Kitchen', W/2, 46);
+  } else if (sg === 2) {
+    ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.beginPath(); ctx.roundRect(W/2-96, 8, 192, 44, 8); ctx.fill();
+    ctx.shadowColor = '#44ff00'; ctx.shadowBlur = 14; ctx.strokeStyle = '#44ff00'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.roundRect(W/2-94, 10, 188, 40, 6); ctx.stroke(); ctx.shadowBlur = 0;
+    ctx.shadowColor = '#88ff44'; ctx.shadowBlur = 10; ctx.fillStyle = '#88ff44';
+    ctx.font = 'bold 15px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('🌱 GARDEN KITCHEN', W/2, 31);
+    ctx.shadowBlur = 5; ctx.fillStyle = '#ccff88'; ctx.font = '10px sans-serif'; ctx.fillText('텃밭 키친', W/2, 45); ctx.shadowBlur = 0;
+  } else if (sg === 3) {
+    const grad = ctx.createLinearGradient(W/2-108, 0, W/2+108, 0);
+    grad.addColorStop(0, '#060e02'); grad.addColorStop(.5, '#0e2006'); grad.addColorStop(1, '#060e02');
+    ctx.fillStyle = grad; ctx.beginPath(); ctx.roundRect(W/2-108, 5, 216, 52, 8); ctx.fill();
+    ctx.strokeStyle = '#aeff44'; ctx.lineWidth = 2.5; ctx.shadowColor = '#88ff22'; ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.roundRect(W/2-108, 5, 216, 52, 8); ctx.stroke(); ctx.shadowBlur = 0;
+    for (let bx = W/2-98; bx <= W/2+98; bx += 17) {
+      ctx.fillStyle = '#eeff88'; ctx.shadowColor = '#ccff00'; ctx.shadowBlur = 6;
+      ctx.beginPath(); ctx.arc(bx, 9, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx, 53, 3, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.shadowBlur = 0; ctx.fillStyle = '#ccff66'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('🌱 GARDEN KITCHEN', W/2, 31); ctx.fillStyle = '#aedd44'; ctx.font = '11px sans-serif';
+    ctx.fillText('텃밭 키친 · Michelin Starred', W/2, 46);
+  } else { // sg === 4 — 미슐랭 스타
+    const grad = ctx.createLinearGradient(W/2-110, 0, W/2+110, 0);
+    grad.addColorStop(0, '#100808'); grad.addColorStop(.5, '#201200'); grad.addColorStop(1, '#100808');
+    ctx.fillStyle = grad; ctx.beginPath(); ctx.roundRect(W/2-110, 4, 220, 54, 8); ctx.fill();
+    ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 3; ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 12;
+    ctx.beginPath(); ctx.roundRect(W/2-110, 4, 220, 54, 8); ctx.stroke(); ctx.shadowBlur = 0;
+    for (let bx = W/2-100; bx <= W/2+100; bx += 16) {
+      ctx.fillStyle = '#ffff88'; ctx.shadowColor = '#ffff00'; ctx.shadowBlur = 6;
+      ctx.beginPath(); ctx.arc(bx, 8, 3, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(bx, 54, 3, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.shadowBlur = 0; ctx.fillStyle = '#ffd700'; ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('⭐ 텃밭 키친 ⭐', W/2, 30); ctx.fillStyle = '#ffcc88'; ctx.font = '11px sans-serif';
+    ctx.fillText('Garden Kitchen · Michelin ★★★', W/2, 46);
+  }
   ctx.restore();
-  ctx.restore();
-
-  // ── 11. HUD ───────────────────────────────────────────────────────
-  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.beginPath();ctx.roundRect(W-108,H-30,102,22,5);ctx.fill();
-  ctx.fillStyle='#ffd700';ctx.font='bold 10px sans-serif';ctx.textAlign='right';
-  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`,W-8,H-14);
 }
-function renderRst(){
-  const el=document.getElementById('rst');el.innerHTML='';
-  [{k:'sign',ko:'간판·창문',en:'Sign',e:'🪧'},
-   {k:'lighting',ko:'조명',en:'Lighting',e:'💡'},
-   {k:'table',ko:'테이블',en:'Table',e:'🪑'},
-   {k:'kitchen',ko:'주방',en:'Kitchen',e:'👨‍🍳'},
-   {k:'floor',ko:'바닥재',en:'Flooring',e:'🪵'},
-   {k:'interior',ko:'인테리어',en:'Interior',e:'🎨'}].forEach(u=>{
-    const lv=S.ups[u.k]||0;
-    const pct=lv/4*100;
-    el.innerHTML+=`<div class="rs"><div class="rsl">${u.e} ${S.lang==='ko'?u.ko:u.en}</div><div class="rsv">${['◆','◆','◆','◆'].map((d,i)=>`<span style="color:${i<lv?'#c07030':'#2a1808'}">${d}</span>`).join('')} <span style="color:#7a5030;font-size:.78em">${lv}/4</span></div><div class="rs-bar"><div class="rs-bar-fill" style="width:${pct}%"></div></div></div>`;
+
+function _drawRestHud(ctx, W, H) {
+  ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.beginPath(); ctx.roundRect(W - 108, H - 30, 102, 22, 5); ctx.fill();
+  ctx.fillStyle = '#ffd700'; ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText(`Lv.${S.level} · 🪙${S.coins}`, W - 8, H - 14);
+}
+
+/** 레스토랑 캔버스 전체를 다시 그림 (헬퍼 함수들을 순서대로 호출) */
+function drawRest() {
+  const cv  = document.getElementById('rc');
+  const ctx = cv.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  const W = cv.width, H = cv.height;
+  const sg = S.ups.sign || 0, lt = S.ups.lighting || 0, tb = S.ups.table || 0,
+        kt = S.ups.kitchen || 0, fl = S.ups.floor || 0, it = S.ups.interior || 0;
+  const wallH  = Math.round(H * 0.42); // 벽 높이 (~160px)
+  const ctrH   = 28;                   // 카운터 두께
+  const ctrY   = wallH - ctrH;         // 카운터 상단 y (~132px)
+  const floorY = wallH;                // 바닥 시작 y (~160px)
+
+  _drawRestBackWall(ctx, W, wallH, ctrY, it);
+  _drawRestWindows(ctx, W, H, sg, lt, 44, 64, 12);
+  _drawRestWallDecorations(ctx, W, it);
+  _drawRestCounter(ctx, W, kt, ctrY, ctrH);
+  _drawRestFloor(ctx, W, H, fl, floorY);
+  _drawRestLights(ctx, W, H, lt, floorY);
+  _drawRestPlants(ctx, W, H, it);
+  _drawRestSofa(ctx, W, it, floorY);
+  _drawRestTables(ctx, W, H, tb, lt, it, floorY);
+  _drawRestSign(ctx, W, sg);
+  _drawRestHud(ctx, W, H);
+}
+/** 레스토랑 탭 하단 업그레이드 현황 바를 렌더링 */
+function renderRst() {
+  const listEl = document.getElementById('rst'); listEl.innerHTML = '';
+  [{k:'sign',    ko:'간판·창문', en:'Sign',      e:'🪧'},
+   {k:'lighting',ko:'조명',      en:'Lighting',  e:'💡'},
+   {k:'table',   ko:'테이블',    en:'Table',     e:'🪑'},
+   {k:'kitchen', ko:'주방',      en:'Kitchen',   e:'👨‍🍳'},
+   {k:'floor',   ko:'바닥재',    en:'Flooring',  e:'🪵'},
+   {k:'interior',ko:'인테리어',  en:'Interior',  e:'🎨'}
+  ].forEach(upgradeDef => {
+    const currentLevel = S.ups[upgradeDef.k] || 0;
+    const pct = currentLevel / 4 * 100;
+    listEl.innerHTML += `<div class="rs"><div class="rsl">${upgradeDef.e} ${S.lang === 'ko' ? upgradeDef.ko : upgradeDef.en}</div><div class="rsv">${['◆','◆','◆','◆'].map((d, i) => `<span style="color:${i < currentLevel ? '#c07030' : '#2a1808'}">${d}</span>`).join('')} <span style="color:#7a5030;font-size:.78em">${currentLevel}/4</span></div><div class="rs-bar"><div class="rs-bar-fill" style="width:${pct}%"></div></div></div>`;
   });
 }
 
-// ── TABS ───────────────────────────────────────────────────────────
-function goTab(name){
-  S.tab=name;
+// ══════════════════════════════════════════════════════════════════════
+// 탭 내비게이션
+// ══════════════════════════════════════════════════════════════════════
+
+function goTab(name) {
+  S.tab = name;
   applyTabToDom();
-  if(name==='rest'){drawRest();renderRst();}
-  if(name==='up')renderUps();
-  if(name==='story')renderStory();
-  if(name==='board'){renderBanner();goSubBoard(S.subBoard);}
-  if(name==='garden')renderHubUi();
+  if (name === 'rest')   { drawRest(); renderRst(); }
+  if (name === 'up')     renderUps();
+  if (name === 'story')  renderStory();
+  if (name === 'board')  { renderBanner(); goSubBoard(S.subBoard); }
+  if (name === 'garden') renderHubUi();
 }
-function toggleLang(){S.lang=S.lang==='ko'?'en':'ko';save();renderAll();}
-function renderAll(){
+
+function toggleLang() { S.lang = S.lang === 'ko' ? 'en' : 'ko'; save(); renderAll(); }
+
+/** 언어 전환 또는 세션 복귀 시 모든 UI를 현재 상태에 맞게 갱신 */
+function renderAll() {
   applyTabToDom();
-  document.getElementById('hcoin').textContent=S.coins;
-  document.getElementById('t0').textContent=T('정원','Garden');
-  document.getElementById('t1').textContent=T('머지','Merge');
-  document.getElementById('t2').textContent=T('스토리','Story');
-  document.getElementById('t3').textContent=T('음식점','Restaurant');
-  document.getElementById('t4').textContent=T('업그레이드 · 이야기','Upgrades · Story');
-  renderXP();renderEn();
-  if(S.tab==='board'){
-    document.getElementById('m-lock-ico').style.display=meatUnlocked()?'none':'inline';
+  document.getElementById('hcoin').textContent = S.coins;
+  document.getElementById('t0').textContent = T('정원', 'Garden');
+  document.getElementById('t1').textContent = T('머지', 'Merge');
+  document.getElementById('t2').textContent = T('스토리', 'Story');
+  document.getElementById('t3').textContent = T('음식점', 'Restaurant');
+  document.getElementById('t4').textContent = T('업그레이드 · 이야기', 'Upgrades · Story');
+  renderXP(); renderEn();
+  if (S.tab === 'board') {
+    document.getElementById('m-lock-ico').style.display = meatUnlocked() ? 'none' : 'inline';
     goSubBoard(S.subBoard);
     renderBanner();
-  }else{
-    buildGrid();buildGridMeat();
+  } else {
+    buildGrid(); buildGridMeat();
   }
-  if(S.tab==='garden')renderHubUi();
-  if(S.tab==='story')renderStory();
-  if(S.tab==='up')renderUps();
-  if(S.tab==='rest'){drawRest();renderRst();}
+  if (S.tab === 'garden') renderHubUi();
+  if (S.tab === 'story')  renderStory();
+  if (S.tab === 'up')     renderUps();
+  if (S.tab === 'rest')   { drawRest(); renderRst(); }
 }
 
-// ── INIT ───────────────────────────────────────────────────────────
-document.addEventListener('keydown',e=>{
-  if(S.tab!=='garden')return;
-  let moved=false;
-  let tx=S.gCharX, ty=S.gCharY, dir=S.gCharDir;
-  const step=5; // percent
-  if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A'){tx=S.gCharX-step;dir='l';moved=true;}
-  else if(e.key==='ArrowRight'||e.key==='d'||e.key==='D'){tx=S.gCharX+step;dir='r';moved=true;}
-  else if(e.key==='ArrowUp'||e.key==='w'||e.key==='W'){ty=S.gCharY-step;dir='u';moved=true;}
-  else if(e.key==='ArrowDown'||e.key==='s'||e.key==='S'){ty=S.gCharY+step;dir='d';moved=true;}
-  if(!moved)return;
-  S.gCharDir=dir;
-  const ok=moveCharConstrained(tx,ty);
-  if(!ok)return;
+// ══════════════════════════════════════════════════════════════════════
+// 초기화
+// ══════════════════════════════════════════════════════════════════════
+
+// 키보드 방향키 / WASD 로 정원 캐릭터 이동
+document.addEventListener('keydown', e => {
+  if (S.tab !== 'garden') return;
+  let moved = false;
+  let targetX = S.gCharX, targetY = S.gCharY, dir = S.gCharDir;
+  const step = 5; // 이동 단위(%)
+  if      (e.key === 'ArrowLeft'  || e.key === 'a' || e.key === 'A') { targetX = S.gCharX - step; dir = 'l'; moved = true; }
+  else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { targetX = S.gCharX + step; dir = 'r'; moved = true; }
+  else if (e.key === 'ArrowUp'    || e.key === 'w' || e.key === 'W') { targetY = S.gCharY - step; dir = 'u'; moved = true; }
+  else if (e.key === 'ArrowDown'  || e.key === 's' || e.key === 'S') { targetY = S.gCharY + step; dir = 'd'; moved = true; }
+  if (!moved) return;
+  S.gCharDir = dir;
+  if (!moveCharConstrained(targetX, targetY)) return;
   startFarmerWalkAnim();
   save();
 });
-(function(){
-  load();regenEn();
-  // 새로고침/재진입 시 기본 화면을 정원으로 고정
-  S.tab='garden';
-  if(S.board.every(c=>c==null))[0,2,4,6,8,10,12,14].forEach(i=>S.board[i]=1);
+
+(function () {
+  load(); regenEn();
+  S.tab = 'garden'; // 새로고침 시 항상 정원으로 시작
+  // 보드가 완전히 비어 있으면 초기 씨앗 배치
+  if (S.board.every(c => c == null)) [0, 2, 4, 6, 8, 10, 12, 14].forEach(i => S.board[i] = 1);
   seedMeatIfEligible();
-  const _fp=new Image();
-  _fp.onerror=hubCharSpriteFail;
-  _fp.src=FARMER_SHEET.src;
+  // 농부 스프라이트 로드 실패 시 이모지 폴백
+  const farmerImg = new Image();
+  farmerImg.onerror = hubCharSpriteFail;
+  farmerImg.src = FARMER_SHEET.src;
   renderAll();
   initGardenAnimals();
 
-  // 모바일: 필드 드래그(스와이프)로 상/하/좌/우 이동
-  const field=document.getElementById('g-walk-hit');
-  if(field){
-    const step=5; // percent
-    const MOVE_TH=16; // px threshold
-    const MOVE_COOLDOWN=90; // ms
-    let activeTouchId=null;
-    let swipeEnabled=false;
-    let lastMoveAt=0;
-    let lastX=0,lastY=0;
+  // 모바일: 정원 필드 스와이프로 캐릭터 이동
+  const walkField = document.getElementById('g-walk-hit');
+  if (walkField) {
+    const step          = 5;  // 이동 단위(%)
+    const MOVE_THRESHOLD = 16; // 스와이프로 인정할 최소 px
+    const MOVE_COOLDOWN  = 90; // 연속 이동 최소 간격(ms)
+    let activeTouchId = null;
+    let swipeEnabled  = false;
+    let lastMoveAt    = 0;
+    let lastX = 0, lastY = 0;
 
-    const touchXY=(t)=>{
-      return {x:t.clientX,y:t.clientY};
-    };
+    const getTouchXY = t => ({ x: t.clientX, y: t.clientY });
 
-    field.addEventListener('touchstart',(ev)=>{
-      if(S.tab!=='garden')return;
-      const t=ev.changedTouches && ev.changedTouches[0];
-      if(!t)return;
-      activeTouchId=t.identifier;
-      const {x,y}=touchXY(t);
-      lastX=x;lastY=y;
+    walkField.addEventListener('touchstart', ev => {
+      if (S.tab !== 'garden') return;
+      const touch = ev.changedTouches && ev.changedTouches[0];
+      if (!touch) return;
+      activeTouchId = touch.identifier;
+      const { x, y } = getTouchXY(touch);
+      lastX = x; lastY = y;
+      // 레스토랑 문·냉동창고 버튼 위에서 시작하면 스와이프 비활성화 (click 우선)
+      const startEl = ev.target;
+      swipeEnabled = !(startEl?.closest?.('.hub-tavern-door') || startEl?.closest?.('.hub-freezer-wrap'));
+      if (swipeEnabled) ev.preventDefault();
+    }, {passive: false});
 
-      // 정원 위의 "제어 버튼"(레스토랑 문/냉동창고)을 눌렀다면
-      // 스와이프 이동 로직을 비활성화해서 click이 정상 동작하게 합니다.
-      const startEl=ev.target;
-      swipeEnabled=!!(startEl && startEl.closest && (
-        startEl.closest('.hub-tavern-door') ||
-        startEl.closest('.hub-freezer-wrap')
-      )) ? false : true;
-
-      if(swipeEnabled)ev.preventDefault();
-    },{passive:false});
-
-    field.addEventListener('touchmove',(ev)=>{
-      if(S.tab!=='garden')return;
-      if(activeTouchId==null)return;
-      if(!swipeEnabled)return;
-      const t=Array.from(ev.changedTouches||[]).find(tt=>tt.identifier===activeTouchId);
-      if(!t)return;
-
-      const now=Date.now();
-      if(now-lastMoveAt<MOVE_COOLDOWN)return;
-
-      const {x,y}=touchXY(t);
-      const dx=x-lastX;
-      const dy=y-lastY;
-      if(Math.abs(dx)<MOVE_TH && Math.abs(dy)<MOVE_TH)return;
-
-      lastMoveAt=now;
-
+    walkField.addEventListener('touchmove', ev => {
+      if (S.tab !== 'garden' || activeTouchId == null || !swipeEnabled) return;
+      const touch = Array.from(ev.changedTouches || []).find(t => t.identifier === activeTouchId);
+      if (!touch) return;
+      const now = Date.now();
+      if (now - lastMoveAt < MOVE_COOLDOWN) return;
+      const { x, y } = getTouchXY(touch);
+      const dx = x - lastX, dy = y - lastY;
+      if (Math.abs(dx) < MOVE_THRESHOLD && Math.abs(dy) < MOVE_THRESHOLD) return;
+      lastMoveAt = now;
       // 더 큰 이동 축 기준으로 방향 결정
-      let tx=S.gCharX, ty=S.gCharY, dir=S.gCharDir;
-      if(Math.abs(dx)>=Math.abs(dy)){
-        dir=dx>0?'r':'l';
-        tx=S.gCharX + (dx>0?step:-step);
-      }else{
-        dir=dy>0?'d':'u';
-        ty=S.gCharY + (dy>0?step:-step);
+      let targetX = S.gCharX, targetY = S.gCharY, dir = S.gCharDir;
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        dir = dx > 0 ? 'r' : 'l';
+        targetX = S.gCharX + (dx > 0 ? step : -step);
+      } else {
+        dir = dy > 0 ? 'd' : 'u';
+        targetY = S.gCharY + (dy > 0 ? step : -step);
       }
-      S.gCharDir=dir;
-      const ok=moveCharConstrained(tx,ty);
-      if(ok){
-        syncHubCharFull();
-        startFarmerWalkAnim();
-        save();
-      }
-      // 같은 방향으로 연속 이동 가능하게 기준점을 최신 위치로 갱신
-       lastX=x;lastY=y;
-      _hubSkipNextWalkClickUntil=Date.now()+450;
+      S.gCharDir = dir;
+      if (moveCharConstrained(targetX, targetY)) { syncHubCharFull(); startFarmerWalkAnim(); save(); }
+      lastX = x; lastY = y;
+      _hubSkipNextWalkClickUntil = Date.now() + 450;
       ev.preventDefault();
-    },{passive:false});
+    }, {passive: false});
 
-    const reset=()=>{
-      activeTouchId=null;
-      swipeEnabled=false;
-    };
-    field.addEventListener('touchend',reset,{passive:true});
-    field.addEventListener('touchcancel',reset,{passive:true});
+    const resetTouch = () => { activeTouchId = null; swipeEnabled = false; };
+    walkField.addEventListener('touchend',   resetTouch, {passive: true});
+    walkField.addEventListener('touchcancel', resetTouch, {passive: true});
   }
 })();
 </script>
